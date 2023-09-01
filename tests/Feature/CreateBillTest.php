@@ -2,16 +2,19 @@
 
 namespace Tests\Feature;
 
+use Module\Balance\Application\CreateBillCommand;
+use Module\Balance\Application\CreateBillCommandHandler;
+use Module\Balance\Application\ReceiveBillPaymentCommand;
+use Module\Balance\Application\ReceiveBillPaymentCommandHandler;
 use Module\Billing\Domain\BillRepository;
+use Module\Billing\Domain\Events\BillPaid;
+use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
 use Module\Expense\Application\CreateExpenseCommand;
 use Module\Expense\Application\CreateExpenseCommandHandler;
 use Module\Expense\Domain\Events\ExpensePaid;
 use Module\Expense\Domain\Exception\CannotCreateExpense;
-use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
-use Module\Expense\Infrastructure\Repository\ExpenseDomainFactory;
-use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\EventDispatcher;
 use Tests\FakeClock;
@@ -34,64 +37,59 @@ class CreateBillTest extends TestCase
 
     public function testItRecordsExpense()
     {
-        $command = new CreateExpenseCommand(
-            $reference = 'expense-001',
-            'car',
-            'company-1',
-            $amount = 500.54,
-            $taxRate = 21,
-            'BE'
+        $command = new CreateBillCommand(
+            $reference = 'bill_2023-001',
+            'client_1',
+            500.25,
+            21,
+            $this->clock->now()
         );
 
-        $commandHandler = new CreateExpenseCommandHandler(
-            $this->expenseRepository,
-            $this->eventDispatcher
+        $commandHandler = new CreateBillCommandHandler(
+            $this->billRepository
         );
 
         $commandHandler->handle($command);
 
-        $expenseInDb = EloquentExpense::where('reference', $reference)->first();
+        $billingInDb = EloquentBill::where('reference', $reference)->first();
 
-        $this->assertNotNull($expenseInDb);
-        $this->assertDatabaseHas(EloquentExpense::class, [
+        $this->assertNotNull($billingInDb);
+        $this->assertDatabaseHas(EloquentBill::class, [
             'reference' => $reference,
-            'category' => 'CAR',
-            'provider' => 'company-1',
-            'amount' => '50054',
+            'client' => 'client_1',
+            'amount' => 50025,
             'tax_rate' => 21,
-            'country_code' => 'BE'
+            'billing_datetime' => $this->clock->now(),
         ]);
     }
 
-    public function testItRecordsAndMarkExpensePaid()
+    public function testBillPaymentEmitEvent()
     {
-        $command = new CreateExpenseCommand(
-            $reference = 'expense-002',
-            'car',
-            'company-1',
+        EloquentBill::factory(['reference' => 'bill_2023-002'])->create();
+
+        $command = new ReceiveBillPaymentCommand(
+            $reference = 'bill_2023-002',
             $amount = 500.54,
-            $taxRate = 21,
-            'BE',
             $this->clock->now(),
         );
 
-        $commandHandler = new CreateExpenseCommandHandler(
-            $this->expenseRepository,
+        $commandHandler = new ReceiveBillPaymentCommandHandler(
+            $this->billRepository,
             $this->eventDispatcher
         );
 
         $commandHandler->handle($command);
 
-        $expenseInDb = EloquentExpense::where('reference', $reference)->first();
+        $expenseInDb = EloquentBill::where('reference', $reference)->first();
 
         $this->assertNotNull($expenseInDb);
 
-        $this->eventDispatcher->assertEmitted(new ExpensePaid($reference, ($amount + ($amount * $taxRate/100)) * 100, $this->clock->now()));
+        $this->eventDispatcher->assertEmitted(new BillPaid($reference, ($amount + ($amount * $taxRate/100)) * 100, $this->clock->now()));
     }
 
     public function testItFailsWhenExpenseReferenceAlreadyExists()
     {
-        $command = new CreateExpenseCommand(
+        $command = new CreateBillCommand(
             $reference = 'expense-002',
             'car',
             'company-1',

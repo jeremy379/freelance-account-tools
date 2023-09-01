@@ -3,10 +3,8 @@
 namespace Feature;
 
 use Carbon\CarbonImmutable;
-use Module\Balance\Domain\BalanceRepository;
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
-use Module\Balance\Infrastructure\Repository\BalanceRepositoryDatabase;
 use Module\Expense\Application\ListExpensePaidBetweenQuery;
 use Module\Expense\Application\ListExpenseQueryHandler;
 use Module\Expense\Domain\ExpenseRepository;
