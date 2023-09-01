@@ -4,10 +4,12 @@ namespace Module\Expense\Domain;
 
 use Module\SharedKernel\Domain\DomainEntityWithEvents;
 use Module\SharedKernel\Domain\DomainEvent;
+use Module\SharedKernel\Domain\SavingMode;
 
 class Expense implements DomainEntityWithEvents
 {
     private array $events = [];
+    private SavingMode $savingMode;
 
     private function __construct(
         public readonly string $reference,
@@ -22,7 +24,10 @@ class Expense implements DomainEntityWithEvents
 
     public static function record(): Expense
     {
-        return new self();
+        $expense =  new self();
+        $expense->savingMode = SavingMode::CREATE;
+
+        return $expense;
     }
 
     public function chainEvent(DomainEvent $domainEvent): void
@@ -33,5 +38,10 @@ class Expense implements DomainEntityWithEvents
     public function popEvents(): array
     {
         return $this->events;
+    }
+
+    public function savingMode(): SavingMode
+    {
+        return $this->savingMode;
     }
 }

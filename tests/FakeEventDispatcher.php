@@ -12,9 +12,9 @@ class FakeEventDispatcher implements EventDispatcher
     /** @var array<DomainEvent>  */
     public array $emitted = [];
 
-    public function dispatch(DomainEvent $event): void
+    public function dispatch(DomainEvent ...$events): void
     {
-        $this->emitted[] = $event;
+        $this->emitted = array_merge($this->emitted, $events);
     }
 
     public function assertEmitted(DomainEvent $event): void

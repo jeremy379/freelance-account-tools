@@ -6,7 +6,9 @@ use Module\SharedKernel\Domain\Command;
 
 class CreateExpenseCommand implements Command
 {
-    public function __construct()
+    public function __construct(
+        public readonly string $reference,
+    )
     {
     }
 }

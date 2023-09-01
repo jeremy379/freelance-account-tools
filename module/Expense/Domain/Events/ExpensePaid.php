@@ -2,11 +2,16 @@
 
 namespace Module\Expense\Domain\Events;
 
+use Carbon\CarbonImmutable;
 use Module\SharedKernel\Domain\DomainEvent;
 
 class ExpensePaid implements DomainEvent
 {
-    public function __construct(private readonly string $expenseReference, private readonly int $amountPaid)
+    public function __construct(
+        private readonly string $expenseReference,
+        private readonly int $amountPaid,
+        private readonly \DateTimeImmutable $paymentDatetime,
+    )
     {
     }
 
@@ -20,7 +25,8 @@ class ExpensePaid implements DomainEvent
     {
         return [
             'reference' => $this->expenseReference,
-            'amountPaid' => $this->amountPaid
+            'amountPaid' => $this->amountPaid,
+            'paymentDateTime' => $this->paymentDatetime->format('Y-m-d\TH:i:s\Z'),
         ];
     }
 }

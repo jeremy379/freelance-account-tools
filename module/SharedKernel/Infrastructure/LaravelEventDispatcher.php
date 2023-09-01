@@ -7,8 +7,10 @@ use Module\SharedKernel\Domain\EventDispatcher;
 
 class LaravelEventDispatcher implements EventDispatcher
 {
-    public function dispatch(DomainEvent $event): void
+    public function dispatch(DomainEvent ...$events): void
     {
-        event($event->name(), $event->payload());
+        foreach($events as $event) {
+            event($event->name(), $event->payload());
+        }
     }
 }
