@@ -6,19 +6,16 @@ use Module\Expense\Application\CreateExpenseCommand;
 use Module\Expense\Application\CreateExpenseCommandHandler;
 use Module\Expense\Domain\Events\ExpensePaid;
 use Module\Expense\Domain\Exception\CannotCreateExpense;
-use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
-use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\EventDispatcher;
-use Module\SharedKernel\Infrastructure\LaravelBus;
 use Psr\Clock\ClockInterface;
 use Tests\FakeClock;
 use Tests\FakeEventDispatcher;
 use Tests\TestCase;
 
-class ExpenseTest extends TestCase
+class CreateExpenseTest extends TestCase
 {
     private EventDispatcher $eventDispatcher;
     private ExpenseRepository $expenseRepository;

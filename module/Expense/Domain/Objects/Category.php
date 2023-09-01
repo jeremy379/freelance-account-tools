@@ -2,17 +2,12 @@
 
 namespace Module\Expense\Domain\Objects;
 
-enum Category: string
+class Category
 {
-    case CAR = 'CAR';
-    case ACCOUNTANT = 'ACCOUNTANT';
-    case TRAVEL = 'TRAVEL';
-    case SOCIAL_CHARGE = 'SOCIAL_CHARGE';
-    case TAX_PREVISION = 'TAX_PREVISION';
-    case TAX = 'TAX';
-    case TVA_PAYMENT = 'TVA_PAYMENT';
-    case HARDWARE = 'HARDWARE';
-    case SOFTWARE = 'SOFTWARE';
-    case SERVICES = 'SERVICES';
-    case OTHERS = 'OTHERS';
+    private function __construct(
+        public readonly CategoryValue $name,
+        public readonly int $percentOfDeductibility,
+    )
+    {
+    }
 }

@@ -8,6 +8,7 @@ use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Domain\Objects\Amount;
 use Module\Expense\Domain\Objects\Category;
+use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Domain\Objects\Provider;
 use Module\Expense\Domain\Objects\Reference;
@@ -32,7 +33,7 @@ class CreateExpenseCommandHandler
 
             $expense = Expense::record(
                 Reference::fromString($command->reference),
-                Category::from(strtoupper($command->category)),
+                CategoryValue::from(strtoupper($command->category)),
                 Provider::fromString($command->provider),
                 Amount::fromFloat($command->amount),
                 match($command->taxRate) {

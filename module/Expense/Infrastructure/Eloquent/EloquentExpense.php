@@ -2,6 +2,7 @@
 
 namespace Module\Expense\Infrastructure\Eloquent;
 
+use Factory\ExpenseFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EloquentExpense extends Model
@@ -13,4 +14,9 @@ class EloquentExpense extends Model
     ];
 
     public $timestamps = true;
+
+    protected static function newFactory(): ExpenseFactory
+    {
+        return ExpenseFactory::new();
+    }
 }

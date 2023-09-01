@@ -6,7 +6,7 @@ use Module\Expense\Domain\Exception\ExpenseNotFound;
 use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Domain\Objects\Amount;
-use Module\Expense\Domain\Objects\Category;
+use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Domain\Objects\Provider;
 use Module\Expense\Domain\Objects\Reference;
@@ -26,7 +26,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
 
         return Expense::restore(
             Reference::fromString($expense->reference),
-            Category::from($expense->category),
+            CategoryValue::from($expense->category),
             Provider::fromString($expense->provider),
             Amount::fromStoredInt($expense->amount),
             match($expense->tax_rate) {
