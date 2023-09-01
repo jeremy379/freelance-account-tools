@@ -17,4 +17,19 @@ class Balance
     )
     {
     }
+
+    public static function restore(
+        Amount $amount,
+        BalanceType $type,
+        Reference $reference,
+        CarbonImmutable $datetime,
+    ): Balance
+    {
+        return new self(
+            $amount,
+            $type,
+            $reference,
+            $datetime,
+        );
+    }
 }

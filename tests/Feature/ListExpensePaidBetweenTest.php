@@ -3,13 +3,16 @@
 namespace Feature;
 
 use Carbon\CarbonImmutable;
+use Module\Balance\Domain\BalanceRepository;
 use Module\Balance\Domain\Objects\BalanceType;
-use Module\Balance\Infrastructure\Eloquent\EloquentBalance;
+use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
+use Module\Balance\Infrastructure\Repository\BalanceRepositoryDatabase;
 use Module\Expense\Application\ListExpensePaidBetweenQuery;
 use Module\Expense\Application\ListExpenseQueryHandler;
-use Module\Expense\Domain\Expense;
+use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Module\Expense\Infrastructure\Repository\ExpenseDomainFactory;
+use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
 use Tests\FakeClock;
 use Tests\TestCase;
@@ -17,11 +20,13 @@ use Tests\TestCase;
 class ListExpensePaidBetweenTest extends TestCase
 {
     private ClockInterface $clock;
+    private ExpenseRepository $expenseRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->clock = new FakeClock();
+        $this->expenseRepository = new ExpenseRepositoryDatabase(new ExpenseDomainFactory());
     }
 
     public function testItListExpensesInTimeframe()
@@ -35,7 +40,7 @@ class ListExpensePaidBetweenTest extends TestCase
             $this->clock->now()->addWeek()
         );
 
-        $queryHandler = new ListExpenseQueryHandler();
+        $queryHandler = new ListExpenseQueryHandler($this->expenseRepository);
 
         $expenses = $queryHandler->handle($query);
 
@@ -44,17 +49,18 @@ class ListExpensePaidBetweenTest extends TestCase
 
         $expenseObjectFactory = new ExpenseDomainFactory();
 
-        $this->assertContainsEquals($expenseObjectFactory($expense1), $expenses);
-        $this->assertContainsEquals($expenseObjectFactory($expense2), $expenses);
+        $this->assertContainsEquals($expenseObjectFactory->toExpenseWithPayment($expense1), $expenses);
+        $this->assertContainsEquals($expenseObjectFactory->toExpenseWithPayment($expense2), $expenses);
     }
 
-    private function givenAnExpensePaidOn(CarbonImmutable $on): Expense
+    private function givenAnExpensePaidOn(CarbonImmutable $on): EloquentExpense
     {
         $expense = EloquentExpense::factory()->create();
 
-        EloquentBalance::factory()->create([
+        EloquentBalanceTransaction::factory()->create([
             'type' => BalanceType::EXPENSE,
-            'reference' => $expense->reference
+            'reference' => $expense->reference,
+            'occurred_on' => $on,
         ]);
 
         return $expense;

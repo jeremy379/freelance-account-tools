@@ -8,6 +8,7 @@ use Module\Expense\Domain\Events\ExpensePaid;
 use Module\Expense\Domain\Exception\CannotCreateExpense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
+use Module\Expense\Infrastructure\Repository\ExpenseDomainFactory;
 use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\EventDispatcher;
@@ -25,7 +26,7 @@ class CreateExpenseTest extends TestCase
     {
         parent::setUp();
         $this->eventDispatcher = new FakeEventDispatcher();
-        $this->expenseRepository = new ExpenseRepositoryDatabase();
+        $this->expenseRepository = new ExpenseRepositoryDatabase(new ExpenseDomainFactory());
         $this->clock = new FakeClock();
     }
 

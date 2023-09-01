@@ -3,11 +3,14 @@
 namespace Module\Balance\Infrastructure\Eloquent;
 
 use Factory\BalanceFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EloquentBalance extends Model
+class EloquentBalanceTransaction extends Model
 {
-    protected $table = 'balance';
+    use HasFactory;
+
+    protected $table = 'balance_transaction';
 
     protected $fillable = [
         'type', 'reference', 'amount', 'occurred_on',

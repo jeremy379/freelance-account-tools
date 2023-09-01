@@ -2,20 +2,20 @@
 
 namespace Module\Expense\Infrastructure\Repository;
 
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Builder;
 use Module\Expense\Domain\Exception\ExpenseNotFound;
 use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
-use Module\Expense\Domain\Objects\Amount;
-use Module\Expense\Domain\Objects\CategoryValue;
-use Module\Expense\Domain\Objects\CountryCode;
-use Module\Expense\Domain\Objects\Provider;
-use Module\Expense\Domain\Objects\Reference;
-use Module\Expense\Domain\Objects\TaxRate;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Module\SharedKernel\Domain\SavingMode;
 
 class ExpenseRepositoryDatabase implements ExpenseRepository
 {
+    public function __construct(private ExpenseDomainFactory $expenseDomainFactory)
+    {
+    }
+
     public function byReference(string $reference): Expense
     {
         $expense = EloquentExpense::where('reference', $reference)->first();
@@ -24,7 +24,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
             throw ExpenseNotFound::byReference($reference);
         }
 
-        return (new ExpenseDomainFactory())($expense);
+        return $this->expenseDomainFactory->toExpense($expense);
     }
 
     public function save(Expense $expense): void
@@ -39,5 +39,21 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
                 'country_code' => $expense->countryCode->value,
             ]);
         }
+    }
+
+    public function fetchBetween(CarbonImmutable $from, CarbonImmutable $to): array
+    {
+        return EloquentExpense::query()
+            ->whereHas('payment', function(Builder $query) use ($from, $to) {
+                $query->where('occurred_on', '>=', $from);
+
+                if($to) {
+                    $query->where('occurred_on', '<=', $to);
+                }
+            })
+            ->get()
+            ->transform(fn(EloquentExpense $expense) => $this->expenseDomainFactory->toExpenseWithPayment($expense))
+            ->toArray()
+        ;
     }
 }
