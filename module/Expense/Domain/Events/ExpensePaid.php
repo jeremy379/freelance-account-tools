@@ -7,10 +7,12 @@ use Module\SharedKernel\Domain\DomainEvent;
 
 class ExpensePaid implements DomainEvent
 {
+    public const NAME = 'ExpensePaid';
+
     public function __construct(
         private readonly string $expenseReference,
         private readonly int $amountPaid,
-        private readonly \DateTimeImmutable $paymentDatetime,
+        private readonly CarbonImmutable $paymentDatetime,
     )
     {
     }
@@ -18,7 +20,7 @@ class ExpensePaid implements DomainEvent
 
     public function name(): string
     {
-        return 'ExpensePaid';
+        return self::NAME;
     }
 
     public function payload(): array
@@ -26,7 +28,7 @@ class ExpensePaid implements DomainEvent
         return [
             'reference' => $this->expenseReference,
             'amountPaid' => $this->amountPaid,
-            'paymentDateTime' => $this->paymentDatetime->format('Y-m-d\TH:i:s\Z'),
+            'paymentDateTime' => $this->paymentDatetime->toIso8601String(),
         ];
     }
 }

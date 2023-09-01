@@ -24,20 +24,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
             throw ExpenseNotFound::byReference($reference);
         }
 
-        return Expense::restore(
-            Reference::fromString($expense->reference),
-            CategoryValue::from($expense->category),
-            Provider::fromString($expense->provider),
-            Amount::fromStoredInt($expense->amount),
-            match($expense->tax_rate) {
-                0 => TaxRate::exempt(),
-                6 => TaxRate::rate6(),
-                20 => TaxRate::rate20(),
-                21 => TaxRate::rate21(),
-                default => TaxRate::includedAndNotRefundable()
-            },
-            CountryCode::from($expense->country_code),
-        );
+        return (new ExpenseDomainFactory())($expense);
     }
 
     public function save(Expense $expense): void

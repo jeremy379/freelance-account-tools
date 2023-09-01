@@ -2,7 +2,7 @@
 
 namespace Module\Expense\Domain;
 
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Events\ExpensePaid;
 use Module\Expense\Domain\Objects\Amount;
 use Module\Expense\Domain\Objects\CountryCode;
@@ -52,7 +52,7 @@ class Expense implements DomainEntityWithEvents
         return $expense;
     }
 
-    public function pay(DateTimeImmutable $paymentDatetime): Expense
+    public function pay(CarbonImmutable $paymentDatetime): Expense
     {
         $expense = $this->copy();
 

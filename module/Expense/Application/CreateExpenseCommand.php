@@ -2,7 +2,7 @@
 
 namespace Module\Expense\Application;
 
-use DateTimeImmutable;
+use Carbon\CarbonImmutable;
 use Module\SharedKernel\Domain\Command;
 
 class CreateExpenseCommand implements Command
@@ -14,7 +14,7 @@ class CreateExpenseCommand implements Command
         public readonly float              $amount,
         public readonly int|string         $taxRate,
         public readonly string             $countryCode,
-        public readonly ?DateTimeImmutable $paymentDate = null
+        public readonly ?CarbonImmutable $paymentDate = null
     )
     {
     }

@@ -3,13 +3,16 @@
 namespace Module\Balance\Domain;
 
 use Carbon\CarbonImmutable;
+use Module\Balance\Domain\Objects\Amount;
+use Module\Balance\Domain\Objects\BalanceType;
+use Module\Balance\Domain\Objects\Reference;
 
 class Balance
 {
     private function __construct(
-        public readonly int $amount,
-        public readonly string $type,
-        public readonly string $reference,
+        public readonly Amount $amount,
+        public readonly BalanceType $type,
+        public readonly Reference $reference,
         public readonly CarbonImmutable $datetime,
     )
     {
