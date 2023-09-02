@@ -6,15 +6,13 @@ use Module\Balance\Application\CreateBillCommand;
 use Module\Balance\Application\CreateBillCommandHandler;
 use Module\Balance\Application\ReceiveBillPaymentCommand;
 use Module\Balance\Application\ReceiveBillPaymentCommandHandler;
+use Module\Balance\Domain\Balance;
 use Module\Billing\Domain\BillRepository;
 use Module\Billing\Domain\Events\BillPaid;
+use Module\Billing\Domain\Exception\CannotCreateBill;
+use Module\Billing\Domain\Objects\TaxRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
-use Module\Expense\Application\CreateExpenseCommand;
-use Module\Expense\Application\CreateExpenseCommandHandler;
-use Module\Expense\Domain\Events\ExpensePaid;
-use Module\Expense\Domain\Exception\CannotCreateExpense;
-use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\EventDispatcher;
 use Tests\FakeClock;
@@ -65,7 +63,8 @@ class CreateBillTest extends TestCase
 
     public function testBillPaymentEmitEvent()
     {
-        EloquentBill::factory(['reference' => 'bill_2023-002'])->create();
+        $taxRate = TaxRate::rate21();
+        EloquentBill::factory(['reference' => 'bill_2023-002', 'tax_rate' => $taxRate->taxRatePercentage])->create();
 
         $command = new ReceiveBillPaymentCommand(
             $reference = 'bill_2023-002',
@@ -80,34 +79,33 @@ class CreateBillTest extends TestCase
 
         $commandHandler->handle($command);
 
-        $expenseInDb = EloquentBill::where('reference', $reference)->first();
+        $expenseInDb = Balance::where('reference', $reference)->first();
 
         $this->assertNotNull($expenseInDb);
+        $this->assertEquals(50054, $expenseInDb->amount);
 
         $this->eventDispatcher->assertEmitted(new BillPaid($reference, ($amount + ($amount * $taxRate/100)) * 100, $this->clock->now()));
     }
 
     public function testItFailsWhenExpenseReferenceAlreadyExists()
     {
+        EloquentBill::factory(['reference' => 'bill_2023-002',])->create();
+
         $command = new CreateBillCommand(
-            $reference = 'expense-002',
-            'car',
-            'company-1',
-            $amount = 500.54,
-            $taxRate = 21,
-            'BE',
-            $this->clock->now(),
+             'bill_2023-002',
+            'client_1',
+            500.25,
+            21,
+            $this->clock->now()
         );
 
-        $commandHandler = new CreateExpenseCommandHandler(
-            $this->expenseRepository,
-            $this->eventDispatcher
+        $commandHandler = new CreateBillCommandHandler(
+            $this->expenseRepository
         );
-
 
         $commandHandler->handle($command);
 
-        $this->expectException(CannotCreateExpense::class);
+        $this->expectException(CannotCreateBill::class);
         $commandHandler->handle($command);
     }
 }
