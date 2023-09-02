@@ -3,6 +3,8 @@
 namespace Module\Billing\Application;
 
 use Module\Billing\Domain\BillRepository;
+use Module\Billing\Domain\Objects\Amount;
+use Module\Billing\Domain\Objects\Reference;
 use Module\SharedKernel\Domain\EventDispatcher;
 
 class ReceiveBillPaymentCommandHandler
@@ -13,6 +15,10 @@ class ReceiveBillPaymentCommandHandler
 
     public function handle(ReceiveBillPaymentCommand $command): void
     {
+        $bill = $this->billRepository->byReference(Reference::fromString($command->reference));
 
+        $bill = $bill->paymentReceived($command->paymentReceivedOn, Amount::fromFloat($command->amountReceived));
+
+        $this->eventDispatcher->dispatch(...$bill->popEvents());
     }
 }

@@ -12,7 +12,7 @@ class Amount
 
     public static function fromFloat(float $amount): Amount
     {
-        $amount = (int) ($amount * 100);
+        $amount = (int) $amount * 100;
 
         Assert::positiveInteger($amount);
 

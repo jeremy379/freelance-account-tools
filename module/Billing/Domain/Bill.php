@@ -67,7 +67,7 @@ class Bill implements DomainEntityWithEvents
     {
         $bill = $this->copy();
 
-        $this->chainEvent(new BillPaid($bill->reference->value, $amountReceived->withTax($bill->taxRate)->toInt(), $receivedOn));
+        $bill->chainEvent(new BillPaid($bill->reference->value, $amountReceived->withTax($bill->taxRate)->toInt(), $receivedOn));
 
         return $bill;
     }
@@ -79,7 +79,9 @@ class Bill implements DomainEntityWithEvents
 
     public function popEvents(): array
     {
-        return $this->events;
+        $events = $this->events;
+        $this->events = [];
+        return $events;
     }
 
     public function savingMode(): SavingMode
@@ -97,7 +99,7 @@ class Bill implements DomainEntityWithEvents
             $this->billingDate,
         );
 
-        $bill->savingMode = $this->savingMode;
+        $bill->savingMode = $this->savingMode();
 
         return $bill;
     }

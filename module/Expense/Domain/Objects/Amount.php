@@ -37,7 +37,7 @@ class Amount
 
     public function withTax(TaxRate $taxRate): Amount
     {
-        $amountInt = $this->amount + ($this->amount * $taxRate->taxRatePercentage / 100);
+        $amountInt = (int) round($this->amount + ($this->amount * $taxRate->taxRatePercentage / 100));
 
         return new self($amountInt);
     }

@@ -91,7 +91,9 @@ class Expense implements DomainEntityWithEvents
 
     public function popEvents(): array
     {
-        return $this->events;
+        $events = $this->events;
+        $this->events = [];
+        return $events;
     }
 
     public function savingMode(): SavingMode
@@ -110,7 +112,7 @@ class Expense implements DomainEntityWithEvents
             $this->countryCode,
         );
 
-        $expense->savingMode = $this->savingMode;
+        $expense->savingMode = $this->savingMode();
         return $expense;
     }
 }
