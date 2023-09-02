@@ -96,7 +96,7 @@ class Expense implements DomainEntityWithEvents
 
     public function savingMode(): SavingMode
     {
-        return $this->savingMode;
+        return $this->savingMode ?? SavingMode::NONE;
     }
 
     private function copy(): Expense

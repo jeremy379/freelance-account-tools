@@ -1,6 +1,6 @@
 <?php
 
-namespace Module\Balance\Application;
+namespace Module\Billing\Application;
 
 use Carbon\CarbonImmutable;
 use Module\SharedKernel\Domain\Command;

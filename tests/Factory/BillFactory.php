@@ -4,9 +4,6 @@ namespace Factory;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
-use Module\Expense\Domain\Objects\CategoryValue;
-use Module\Expense\Domain\Objects\CountryCode;
-use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Tests\FakeClock;
 
 class BillFactory extends Factory

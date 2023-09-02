@@ -1,6 +1,6 @@
 <?php
 
-namespace Module\Balance\Application;
+namespace Module\Billing\Application;
 
 use Module\Billing\Domain\BillRepository;
 use Module\SharedKernel\Domain\EventDispatcher;

@@ -82,6 +82,11 @@ class Bill implements DomainEntityWithEvents
         return $this->events;
     }
 
+    public function savingMode(): SavingMode
+    {
+        return $this->savingMode ?? SavingMode::NONE;
+    }
+
     private function copy(): Bill
     {
         $bill = new self(

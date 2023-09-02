@@ -2,16 +2,17 @@
 
 namespace Tests\Feature;
 
-use Module\Balance\Application\CreateBillCommand;
-use Module\Balance\Application\CreateBillCommandHandler;
-use Module\Balance\Application\ReceiveBillPaymentCommand;
-use Module\Balance\Application\ReceiveBillPaymentCommandHandler;
 use Module\Balance\Domain\Balance;
+use Module\Billing\Application\CreateBillCommand;
+use Module\Billing\Application\CreateBillCommandHandler;
+use Module\Billing\Application\ReceiveBillPaymentCommand;
+use Module\Billing\Application\ReceiveBillPaymentCommandHandler;
 use Module\Billing\Domain\BillRepository;
 use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Domain\Exception\CannotCreateBill;
 use Module\Billing\Domain\Objects\TaxRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
+use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\EventDispatcher;
@@ -29,7 +30,7 @@ class CreateBillTest extends TestCase
     {
         parent::setUp();
         $this->eventDispatcher = new FakeEventDispatcher();
-        $this->billRepository = new BillRepositoryDatabase();
+        $this->billRepository = new BillRepositoryDatabase(new BillDomainFactory());
         $this->clock = new FakeClock();
     }
 
@@ -100,10 +101,8 @@ class CreateBillTest extends TestCase
         );
 
         $commandHandler = new CreateBillCommandHandler(
-            $this->expenseRepository
+            $this->billRepository
         );
-
-        $commandHandler->handle($command);
 
         $this->expectException(CannotCreateBill::class);
         $commandHandler->handle($command);
