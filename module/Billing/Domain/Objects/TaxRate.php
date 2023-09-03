@@ -8,6 +8,13 @@ class TaxRate
 
     }
 
+    public static function values(): array
+    {
+        return [
+            '21' => 21, '20' => 20, '6' => 6, 'exempt' => 0, 'intracom' => 0,
+        ];
+    }
+
     public static function rate21(): TaxRate
     {
         return new self(21);
