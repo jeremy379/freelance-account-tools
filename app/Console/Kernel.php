@@ -6,12 +6,14 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Module\Billing\Http\Console\BillPaymentReceived;
 use Module\Billing\Http\Console\CreateBill;
+use Module\Expense\Http\Console\CreateExpense;
 
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
         CreateBill::class,
         BillPaymentReceived::class,
+        CreateExpense::class,
     ];
 
     /**
