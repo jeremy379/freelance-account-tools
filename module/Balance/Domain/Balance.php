@@ -6,9 +6,13 @@ use Carbon\CarbonImmutable;
 use Module\Balance\Domain\Objects\Amount;
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Domain\Objects\Reference;
+use Module\SharedKernel\Domain\DomainEntityWithEvents;
+use Module\SharedKernel\Domain\DomainEvent;
 
-class Balance
+class Balance implements DomainEntityWithEvents
 {
+    private array $events = [];
+
     private function __construct(
         public readonly Amount $amount,
         public readonly BalanceType $type,
@@ -16,6 +20,16 @@ class Balance
         public readonly CarbonImmutable $datetime,
     )
     {
+    }
+
+    public static function newEntry(
+        Amount $amount,
+        BalanceType $type,
+        Reference $reference,
+        CarbonImmutable $datetime,
+    ): Balance
+    {
+        return new self($amount, $type, $reference, $datetime);
     }
 
     public static function restore(
@@ -31,5 +45,17 @@ class Balance
             $reference,
             $datetime,
         );
+    }
+
+    public function chainEvent(DomainEvent $domainEvent): void
+    {
+        $this->events[] = $domainEvent;
+    }
+
+    public function popEvents(): array
+    {
+        $events = $this->events;
+        $this->events = [];
+        return $events;
     }
 }

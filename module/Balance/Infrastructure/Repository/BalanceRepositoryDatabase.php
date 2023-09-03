@@ -27,6 +27,11 @@ class BalanceRepositoryDatabase implements BalanceRepository
 
     public function save(Balance $balance): void
     {
-        // TODO: Implement save() method.
+        EloquentBalanceTransaction::create([
+            'type' => $balance->type->value,
+            'reference' => $balance->reference->value,
+            'amount' => $balance->amount->toInt(),
+            'occurred_on' => $balance->datetime,
+        ]);
     }
 }

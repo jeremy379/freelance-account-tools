@@ -9,6 +9,6 @@ class FakeClock implements ClockInterface
 {
     public function now(): CarbonImmutable
     {
-        return CarbonImmutable::parse('2023-09-01 09:00:00'); //Friday
+        return CarbonImmutable::parse('2023-09-01 09:00:00')->startOfSecond(); //Friday
     }
 }

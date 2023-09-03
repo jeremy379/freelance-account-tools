@@ -176,6 +176,8 @@ return [
         \Module\Expense\ExpenseServiceProvider::class,
         \Module\Billing\BillingServiceProvider::class,
         \Module\Reporting\ReportingServiceProvider::class,
+        \Module\Balance\BalanceServiceProvider::class,
+        \Module\Balance\BalanceEventServiceProvider::class,
     ])->toArray(),
 
     /*
