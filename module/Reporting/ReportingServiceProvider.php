@@ -4,16 +4,22 @@ namespace Module\Reporting;
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\ServiceProvider;
+use Module\Reporting\Application\GetBalanceOnDatetimeQuery;
+use Module\Reporting\Application\GetBalanceOnDatetimeQueryHandler;
+use Module\Reporting\Domain\ReportingRepository;
+use Module\Reporting\Infrastructure\Repository\ReportingRepositoryDatabase;
 
 class ReportingServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        //$this->app->bind(interface, concrete);
+        $this->app->bind(ReportingRepository::class, ReportingRepositoryDatabase::class);
     }
 
     public function boot()
     {
-        Bus::map([]);
+        Bus::map([
+            GetBalanceOnDatetimeQuery::class => GetBalanceOnDatetimeQueryHandler::class,
+        ]);
     }
 }

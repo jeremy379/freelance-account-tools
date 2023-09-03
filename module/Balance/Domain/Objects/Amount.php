@@ -3,6 +3,7 @@
 namespace Module\Balance\Domain\Objects;
 
 use Webmozart\Assert\Assert;
+use Webmozart\Assert\InvalidArgumentException;
 
 class Amount
 {
@@ -21,7 +22,10 @@ class Amount
 
     public static function fromStoredInt(int $amount): Amount
     {
-        Assert::positiveInteger($amount);
+        Assert::integer($amount);
+        if($amount < 0) {
+            throw new InvalidArgumentException('Amount must be 0 or above');
+        }
         return new self($amount);
     }
 
