@@ -6,7 +6,7 @@ use Module\Billing\Domain\Objects\Reference;
 
 interface BillRepository
 {
-    public function byReference(Reference $reference): Bill;
+    public function byReference(Reference $reference, bool $withPayment = false): Bill;
 
     public function save(Bill $bill): void;
 }

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\ServiceProvider;
 use Module\Billing\Application\CreateBillCommand;
 use Module\Billing\Application\CreateBillCommandHandler;
+use Module\Billing\Application\GetBillWithPaymentByReferenceHandler;
+use Module\Billing\Application\GetBillWithPaymentByReferenceQuery;
 use Module\Billing\Application\ReceiveBillPaymentCommand;
 use Module\Billing\Application\ReceiveBillPaymentCommandHandler;
 use Module\Billing\Domain\BillRepository;
@@ -23,6 +25,7 @@ class BillingServiceProvider extends ServiceProvider
         Bus::map([
             CreateBillCommand::class => CreateBillCommandHandler::class,
             ReceiveBillPaymentCommand::class => ReceiveBillPaymentCommandHandler::class,
+            GetBillWithPaymentByReferenceQuery::class => GetBillWithPaymentByReferenceHandler::class,
         ]);
     }
 }

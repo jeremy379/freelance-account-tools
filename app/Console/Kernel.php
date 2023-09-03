@@ -4,12 +4,14 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Module\Billing\Http\Console\BillPaymentReceived;
 use Module\Billing\Http\Console\CreateBill;
 
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
         CreateBill::class,
+        BillPaymentReceived::class,
     ];
 
     /**

@@ -29,7 +29,7 @@ class BillRepositoryDatabase implements BillRepository
         }
     }
 
-    public function byReference(Reference $reference): Bill
+    public function byReference(Reference $reference, bool $withPayment = false): Bill
     {
         $dbBill = EloquentBill::where('reference', $reference->value)->first();
 
@@ -37,6 +37,11 @@ class BillRepositoryDatabase implements BillRepository
             throw BillNotFound::byReference($reference->value);
         }
 
-        return $this->factory->toBill($dbBill);
+        if($withPayment) {
+            return $this->factory->toBillWithPayment($dbBill);
+        } else {
+            return $this->factory->toBill($dbBill);
+        }
+
     }
 }
