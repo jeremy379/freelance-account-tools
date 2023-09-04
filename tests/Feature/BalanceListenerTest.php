@@ -63,7 +63,7 @@ class BalanceListenerTest extends TestCase
         $this->assertDatabaseHas(EloquentBalanceTransaction::class, [
             'type' => BalanceType::EXPENSE->value,
             'reference' => $expense->reference,
-            'amount' => $amount,
+            'amount' => -1 * $amount,
             'occurred_on' => $this->clock->now(),
         ]);
     }

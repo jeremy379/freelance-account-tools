@@ -3,6 +3,7 @@
 namespace Module\Balance\Domain;
 
 use Carbon\CarbonImmutable;
+use Module\Balance\Domain\Events\BalanceEntryRecorded;
 use Module\Balance\Domain\Objects\Amount;
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Domain\Objects\Reference;
@@ -29,7 +30,14 @@ class Balance implements DomainEntityWithEvents
         CarbonImmutable $datetime,
     ): Balance
     {
-        return new self($amount, $type, $reference, $datetime);
+        if($type === BalanceType::EXPENSE) {
+            $amount = Amount::fromStoredInt($amount->toInt() * -1);
+        }
+        $entry = new self($amount, $type, $reference, $datetime);
+
+        $entry->chainEvent(new BalanceEntryRecorded($amount->toInt(), $type->value, $datetime));
+
+        return $entry;
     }
 
     public static function restore(

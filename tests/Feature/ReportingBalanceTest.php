@@ -30,7 +30,7 @@ class ReportingBalanceTest extends TestCase
         EloquentBalanceTransaction::factory(
             [
                 'type' => BalanceType::EXPENSE,
-                'amount' => 50051,
+                'amount' => -50051,
                 'occurred_on' => $this->clock->now()->subHour()
             ]
         )->create();
@@ -48,7 +48,7 @@ class ReportingBalanceTest extends TestCase
         /** @var BalanceOnDatetime $balance */
         $balance = $this->bus->dispatch($query);
 
-        $this->assertEquals(40000, $balance->amount->toInt());
+        $this->assertEquals(-40000, $balance->amount->toInt());
     }
 
     public function testItShowsBalanceOnAllPivotDateBetweenValues()

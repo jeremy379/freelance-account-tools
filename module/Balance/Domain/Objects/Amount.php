@@ -23,9 +23,6 @@ class Amount
     public static function fromStoredInt(int $amount): Amount
     {
         Assert::integer($amount);
-        if($amount < 0) {
-            throw new InvalidArgumentException('Amount must be 0 or above');
-        }
         return new self($amount);
     }
 
