@@ -2,9 +2,10 @@
 
 namespace Module\Reporting\Domain;
 
-use Module\Balance\Domain\Objects\Amount;
+use Countable;
+use Illuminate\Contracts\Support\Arrayable;
 
-class BalanceOverTime
+class BalanceOverTime implements Countable, Arrayable
 {
     /**
      * @param array<BalanceOnDatetime> $balances
@@ -37,5 +38,15 @@ class BalanceOverTime
     public function last(): ?BalanceOnDatetime
     {
         return end($this->balances);
+    }
+
+    public function count(): int
+    {
+        return count($this->balances);
+    }
+
+    public function toArray(): array
+    {
+        return $this->balances;
     }
 }

@@ -30,12 +30,7 @@ class ComputeBalanceOverTime
         $previousAmount = 0;
 
         foreach($balancesEntries as $balanceEntry) {
-
             $timestamp = CarbonImmutable::parse($balanceEntry['occurred_on'])->timestamp;
-
-            if(isset($cumulatedEntries[$timestamp])) {
-                $previousAmount+= $cumulatedEntries[$timestamp];
-            }
 
             $cumulatedEntries[$timestamp] = $previousAmount + $balanceEntry['amount'];
 
