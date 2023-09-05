@@ -4,7 +4,7 @@ namespace Module\Reporting\Domain\Config;
 
 class TaxConfig
 {
-    private function __construct(private array $slices, private int $rateAfterLastSlice, private float $thresholdAfterLastSlice, private float $exoneratedAmount, private int $cityTaxRate)
+    private function __construct(private array $slices, private int $rateAfterLastSlice, private float $thresholdAfterLastSlice, private float $exoneratedAmount, private array $cityTaxRate)
     {
     }
 
@@ -43,6 +43,6 @@ class TaxConfig
 
     public function cityTaxRate(string $zipcode)
     {
-        return $this->cityTaxRate;
+        return $this->cityTaxRate[$zipcode];
     }
 }
