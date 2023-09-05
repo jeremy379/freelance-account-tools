@@ -45,6 +45,9 @@ return [
             'threshold_after_last_slice' => 46440,
             'rate_after_last_slice' => 50,
             'exoneratedAmount' => 10160,
+            'rate_city_tax' => [ // https://finances.belgium.be/sites/default/files/downloads/111-taux-taxe-communale-2023.pdf
+                '5030' => 7.8
+            ]
         ]
     ],
 ];

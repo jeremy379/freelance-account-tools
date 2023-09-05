@@ -37,6 +37,9 @@ class TaxCalculatorTest extends TestCase
                 'threshold_after_last_slice' => 46440,
                 'rate_after_last_slice' => 50,
                 'exoneratedAmount' => 10160,
+                'rate_city_tax' => [
+                    '5030' => 7.8
+                ]
             ]
         ]);
     }
@@ -60,7 +63,7 @@ class TaxCalculatorTest extends TestCase
         return [
             [
                 38198.88,
-                13568,
+                14626.30, //13568 * 7.8% (city tax),
                 [
                     [
                         'amount' => 15200,
@@ -78,7 +81,7 @@ class TaxCalculatorTest extends TestCase
             ],
             [
                 83216.66,
-                35664.83,
+                38446.69, //35664.83 * 7,8% city tax,
                 [
                     [
                         'amount' => 15200,
