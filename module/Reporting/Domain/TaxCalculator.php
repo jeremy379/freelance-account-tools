@@ -12,7 +12,7 @@ class TaxCalculator
     {
     }
 
-    public function compute(float $taxableIncomeAfterAllDeduction): float
+    public function compute(float $taxableIncomeAfterAllDeduction, string $companyQGZipCode): float
     {
         $tax = 0;
         $rest = $taxableIncomeAfterAllDeduction;
@@ -26,7 +26,9 @@ class TaxCalculator
             $tax += $amountAsInt * $slice['rate']/100;
         }
 
-        return $this->commercialRound($tax/100, 2);
+        $cityTaxRate = 1 + $this->taxConfig->cityTaxRate($companyQGZipCode)/100;
+
+        return $this->commercialRound(($tax * $cityTaxRate)/100, 2);
     }
 
     public function computationDetails(): array

@@ -51,7 +51,7 @@ class TaxCalculatorTest extends TestCase
     {
         $calculator = new TaxCalculator($this->config);
 
-        $tax = $calculator->compute($taxableIncomeAfterAllDeduction);
+        $tax = $calculator->compute($taxableIncomeAfterAllDeduction, '5030');
 
         $this->assertEquals($expectedTax, $tax);
 
