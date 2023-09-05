@@ -55,6 +55,10 @@ class GetBalanceOverTime extends Command
             }
         }
 
+        $sumRowYIndex = $yIndex + 1;
+
+        $rows[$sumRowYIndex][0] = 'Total';
+
         /** @var BalanceOnDatetime $balance */
         foreach($balances->toArray() as $timestamp => $balance) {
             //Check the right box in the matrix
@@ -62,6 +66,8 @@ class GetBalanceOverTime extends Command
             $yIndexToCheck = $this->getClosestPreviousAmount($balance->amount->toInt(), $yScale);
 
             $rows[$yIndexToCheck][$xIndexToCheck] = 'x';
+
+            $rows[$sumRowYIndex][$xIndexToCheck] = $balance->amount->toHumanFloat();
         }
 
         $this->table($xScale, $rows);
