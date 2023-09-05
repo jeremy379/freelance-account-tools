@@ -69,7 +69,7 @@ class TaxCalculator
         if($amount > $this->taxConfig->thresholdAfterLastSlice()) {
             $sliced[] = [
                 'rate' => $this->taxConfig->finalRate(),
-                'amount' => ((int) ($amount * 10000 - $this->taxConfig->thresholdAfterLastSlice() * 1000) / 10000),
+                'amount' => ((int) ($amount * 10000 - $this->taxConfig->thresholdAfterLastSlice() * 10000) / 10000),
             ];
         }
 

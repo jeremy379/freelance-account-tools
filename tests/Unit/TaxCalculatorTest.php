@@ -78,7 +78,7 @@ class TaxCalculatorTest extends TestCase
             ],
             [
                 83216.66,
-                35663.48,
+                35664.83,
                 [
                     [
                         'amount' => 15200,
@@ -89,11 +89,11 @@ class TaxCalculatorTest extends TestCase
                         'rate' => 40,
                     ],
                     [
-                        'amount' => 11368.88,
+                        'amount' => 19610,
                         'rate' => 45
                     ],
                     [
-                        'amount' => 56386.66,
+                        'amount' => 36776.66,
                         'rate' => 50
                     ],
                 ]
