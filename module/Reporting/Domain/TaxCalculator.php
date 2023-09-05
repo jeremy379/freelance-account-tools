@@ -2,7 +2,7 @@
 
 namespace Module\Reporting\Domain;
 
-class ProjectedBalanceOverTime
+class TaxCalculator
 {
 
 }
