@@ -2,11 +2,16 @@
 
 namespace Module\Reporting\Domain;
 
+use Carbon\CarbonImmutable;
 use Countable;
 use Illuminate\Contracts\Support\Arrayable;
+use Module\Balance\Domain\Objects\Amount;
 
 class BalanceOverTime implements Countable, Arrayable
 {
+    private ?int $minValue = null;
+    private ?int $maxValue = null;
+
     /**
      * @param array<BalanceOnDatetime> $balances
      */
@@ -27,17 +32,29 @@ class BalanceOverTime implements Countable, Arrayable
 
         ksort($balances);
 
-        return new self($balances);
+        $newBalances = new self($balances);
+        $newBalances->maxValue = $this->maxValue;
+        $newBalances->minValue = $this->minValue;
+
+        if($this->minValue === null || $balanceOnDatetime->amount->toInt() < $this->minValue) {
+            $newBalances->minValue = $balanceOnDatetime->amount->toInt();
+        }
+
+        if($this->maxValue === null || $balanceOnDatetime->amount->toInt() > $this->maxValue) {
+            $newBalances->maxValue = $balanceOnDatetime->amount->toInt();
+        }
+
+        return $newBalances;
     }
 
     public function first(): ?BalanceOnDatetime
     {
-        return $this->balances[0] ?? null;
+        return reset($this->balances) ?? null;
     }
 
     public function last(): ?BalanceOnDatetime
     {
-        return end($this->balances);
+        return end($this->balances) ?? null;
     }
 
     public function count(): int
@@ -48,5 +65,47 @@ class BalanceOverTime implements Countable, Arrayable
     public function toArray(): array
     {
         return $this->balances;
+    }
+
+    public function min(): int
+    {
+        return $this->minValue ?? 0;
+    }
+
+    public function max(): int
+    {
+        return $this->maxValue ?? 0;
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->balances);
+    }
+
+    /**
+     * Group Balance recorded on the same date (Y-m-d). This will sum the amount for this day.
+     */
+    public function groupByDate(): BalanceOverTime
+    {
+        $balancesByDays = [];
+
+        foreach($this->balances as $balance) {
+            $amount = $balance->amount;
+            if(isset($balancesByDays[$balance->datetime->toDateString()])) {
+                $amount = Amount::fromStoredInt($amount->toInt() + $balancesByDays[$balance->datetime->toDateString()]->toInt());
+            }
+
+            $balancesByDays[$balance->datetime->toDateString()] = $amount;
+        }
+
+        $balanceOverTime = self::new();
+
+        foreach($balancesByDays as $dateString => $amountObject) {
+            $balanceOverTime = $balanceOverTime->with(
+                new BalanceOnDatetime($amountObject, CarbonImmutable::parse($dateString))
+            );
+        }
+
+        return $balanceOverTime;
     }
 }
