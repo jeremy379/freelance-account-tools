@@ -6,7 +6,7 @@ use Webmozart\Assert\Assert;
 
 class SocialContributionConfig
 {
-    public function __construct(
+    private function __construct(
         private array $slices,
         private array $finalSlice,
         private float $managingFee,

@@ -21,6 +21,30 @@ return [
             ],
             'managing_fees_rate' => 4.25,
         ],
-
+    ],
+    'tax' => [
+        2023 => [
+            'slices' => [
+                // https://finances.belgium.be/fr/particuliers/declaration_impot/taux-revenus-imposables/taux
+                [
+                    'from' => 0,
+                    'to' => 15200,
+                    'rate' => 25,
+                ],
+                [
+                    'from' => 15200,
+                    'to' => 26830,
+                    'rate' => 40,
+                ],
+                [
+                    'from' => 26830,
+                    'to' => 46440,
+                    'rate' => 45,
+                ],
+            ],
+            'threshold_after_last_slice' => 46440,
+            'rate_after_last_slice' => 50,
+            'exoneratedAmount' => 10160,
+        ]
     ],
 ];
