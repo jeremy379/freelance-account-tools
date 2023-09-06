@@ -12,4 +12,14 @@ class YearlyBill
     )
     {
     }
+
+    public function toArray(): array
+    {
+        return [
+            'year' => $this->year,
+            'total' => $this->total,
+            'totalVatCollected' => $this->totalVatCollected,
+            'billCount' => $this->billCount,
+        ];
+    }
 }

@@ -8,6 +8,8 @@ use Module\Reporting\Application\GetBalanceOnDatetimeQuery;
 use Module\Reporting\Application\GetBalanceOnDatetimeQueryHandler;
 use Module\Reporting\Application\GetBalanceOverPeriodQuery;
 use Module\Reporting\Application\GetBalanceOverPeriodQueryHandler;
+use Module\Reporting\Application\GetYearlyOverviewQuery;
+use Module\Reporting\Application\GetYearlyOverviewQueryHandler;
 use Module\Reporting\Domain\ReportingRepository;
 use Module\Reporting\Infrastructure\Repository\ReportingRepositoryDatabase;
 
@@ -23,6 +25,7 @@ class ReportingServiceProvider extends ServiceProvider
         Bus::map([
             GetBalanceOnDatetimeQuery::class => GetBalanceOnDatetimeQueryHandler::class,
             GetBalanceOverPeriodQuery::class => GetBalanceOverPeriodQueryHandler::class,
+            GetYearlyOverviewQuery::class => GetYearlyOverviewQueryHandler::class,
         ]);
     }
 }

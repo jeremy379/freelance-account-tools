@@ -13,4 +13,15 @@ class YearlyExpense
     )
     {
     }
+
+    public function toArray(): array
+    {
+        return [
+            'totalExpense' => $this->totalExpense,
+            'totalDeductibleExpense' => $this->totalDeductibleExpense,
+            'expenseCount' => $this->expenseCount,
+            'vatToRecover' => $this->vatToRecover,
+            'year' => $this->year,
+        ];
+    }
 }
