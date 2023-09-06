@@ -15,4 +15,6 @@ enum CategoryValue: string
     case SOFTWARE = 'SOFTWARE';
     case SERVICES = 'SERVICES';
     case OTHERS = 'OTHERS';
+    case OTHERS_NOT_DEDUCTIBLE = 'OTHERS_NOT_DEDUCTIBLE';
+    case HOUSE_EXPENSE = 'HOUSE_EXPENSE';
 }

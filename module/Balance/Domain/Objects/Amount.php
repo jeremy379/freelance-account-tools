@@ -3,7 +3,6 @@
 namespace Module\Balance\Domain\Objects;
 
 use Webmozart\Assert\Assert;
-use Webmozart\Assert\InvalidArgumentException;
 
 class Amount
 {

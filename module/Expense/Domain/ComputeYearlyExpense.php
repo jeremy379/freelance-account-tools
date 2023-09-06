@@ -1,0 +1,41 @@
+<?php
+
+namespace Module\Expense\Domain;
+
+use Carbon\CarbonImmutable;
+use Module\Expense\Domain\Config\DeductibilityConfiguration;
+use Module\Expense\Domain\Objects\YearlyExpense;
+
+class ComputeYearlyExpense
+{
+    public function __construct(private readonly ExpenseRepository $expenseRepository, private readonly DeductibilityConfiguration $configuration)
+    {
+
+    }
+
+    public function compute(int $year): YearlyExpense
+    {
+        $from = CarbonImmutable::now()->setYear($year)->startOfYear();
+        $to = CarbonImmutable::now()->setYear($year)->endOfYear();
+
+        $expenses = $this->expenseRepository->fetchBetween($from, $to);
+
+        $sumAllExpenses = 0;
+        $sumDeductibleExpense = 0;
+        foreach($expenses as $expense) {
+            $expenseAmount = $expense->expense->amount->toInt();
+            $sumAllExpenses += $expenseAmount;
+
+            $category = $expense->expense->category;
+            $deductibleRate = $this->configuration->deductibilityRateFor($category);
+
+            if(!$this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
+                $expenseAmount *= 1 + ($expense->expense->taxRate->taxRatePercentage / 100);
+            }
+
+            $sumDeductibleExpense += $expenseAmount * $deductibleRate;
+        }
+
+        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $year);
+    }
+}

@@ -7,7 +7,11 @@ use Module\Expense\Domain\Exception\ExpenseNotFound;
 
 interface ExpenseRepository
 {
+    /**
+     * @return array<ExpenseWithPayment>
+     */
     public function fetchBetween(CarbonImmutable $from, CarbonImmutable $to): array;
+
     /**
      * @throws ExpenseNotFound
      */
