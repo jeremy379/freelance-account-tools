@@ -9,6 +9,10 @@ use Module\Billing\Domain\Objects\TaxRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\suggest;
+use function Laravel\Prompts\info;
 
 class CreateBill extends Command
 {
@@ -18,11 +22,11 @@ class CreateBill extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = $this->ask('Enter the Reference');
-        $client = $this->askWithCompletion('Enter the client', $this->existingClient());
-        $amount = (float) $this->ask('Enter the amount (without tax)');
-        $taxRate = (int) $this->choice('Choose the tax rate', TaxRate::values(), TaxRate::rate21()->taxRatePercentage, 5);
-        $billingDate = $this->ask('Enter the billing date', $clock->now()->toIso8601String());
+        $reference = text('Enter the Reference', $clock->now()->year . '-001');
+        $client = suggest('Enter the client', $this->existingClient());
+        $amount = (float) text('Enter the amount (without tax)');
+        $taxRate = (int) select('Choose the tax rate', TaxRate::values(), TaxRate::rate21()->taxRatePercentage);
+        $billingDate = text('Enter the billing date', $clock->now()->toIso8601String());
 
         $command = new CreateBillCommand(
             $reference,
@@ -34,7 +38,7 @@ class CreateBill extends Command
 
         $bus->dispatch($command);
 
-        $this->output->success('Done!');
+        info('Done');
 
         return self::SUCCESS;
     }

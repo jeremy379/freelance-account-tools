@@ -11,6 +11,10 @@ use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\suggest;
+use function Laravel\Prompts\info;
 
 class CreateExpense extends Command
 {
@@ -20,13 +24,13 @@ class CreateExpense extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = $this->ask('Enter the Reference');
-        $category = $this->choice('Choose the category', $this->mapCase(CategoryValue::cases()));
-        $provider = $this->askWithCompletion('Enter the provider', $this->existingProvider());
-        $amount = (float) $this->ask('Enter the amount (without tax)');
-        $taxRate = (int) $this->choice('Choose the tax rate', TaxRate::values(), TaxRate::rate21()->taxRatePercentage, 5);
-        $paymentDate = $this->ask('Enter the payment date', $clock->now()->toIso8601String());
-        $countryCode = $this->choice('Choose the country', $this->mapCase(CountryCode::cases()));
+        $reference = text('Enter the Reference', '051-Provider-title');
+        $category = select('Choose the category', $this->mapCase(CategoryValue::cases()));
+        $provider = suggest('Enter the provider', $this->existingProvider());
+        $amount = (float) text('Enter the amount (without tax)');
+        $taxRate = (int) select('Choose the tax rate', TaxRate::values(), TaxRate::rate21()->taxRatePercentage, 5);
+        $paymentDate = text('Enter the payment date', $clock->now()->toIso8601String());
+        $countryCode = select('Choose the country', $this->mapCase(CountryCode::cases()));
 
         $command = new CreateExpenseCommand(
             $reference,
@@ -40,7 +44,7 @@ class CreateExpense extends Command
 
         $bus->dispatch($command);
 
-        $this->output->success('Done!');
+        info('Done!');
 
         return self::SUCCESS;
     }

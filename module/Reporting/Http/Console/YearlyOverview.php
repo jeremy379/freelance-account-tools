@@ -20,6 +20,8 @@ class YearlyOverview extends Command
         $query = new GetYearlyOverviewQuery($year);
         $result = $bus->dispatch($query);
 
+
+
         dd($result);
 
 
