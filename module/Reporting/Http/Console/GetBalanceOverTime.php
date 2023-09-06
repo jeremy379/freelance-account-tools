@@ -9,6 +9,11 @@ use Module\Reporting\Domain\BalanceOnDatetime;
 use Module\Reporting\Domain\BalanceOverTime;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\text;
+use function Laravel\Prompts\info;
 
 class GetBalanceOverTime extends Command
 {
@@ -18,8 +23,8 @@ class GetBalanceOverTime extends Command
 
     public function handle(ClockInterface $clock, Bus $bus): int
     {
-        $from = $this->ask('From', $clock->now()->startOfYear()->toIso8601String());
-        $to = $this->ask('To', $clock->now()->endOfYear()->toIso8601String());
+        $from = text('From', $clock->now()->startOfYear()->toIso8601String(), $clock->now()->startOfYear()->toIso8601String());
+        $to = text('To', $clock->now()->endOfYear()->toIso8601String(), $clock->now()->endOfYear()->toIso8601String());
 
         $query = new GetBalanceOverPeriodQuery(CarbonImmutable::parse($from), CarbonImmutable::parse($to));
 
@@ -28,7 +33,7 @@ class GetBalanceOverTime extends Command
 
         if($balances->isEmpty())
         {
-            $this->error('There is no entries in your balance');
+            error('There is no entries in your balance');
             return self::INVALID;
         }
 
@@ -48,7 +53,7 @@ class GetBalanceOverTime extends Command
         foreach($xScale as $xIndex => $date) {
             foreach($yScale as $yIndex => $amount) {
                 if($xIndex === 0) {
-                    $rows[$yIndex][0] = round($amount/100);
+                    $rows[$yIndex][0] = '<info>' . round($amount/100) . '</info>';
                 } else {
                     $rows[$yIndex][$xIndex] = '';
                 }
@@ -57,7 +62,7 @@ class GetBalanceOverTime extends Command
 
         $sumRowYIndex = $yIndex + 1;
 
-        $rows[$sumRowYIndex][0] = 'Total';
+        $rows[$sumRowYIndex][0] = '<info>Total</info>';
 
         /** @var BalanceOnDatetime $balance */
         foreach($balances->toArray() as $timestamp => $balance) {
@@ -65,12 +70,12 @@ class GetBalanceOverTime extends Command
             $xIndexToCheck = $this->getClosestPreviousDatetime($balance->datetime, $xScale);
             $yIndexToCheck = $this->getClosestPreviousAmount($balance->amount->toInt(), $yScale);
 
-            $rows[$yIndexToCheck][$xIndexToCheck] = 'x';
+            $rows[$yIndexToCheck][$xIndexToCheck] = '<error>x</error>';
 
-            $rows[$sumRowYIndex][$xIndexToCheck] = $balance->amount->toHumanFloat();
+            $rows[$sumRowYIndex][$xIndexToCheck] = '<info>' . $balance->amount->toHumanFloat() . '</info>';
         }
 
-        $this->table($xScale, $rows);
+        $this->customTable($xScale, $rows);
 
         return self::SUCCESS;
     }
@@ -148,5 +153,21 @@ class GetBalanceOverTime extends Command
         }
 
         return 0;
+    }
+
+    private function customTable(array $xScale, array $rows)
+    {
+        $table = new Table($this->output);
+
+        $table->setHeaders($xScale);
+
+        $separator = new TableSeparator;
+
+        $lastIndex = count($rows) - 1;
+        array_splice($rows, $lastIndex, 0, [$separator]);
+
+        $table->setRows($rows);
+
+        $table->render();
     }
 }
