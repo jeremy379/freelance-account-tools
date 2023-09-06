@@ -2,6 +2,7 @@
 
 namespace Module\Expense\Domain\Objects;
 
+use Module\SharedKernel\Domain\VatRate;
 use Webmozart\Assert\Assert;
 
 class Amount
@@ -35,7 +36,7 @@ class Amount
         return $this->amount / 100;
     }
 
-    public function withTax(TaxRate $taxRate): Amount
+    public function withTax(VatRate $taxRate): Amount
     {
         $amountInt = (int) round($this->amount + ($this->amount * $taxRate->taxRatePercentage / 100));
 

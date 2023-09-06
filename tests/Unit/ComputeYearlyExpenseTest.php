@@ -4,14 +4,14 @@ namespace Tests\Unit;
 
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
+use Module\Expense\Domain\ComputeYearlyExpense;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
-use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
-use Module\Expense\Domain\ComputeYearlyExpense;
 use Module\Expense\Infrastructure\Repository\ExpenseDomainFactory;
 use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
+use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
 use Tests\FakeClock;
 use Tests\TestCase;
@@ -25,19 +25,19 @@ class ComputeYearlyExpenseTest extends TestCase
     {
         $config = [
             'category' => [
-                CategoryValue::CAR->value => 30, // Percentage of pro usage.
-                CategoryValue::ACCOUNTANT->value => 100,
-                CategoryValue::TRAVEL->value => 100,
-                CategoryValue::SOCIAL_CHARGE->value => 100,
-                CategoryValue::TAX_PREVISION->value => 0,
-                CategoryValue::TAX->value => 100,
-                CategoryValue::TVA_PAYMENT->value => 0,
-                CategoryValue::HARDWARE->value => 100,
-                CategoryValue::SOFTWARE->value => 100,
-                CategoryValue::SERVICES->value => 100,
-                CategoryValue::OTHERS->value => 100,
-                CategoryValue::OTHERS_NOT_DEDUCTIBLE->value => 0,
-                CategoryValue::HOUSE_EXPENSE->value => 7.64, //Area of office
+                Category::CAR->value => 30, // Percentage of pro usage.
+                Category::ACCOUNTANT->value => 100,
+                Category::TRAVEL->value => 100,
+                Category::SOCIAL_CHARGE->value => 100,
+                Category::TAX_PREVISION->value => 0,
+                Category::TAX->value => 100,
+                Category::TVA_PAYMENT->value => 0,
+                Category::HARDWARE->value => 100,
+                Category::SOFTWARE->value => 100,
+                Category::SERVICES->value => 100,
+                Category::OTHERS->value => 100,
+                Category::OTHERS_NOT_DEDUCTIBLE->value => 0,
+                Category::HOUSE_EXPENSE->value => 7.64, //Area of office
             ],
             'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, your accountant need to make a procedure in each country. This mostly depend on the amount of VAT you have to get back in that country.
         ];
@@ -49,10 +49,10 @@ class ComputeYearlyExpenseTest extends TestCase
 
     public function testItComputeExpenses()
     {
-        $carExpense = $this->givenExpense(CategoryValue::CAR, 880.50, TaxRate::rate21(), CountryCode::BE);
-        $travelExpense = $this->givenExpense(CategoryValue::TRAVEL, 250.50, TaxRate::rate20(), CountryCode::FR);
-        $houseExpense = $this->givenExpense(CategoryValue::HOUSE_EXPENSE, 4000, TaxRate::rate6(), CountryCode::BE);
-        $accountantExpense = $this->givenExpense(CategoryValue::ACCOUNTANT, 115, TaxRate::rate21(), CountryCode::BE);
+        $carExpense = $this->givenExpense(Category::CAR, 880.50, VatRate::rate21(), CountryCode::BE);
+        $travelExpense = $this->givenExpense(Category::TRAVEL, 250.50, VatRate::rate20(), CountryCode::FR);
+        $houseExpense = $this->givenExpense(Category::HOUSE_EXPENSE, 4000, VatRate::rate6(), CountryCode::BE);
+        $accountantExpense = $this->givenExpense(Category::ACCOUNTANT, 115, VatRate::rate21(), CountryCode::BE);
 
         $totalExpenses = 4;
         $totalAmount = 880.50 + 250.50 + 4000 + 115;
@@ -84,7 +84,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $this->assertEquals($year, $result->year);
     }
 
-    private function givenExpense(CategoryValue $categoryValue, float $amount, TaxRate $taxRate, CountryCode $countryCode): EloquentExpense
+    private function givenExpense(Category $categoryValue, float $amount, VatRate $taxRate, CountryCode $countryCode): EloquentExpense
     {
         $amount *= 100;//We store int.
 

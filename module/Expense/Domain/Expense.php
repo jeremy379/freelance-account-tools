@@ -8,11 +8,11 @@ use Module\Expense\Domain\Objects\Amount;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Domain\Objects\Provider;
 use Module\Expense\Domain\Objects\Reference;
-use Module\Expense\Domain\Objects\CategoryValue;
-use Module\Expense\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\DomainEntityWithEvents;
 use Module\SharedKernel\Domain\DomainEvent;
 use Module\SharedKernel\Domain\SavingMode;
+use Module\SharedKernel\Domain\VatRate;
 
 class Expense implements DomainEntityWithEvents
 {
@@ -20,23 +20,23 @@ class Expense implements DomainEntityWithEvents
     private SavingMode $savingMode;
 
     private function __construct(
-        public readonly Reference     $reference,
-        public readonly CategoryValue $category,
-        public readonly Provider      $provider,
-        public readonly Amount        $amount,
-        public readonly TaxRate       $taxRate,
-        public readonly CountryCode   $countryCode,
+        public readonly Reference   $reference,
+        public readonly Category    $category,
+        public readonly Provider    $provider,
+        public readonly Amount      $amount,
+        public readonly VatRate     $taxRate,
+        public readonly CountryCode $countryCode,
     )
     {
     }
 
     public static function record(
-        Reference     $reference,
-        CategoryValue $category,
-        Provider      $provider,
-        Amount        $amount,
-        TaxRate       $taxRate,
-        CountryCode   $countryCode
+        Reference   $reference,
+        Category    $category,
+        Provider    $provider,
+        Amount      $amount,
+        VatRate     $taxRate,
+        CountryCode $countryCode
     ): Expense
     {
         $expense =  new self(
@@ -66,12 +66,12 @@ class Expense implements DomainEntityWithEvents
     }
 
     public static function restore(
-        Reference     $reference,
-        CategoryValue $category,
-        Provider      $provider,
-        Amount        $amount,
-        TaxRate       $taxRate,
-        CountryCode   $countryCode
+        Reference   $reference,
+        Category    $category,
+        Provider    $provider,
+        Amount      $amount,
+        VatRate     $taxRate,
+        CountryCode $countryCode
     ): Expense
     {
         return new self(

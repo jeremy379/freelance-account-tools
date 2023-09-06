@@ -11,7 +11,7 @@ use Module\Billing\Domain\BillRepository;
 use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Domain\Exception\CannotCreateBill;
 use Module\Billing\Domain\Objects\Amount;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
@@ -65,7 +65,7 @@ class CreateBillTest extends TestCase
 
     public function testBillPaymentEmitEvent()
     {
-        $taxRate = TaxRate::rate21();
+        $taxRate = VatRate::rate21();
         EloquentBill::factory(['reference' => 'bill_2023-002', 'tax_rate' => $taxRate->taxRatePercentage])->create();
 
         $command = new ReceiveBillPaymentCommand(

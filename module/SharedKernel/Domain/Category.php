@@ -1,8 +1,8 @@
 <?php
 
-namespace Module\Expense\Domain\Objects;
+namespace Module\SharedKernel\Domain;
 
-enum CategoryValue: string
+enum Category: string
 {
     case CAR = 'CAR';
     case ACCOUNTANT = 'ACCOUNTANT';

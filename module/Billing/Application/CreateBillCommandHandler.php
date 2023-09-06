@@ -9,7 +9,7 @@ use Module\Billing\Domain\Exception\CannotCreateBill;
 use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\Client;
 use Module\Billing\Domain\Objects\Reference;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 
 class CreateBillCommandHandler
 {
@@ -28,12 +28,12 @@ class CreateBillCommandHandler
                  Client::fromString($command->client),
                  Amount::fromFloat($command->amountWithoutTax),
                  match($command->taxRate) {
-                     0, 'exempt' => TaxRate::exempt(),
-                     'intracom' => TaxRate::intraCom(),
-                     6 => TaxRate::rate6(),
-                     20 => TaxRate::rate20(),
-                     21 => TaxRate::rate21(),
-                     default => TaxRate::exempt()
+                     0, 'exempt' => VatRate::exempt(),
+                     'intracom' => VatRate::intraCom(),
+                     6 => VatRate::rate6(),
+                     20 => VatRate::rate20(),
+                     21 => VatRate::rate21(),
+                     default => VatRate::exempt()
                  },
                  $command->billingDate,
              );

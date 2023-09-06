@@ -1,6 +1,7 @@
 <?php
 
-use \Module\Expense\Domain\Objects\CategoryValue;
+use Module\SharedKernel\Domain\Category;
+
 return [
     'social_cotisation' => [
         2023 => [
@@ -53,20 +54,20 @@ return [
     ],
     'deductibility' => [
         'category' => [
-            CategoryValue::CAR->value => 30, // Percentage of pro usage.
-            CategoryValue::ACCOUNTANT->value => 100,
-            CategoryValue::TRAVEL->value => 100,
-            CategoryValue::SOCIAL_CHARGE->value => 100,
-            CategoryValue::TAX_PREVISION->value => 0,
-            CategoryValue::TAX->value => 100,
-            CategoryValue::TVA_PAYMENT->value => 0,
-            CategoryValue::HARDWARE->value => 100,
-            CategoryValue::SOFTWARE->value => 100,
-            CategoryValue::SERVICES->value => 100,
-            CategoryValue::OTHERS->value => 100,
-            CategoryValue::OTHERS_NOT_DEDUCTIBLE->value => 0,
-            CategoryValue::HOUSE_EXPENSE->value => 7.64, //Area of office
-            CategoryValue::PLCI->value => 100,
+            Category::CAR->value => 30, // Percentage of pro usage.
+            Category::ACCOUNTANT->value => 100,
+            Category::TRAVEL->value => 100,
+            Category::SOCIAL_CHARGE->value => 100,
+            Category::TAX_PREVISION->value => 0,
+            Category::TAX->value => 100,
+            Category::TVA_PAYMENT->value => 0,
+            Category::HARDWARE->value => 100,
+            Category::SOFTWARE->value => 100,
+            Category::SERVICES->value => 100,
+            Category::OTHERS->value => 100,
+            Category::OTHERS_NOT_DEDUCTIBLE->value => 0,
+            Category::HOUSE_EXPENSE->value => 7.64, //Area of office
+            Category::PLCI->value => 100,
         ],
       'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, some stuff need to be requested by your accountant : https://finances.belgium.be/fr/entreprises/tva/international/remboursement-de-la-tva-etrangere/assujettis-etablis-en-belgique#q1
     ],

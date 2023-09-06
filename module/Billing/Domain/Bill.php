@@ -7,7 +7,7 @@ use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\Client;
 use Module\Billing\Domain\Objects\Reference;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 use Module\SharedKernel\Domain\DomainEntityWithEvents;
 use Module\SharedKernel\Domain\DomainEvent;
 use Module\SharedKernel\Domain\SavingMode;
@@ -18,19 +18,19 @@ class Bill implements DomainEntityWithEvents
     private SavingMode $savingMode;
 
     private function __construct(
-        public readonly Reference $reference,
-        public readonly Client $client,
-        public readonly Amount $amountWithoutTax,
-        public readonly TaxRate $taxRate,
+        public readonly Reference       $reference,
+        public readonly Client          $client,
+        public readonly Amount          $amountWithoutTax,
+        public readonly VatRate         $taxRate,
         public readonly CarbonImmutable $billingDate,
     ) {
     }
 
     public static function record(
-        Reference $reference,
-        Client $client,
-        Amount $amountWithoutTax,
-        TaxRate $taxRate,
+        Reference       $reference,
+        Client          $client,
+        Amount          $amountWithoutTax,
+        VatRate         $taxRate,
         CarbonImmutable $billingDate,
     ): Bill
     {
@@ -47,10 +47,10 @@ class Bill implements DomainEntityWithEvents
     }
 
     public static function restore(
-        Reference $reference,
-        Client $client,
-        Amount $amountWithoutTax,
-        TaxRate $taxRate,
+        Reference       $reference,
+        Client          $client,
+        Amount          $amountWithoutTax,
+        VatRate         $taxRate,
         CarbonImmutable $billingDate,
     ): Bill
     {

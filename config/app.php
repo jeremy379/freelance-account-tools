@@ -178,6 +178,7 @@ return [
         \Module\Reporting\ReportingServiceProvider::class,
         \Module\Balance\BalanceServiceProvider::class,
         \Module\Balance\BalanceEventServiceProvider::class,
+        \Module\Forecast\ForecastServiceProvider::class,
     ])->toArray(),
 
     /*

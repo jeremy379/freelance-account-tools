@@ -9,7 +9,7 @@ use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\BillPayment;
 use Module\Billing\Domain\Objects\Client;
 use Module\Billing\Domain\Objects\Reference;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 
 class BillDomainFactory
@@ -21,12 +21,12 @@ class BillDomainFactory
             Client::fromString($bill->client),
             Amount::fromStoredInt($bill->amount),
             match($bill->tax_rate) {
-                0, 'exempt' => TaxRate::exempt(),
-                'intracom' => TaxRate::intraCom(),
-                6 => TaxRate::rate6(),
-                20 => TaxRate::rate20(),
-                21 => TaxRate::rate21(),
-                default => TaxRate::exempt()
+                0, 'exempt' => VatRate::exempt(),
+                'intracom' => VatRate::intraCom(),
+                6 => VatRate::rate6(),
+                20 => VatRate::rate20(),
+                21 => VatRate::rate21(),
+                default => VatRate::exempt()
             },
             CarbonImmutable::parse($bill->billing_datetime)
         );

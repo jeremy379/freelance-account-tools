@@ -2,8 +2,8 @@
 
 namespace Module\Expense\Domain\Config;
 
-use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
+use Module\SharedKernel\Domain\Category;
 use Webmozart\Assert\Assert;
 
 class DeductibilityConfiguration
@@ -20,7 +20,7 @@ class DeductibilityConfiguration
         return new self($configuration['category'], $configuration['vat_handle_for_countries']);
     }
 
-    public function deductibilityRateFor(CategoryValue $categoryValue): float
+    public function deductibilityRateFor(Category $categoryValue): float
     {
         return $this->categoriesDeductibility[$categoryValue->value] / 100;
     }

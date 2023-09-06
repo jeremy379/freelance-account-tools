@@ -7,12 +7,12 @@ use Module\Expense\Domain\Exception\ExpenseNotFound;
 use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Domain\Objects\Amount;
-use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Domain\Objects\Provider;
 use Module\Expense\Domain\Objects\Reference;
-use Module\Expense\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\EventDispatcher;
+use Module\SharedKernel\Domain\VatRate;
 
 class CreateExpenseCommandHandler
 {
@@ -32,15 +32,15 @@ class CreateExpenseCommandHandler
 
             $expense = Expense::record(
                 Reference::fromString($command->reference),
-                CategoryValue::from(strtoupper($command->category)),
+                Category::from(strtoupper($command->category)),
                 Provider::fromString($command->provider),
                 Amount::fromFloat($command->amount),
                 match($command->taxRate) {
-                    0, 'exempt' => TaxRate::exempt(),
-                    6 => TaxRate::rate6(),
-                    20 => TaxRate::rate20(),
-                    21 => TaxRate::rate21(),
-                    default => TaxRate::includedAndNotRefundable()
+                    0, 'exempt' => VatRate::exempt(),
+                    6 => VatRate::rate6(),
+                    20 => VatRate::rate20(),
+                    21 => VatRate::rate21(),
+                    default => VatRate::includedAndNotRefundable()
                 },
                 CountryCode::from(strtoupper($command->countryCode)),
             );

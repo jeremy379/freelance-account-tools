@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use Module\Billing\Domain\ComputeYearlyIncome;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
@@ -23,11 +23,11 @@ class ComputeYearlyIncomeTest extends TestCase
 
     public function testItComputeIncome()
     {
-        $this->givenBill(7850, TaxRate::intraCom());
-        $this->givenBill(5000, TaxRate::intraCom());
-        $this->givenBill(10800, TaxRate::intraCom());
-        $this->givenBill(2500, TaxRate::rate21());
-        $this->givenBill(125, TaxRate::rate21());
+        $this->givenBill(7850, VatRate::intraCom());
+        $this->givenBill(5000, VatRate::intraCom());
+        $this->givenBill(10800, VatRate::intraCom());
+        $this->givenBill(2500, VatRate::rate21());
+        $this->givenBill(125, VatRate::rate21());
 
         $computer = new ComputeYearlyIncome(
             new BillRepositoryDatabase(new BillDomainFactory())
@@ -41,7 +41,7 @@ class ComputeYearlyIncomeTest extends TestCase
         $this->assertEquals((2500 + 125) * 0.21 , $result->totalVatCollected);
     }
 
-    private function givenBill(float $amount, TaxRate $taxRate) {
+    private function givenBill(float $amount, VatRate $taxRate) {
         EloquentBill::factory()->create([
             'amount' => $amount * 100,
             'tax_rate' => $taxRate->taxRatePercentage,

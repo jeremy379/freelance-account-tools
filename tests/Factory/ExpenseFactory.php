@@ -3,9 +3,9 @@
 namespace Factory;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Module\Expense\Domain\Objects\CategoryValue;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
+use Module\SharedKernel\Domain\Category;
 
 class ExpenseFactory extends Factory
 {
@@ -15,7 +15,7 @@ class ExpenseFactory extends Factory
     {
         return [
             'reference' => $this->faker->uuid(),
-            'category' => CategoryValue::CAR->value,
+            'category' => Category::CAR->value,
             'provider' => $this->faker->name,
             'amount' => $this->faker->randomNumber(3),
             'tax_rate' => $this->faker->randomElement([0, 21, 6, 20]),

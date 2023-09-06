@@ -5,7 +5,7 @@ namespace Module\Billing\Http\Console;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use Module\Billing\Application\CreateBillCommand;
-use Module\Billing\Domain\Objects\TaxRate;
+use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
@@ -25,7 +25,7 @@ class CreateBill extends Command
         $reference = text('Enter the Reference', $clock->now()->year . '-001');
         $client = suggest('Enter the client', $this->existingClient());
         $amount = (float) text('Enter the amount (without tax)');
-        $taxRate = (int) select('Choose the tax rate', TaxRate::values(), TaxRate::rate21()->taxRatePercentage);
+        $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->taxRatePercentage);
         $billingDate = text('Enter the billing date', $clock->now()->toIso8601String(), $clock->now()->toIso8601String());
 
         $command = new CreateBillCommand(
