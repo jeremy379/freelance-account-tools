@@ -40,7 +40,7 @@ class CreateForecastTest extends TestCase
         $cmd = new CreateForecastCommand(500, VatRate::intracom()->taxRatePercentage, $this->clock->now());
         $this->bus->dispatch($cmd);
 
-        $expenses = $this->forecastRepository->incomeForecastedForYear($this->clock->now()->startOfYear());
+        $incomes = $this->forecastRepository->incomeForecastedForYear($this->clock->now()->startOfYear());
 
         $this->assertEquals(500, $incomes->total());
     }

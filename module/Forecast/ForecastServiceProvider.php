@@ -4,22 +4,22 @@ namespace Module\Forecast;
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\ServiceProvider;
-use Module\Expense\Application\CreateExpenseCommand;
-use Module\Expense\Application\CreateExpenseCommandHandler;
-use Module\Expense\Domain\ExpenseRepository;
-use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
+use Module\Forecast\Application\CreateForecastCommand;
+use Module\Forecast\Application\CreateForecastCommandHandler;
+use Module\Forecast\Domain\ForecastRepository;
+use Module\Forecast\Infrastructure\Repository\ForecastRepositoryDatabase;
 
 class ForecastServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        //$this->app->bind(ExpenseRepository::class, ExpenseRepositoryDatabase::class);
+        $this->app->bind(ForecastRepository::class, ForecastRepositoryDatabase::class);
     }
 
     public function boot()
     {
         Bus::map([
-          //  CreateExpenseCommand::class => CreateExpenseCommandHandler::class,
+            CreateForecastCommand::class => CreateForecastCommandHandler::class,
         ]);
     }
 }
