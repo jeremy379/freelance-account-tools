@@ -55,7 +55,6 @@ return [
         [
             'category' => [
                 CategoryValue::CAR->value => 30, // Percentage of pro usage.
-                CategoryValue::CAR->value => 100,
                 CategoryValue::ACCOUNTANT->value => 100,
                 CategoryValue::TRAVEL->value => 100,
                 CategoryValue::SOCIAL_CHARGE->value => 100,
@@ -69,7 +68,7 @@ return [
                 CategoryValue::OTHERS_NOT_DEDUCTIBLE->value => 0,
                 CategoryValue::HOUSE_EXPENSE->value => 7.64, //Area of office
             ],
-          'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, your accountant need to make a procedure in each country. This mostly depend on the amount of VAT you have to get back in that country.
+          'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, some stuff need to be requested by your accountant : https://finances.belgium.be/fr/entreprises/tva/international/remboursement-de-la-tva-etrangere/assujettis-etablis-en-belgique#q1
         ],
     ]
 ];

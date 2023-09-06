@@ -26,7 +26,6 @@ class ComputeYearlyExpenseTest extends TestCase
         $config = [
             'category' => [
                 CategoryValue::CAR->value => 30, // Percentage of pro usage.
-                CategoryValue::CAR->value => 100,
                 CategoryValue::ACCOUNTANT->value => 100,
                 CategoryValue::TRAVEL->value => 100,
                 CategoryValue::SOCIAL_CHARGE->value => 100,
@@ -63,6 +62,11 @@ class ComputeYearlyExpenseTest extends TestCase
             + (100 * 115 * 1);
         $deductible /= 100;
 
+        $vatToRecover = (100 * 880.50 * 0.3 * 0.21)
+            + (100 * 4000 * 0.0764 * 0.06)
+            + (100 * 115 * 0.21);
+        $vatToRecover /= 100;
+
 
         $calculator = new ComputeYearlyExpense(
             new ExpenseRepositoryDatabase(
@@ -76,6 +80,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $this->assertEquals($totalExpenses, $result->expenseCount);
         $this->assertEquals($totalAmount, $result->totalExpense);
         $this->assertEquals($deductible, $result->totalDeductibleExpense);
+        $this->assertEquals($vatToRecover, $result->vatToRecover);
         $this->assertEquals($year, $result->year);
     }
 

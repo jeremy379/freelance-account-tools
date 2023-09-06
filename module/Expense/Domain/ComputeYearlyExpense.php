@@ -22,6 +22,7 @@ class ComputeYearlyExpense
 
         $sumAllExpenses = 0;
         $sumDeductibleExpense = 0;
+        $vatToRequest = 0;
         foreach($expenses as $expense) {
             $expenseAmount = $expense->expense->amount->toInt();
             $sumAllExpenses += $expenseAmount;
@@ -31,11 +32,15 @@ class ComputeYearlyExpense
 
             if(!$this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
                 $expenseAmount *= 1 + ($expense->expense->taxRate->taxRatePercentage / 100);
+                $vatAmount = 0;
+            } else {
+                $vatAmount = $expenseAmount * ($expense->expense->taxRate->taxRatePercentage / 100);
             }
 
             $sumDeductibleExpense += $expenseAmount * $deductibleRate;
+            $vatToRequest += $vatAmount * $deductibleRate;
         }
 
-        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $year);
+        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $vatToRequest/100, $year);
     }
 }
