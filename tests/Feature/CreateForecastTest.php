@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
-use Module\Forecast\Application\CreateForecastCommand;
+use Module\Forecast\Application\CreateExpenseForecastCommand;
+use Module\Forecast\Application\CreateIncomeForecastCommand;
 use Module\Forecast\Domain\ForecastRepository;
+use Module\Forecast\Infrastructure\Repository\ForecastFactory;
+use Module\Forecast\Infrastructure\Repository\ForecastRepositoryDatabase;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
@@ -23,25 +26,26 @@ class CreateForecastTest extends TestCase
         parent::setUp();
         $this->bus = new LaravelBus();
         $this->clock = new FakeClock();
+        $this->forecastRepository = new ForecastRepositoryDatabase(new ForecastFactory());
     }
 
     public function testItRecordForecastedExpense()
     {
-        $cmd = new CreateForecastCommand(-500, VatRate::rate21()->taxRatePercentage, $this->clock->now(), Category::CAR->value);
+        $cmd = new CreateExpenseForecastCommand(500, VatRate::rate21()->taxRatePercentage, $this->clock->now(), Category::CAR->value);
         $this->bus->dispatch($cmd);
 
         $expenses = $this->forecastRepository->expenseForecastedForYear($this->clock->now()->startOfYear());
 
-        $this->assertEquals(500, $expenses->total());
+        $this->assertCount(1, $expenses);
     }
 
     public function testItRecordForecastedIncome()
     {
-        $cmd = new CreateForecastCommand(500, VatRate::intracom()->taxRatePercentage, $this->clock->now());
+        $cmd = new CreateIncomeForecastCommand(500, VatRate::intracom()->taxRatePercentage, $this->clock->now());
         $this->bus->dispatch($cmd);
 
         $incomes = $this->forecastRepository->incomeForecastedForYear($this->clock->now()->startOfYear());
 
-        $this->assertEquals(500, $incomes->total());
+        $this->assertCount(1, $incomes);
     }
 }

@@ -20,14 +20,7 @@ class BillDomainFactory
             Reference::fromString($bill->reference),
             Client::fromString($bill->client),
             Amount::fromStoredInt($bill->amount),
-            match($bill->tax_rate) {
-                0, 'exempt' => VatRate::exempt(),
-                'intracom' => VatRate::intraCom(),
-                6 => VatRate::rate6(),
-                20 => VatRate::rate20(),
-                21 => VatRate::rate21(),
-                default => VatRate::exempt()
-            },
+            VatRate::fromStoredValue($bill->tax_rate),
             CarbonImmutable::parse($bill->billing_datetime)
         );
     }

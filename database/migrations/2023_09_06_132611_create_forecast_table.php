@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('forecast', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('category');
+            $table->string('category')->nullable();
             $table->unsignedBigInteger('amount');
             $table->integer('vat_rate');
             $table->dateTime('forecasted_on');

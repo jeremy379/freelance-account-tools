@@ -8,6 +8,19 @@ class VatRate
 
     }
 
+    public static function fromStoredValue(int|string $taxRatePercentage): VatRate
+    {
+        return match($taxRatePercentage) {
+            0, 'exempt' => VatRate::exempt(),
+            'intracom' => VatRate::intraCom(),
+            'includedAndNotRefundable' => VatRate::includedAndNotRefundable(),
+            6 => VatRate::rate6(),
+            20 => VatRate::rate20(),
+            21 => VatRate::rate21(),
+            default => VatRate::exempt()
+        };
+    }
+
     public static function values(): array
     {
         return [
