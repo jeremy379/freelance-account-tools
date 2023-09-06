@@ -67,4 +67,15 @@ class Forecast
             $forecastedOn
         );
     }
+
+    public function toArray(): array
+    {
+        return [
+            'type' => $this->forecastType->value,
+            'int_amount' => $this->amount->toInt(),
+            'category' => $this->category?->value,
+            'vat_rate' => $this->vatRate->taxRatePercentage,
+            'forecasted_on' => $this->forecastedOn->toIso8601String(),
+        ];
+    }
 }

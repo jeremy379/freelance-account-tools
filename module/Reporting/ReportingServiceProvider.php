@@ -8,6 +8,8 @@ use Module\Reporting\Application\GetBalanceOnDatetimeQuery;
 use Module\Reporting\Application\GetBalanceOnDatetimeQueryHandler;
 use Module\Reporting\Application\GetBalanceOverPeriodQuery;
 use Module\Reporting\Application\GetBalanceOverPeriodQueryHandler;
+use Module\Reporting\Application\GetYearlyForecastedOverviewQuery;
+use Module\Reporting\Application\GetYearlyForecastedOverviewQueryHandler;
 use Module\Reporting\Application\GetYearlyOverviewQuery;
 use Module\Reporting\Application\GetYearlyOverviewQueryHandler;
 use Module\Reporting\Domain\ReportingRepository;
@@ -26,6 +28,7 @@ class ReportingServiceProvider extends ServiceProvider
             GetBalanceOnDatetimeQuery::class => GetBalanceOnDatetimeQueryHandler::class,
             GetBalanceOverPeriodQuery::class => GetBalanceOverPeriodQueryHandler::class,
             GetYearlyOverviewQuery::class => GetYearlyOverviewQueryHandler::class,
+            GetYearlyForecastedOverviewQuery::class => GetYearlyForecastedOverviewQueryHandler::class,
         ]);
     }
 }

@@ -13,7 +13,6 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\text;
-use function Laravel\Prompts\info;
 
 class GetBalanceOverTime extends Command
 {

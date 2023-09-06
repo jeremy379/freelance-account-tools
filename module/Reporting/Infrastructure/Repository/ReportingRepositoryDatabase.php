@@ -6,6 +6,7 @@ use Carbon\CarbonImmutable;
 use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
 use Module\Billing\Infrastructure\BillingFacade;
 use Module\Expense\Infrastructure\ExpenseFacade;
+use Module\Forecast\Infrastructure\ForecastFacade;
 use Module\Reporting\Domain\Config\SocialContributionConfig;
 use Module\Reporting\Domain\Config\TaxConfig;
 use Module\Reporting\Domain\ReportingRepository;
@@ -14,7 +15,11 @@ use Module\Reporting\Domain\TaxCalculator;
 
 class ReportingRepositoryDatabase implements ReportingRepository
 {
-    public function __construct(private BillingFacade $billingFacade, private ExpenseFacade $expenseFacade)
+    public function __construct(
+        private BillingFacade $billingFacade,
+        private ExpenseFacade $expenseFacade,
+        private ForecastFacade $forecastFacade,
+    )
     {
     }
 
@@ -55,6 +60,22 @@ class ReportingRepositoryDatabase implements ReportingRepository
             'socialContribution' => $socialContribution,
             'taxable_income' => $taxableIncome,
             'tax' => $tax,
+        ];
+    }
+
+    public function retrieveYearlyForecastedOverview(int $year): array
+    {
+        $realOverview = $this->retrieveYearlyOverview($year);
+
+        $forecastExpenses = $this->forecastFacade->getExpensesForecasted($year);
+        $forecastIncome = $this->forecastFacade->getIncomeForecasted($year);
+
+        return [
+            'real' => $realOverview,
+            'forecast' => [
+                'expense' => $forecastExpenses,
+                'income' => $forecastIncome,
+            ],
         ];
     }
 }

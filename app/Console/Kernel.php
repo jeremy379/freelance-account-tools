@@ -8,6 +8,7 @@ use Module\Billing\Http\Console\BillPaymentReceived;
 use Module\Billing\Http\Console\CreateBill;
 use Module\Expense\Http\Console\CreateExpense;
 use Module\Reporting\Http\Console\GetBalanceOverTime;
+use Module\Reporting\Http\Console\YearlyForecastedOverview;
 use Module\Reporting\Http\Console\YearlyOverview;
 
 class Kernel extends ConsoleKernel
@@ -18,6 +19,7 @@ class Kernel extends ConsoleKernel
         CreateExpense::class,
         GetBalanceOverTime::class,
         YearlyOverview::class,
+        YearlyForecastedOverview::class,
     ];
 
     /**
