@@ -5,12 +5,19 @@ namespace Module\Forecast\Infrastructure\Repository;
 use Carbon\CarbonImmutable;
 use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\ForecastRepository;
+use Module\Forecast\Infrastructure\Eloquent\EloquentForecast;
 
 class ForecastRepositoryDatabase implements ForecastRepository
 {
     public function save(Forecast $forecast): void
     {
-        // TODO: Implement save() method.
+        EloquentForecast::create([
+            'type' => $forecast->forecastType->value,
+            'category' => $forecast->category->value,
+            'amount' => $forecast->amount->toInt(),
+            'vat_rate' => $forecast->vatRate->taxRatePercentage,
+            'forecasted_on' => $forecast->forecastedOn,
+        ]);
     }
 
     public function expenseForecastedForYear(CarbonImmutable $dateTime): array
