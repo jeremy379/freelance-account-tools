@@ -32,7 +32,7 @@ class BillDomainFactory
         );
     }
 
-    public function toBillWithPayment(EloquentBill $bill): ExpenseWithPayment
+    public function toBillWithPayment(EloquentBill $bill): BillWithPayments
     {
         $billObject = $this->toBill($bill);
 
@@ -41,5 +41,7 @@ class BillDomainFactory
         foreach($bill->payments as $payment) {
             $billWithPayment = $billWithPayment->withPayment(BillPayment::with($payment->occurred_on, Amount::fromStoredInt($payment->amount)));
         }
+
+        return $billWithPayment;
     }
 }
