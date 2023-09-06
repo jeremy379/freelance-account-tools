@@ -45,6 +45,7 @@ class CreateBill extends Command
             ->select('client')
             ->distinct('client')
             ->get()
+            ->pluck('client')
             ->toArray();
     }
 }

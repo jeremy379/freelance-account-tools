@@ -51,6 +51,7 @@ class CreateExpense extends Command
             ->select('provider')
             ->distinct('provider')
             ->get()
+            ->pluck('provider')
             ->toArray();
     }
 

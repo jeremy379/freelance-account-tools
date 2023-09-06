@@ -55,7 +55,6 @@ class ReportingRepositoryDatabase implements ReportingRepository
             'socialContribution' => $socialContribution,
             'taxable_income' => $taxableIncome,
             'tax' => $tax,
-            //'tax_details' => $taxCalculator->computationDetails(),
         ];
     }
 }
