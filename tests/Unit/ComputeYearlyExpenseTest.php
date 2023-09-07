@@ -53,7 +53,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $travelExpense = $this->givenExpense(Category::TRAVEL, 250.50, VatRate::rate20(), CountryCode::FR);
         $houseExpense = $this->givenExpense(Category::HOUSE_EXPENSE, 4000, VatRate::rate6(), CountryCode::BE);
         $accountantExpense = $this->givenExpense(Category::ACCOUNTANT, 115, VatRate::rate21(), CountryCode::BE);
-        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::BE);
+        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
 
         $totalExpenses = 5;
         $totalAmount = 880.50 + 250.50 + 4000 + 115;

@@ -5,12 +5,12 @@ namespace Module\Expense\Domain;
 use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
 use Module\Expense\Domain\Objects\YearlyExpense;
+use Module\SharedKernel\Domain\VatRate;
 
 class ComputeYearlyExpense
 {
     public function __construct(private readonly ExpenseRepository $expenseRepository, private readonly DeductibilityConfiguration $configuration)
     {
-
     }
 
     public function compute(int $year): YearlyExpense
@@ -30,20 +30,19 @@ class ComputeYearlyExpense
             $category = $expense->expense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
-            $expenseAmount *= 1 + ($expense->expense->taxRate->rate() / 100);
-
             if($expense->expense->taxRate->isReverseCharge()) {
-                $vatAmount = $expenseAmount * -0.21;
+                $vatAmount = $expenseAmount * -1 *  (VatRate::rate21()->rate() / 100);
             } else {
                 if (!$this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
                     $vatAmount = 0;
+                    $expenseAmount *= 1 + ($expense->expense->taxRate->rate() / 100);
                 } else {
-                    $vatAmount = $expenseAmount * ($expense->expense->taxRate->rate() / 100);
+                    $vatAmount = $expenseAmount * ($expense->expense->taxRate->rate() / 100) * $deductibleRate;
                 }
             }
 
             $sumDeductibleExpense += $expenseAmount * $deductibleRate;
-            $vatToRequest += $vatAmount * $deductibleRate;
+            $vatToRequest += $vatAmount;
         }
 
         return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $vatToRequest/100, $year);
