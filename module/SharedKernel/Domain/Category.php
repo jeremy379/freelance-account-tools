@@ -18,4 +18,5 @@ enum Category: string
     case OTHERS_NOT_DEDUCTIBLE = 'OTHERS_NOT_DEDUCTIBLE';
     case HOUSE_EXPENSE = 'HOUSE_EXPENSE';
     case PLCI = 'PLCI';
+    case INSURANCE = 'INSURANCE';
 }
