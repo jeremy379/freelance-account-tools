@@ -7,7 +7,6 @@ use Module\Reporting\Application\GetYearlyOverviewQuery;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 use function Laravel\Prompts\text;
 
 class YearlyOverview extends Command

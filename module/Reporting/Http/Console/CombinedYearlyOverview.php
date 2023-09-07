@@ -22,10 +22,6 @@ class CombinedYearlyOverview extends Command
         $query = new GetYearlyForecastedOverviewQuery($year, true);
         $result = $bus->dispatch($query);
 
-        //As it's only future, the month from jan. to current need to be added to the forecast
-
-        //dd($result);
-
         $table = new Table($this->output);
 
         $table->setHeaderTitle('Combined Results for ' . $year);

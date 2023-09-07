@@ -81,7 +81,7 @@ class Forecast
             'type' => $this->forecastType->value,
             'int_amount' => $this->amount->toInt(),
             'category' => $this->category?->value,
-            'vat_rate' => $this->vatRate->taxRatePercentage,
+            'vat_rate' => $this->vatRate->value(),
             'forecasted_on' => $this->forecastedOn->toIso8601String(),
             'country_code' => $this->countryCodeWhereExpenseIsMade?->value,
         ];
