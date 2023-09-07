@@ -30,7 +30,7 @@ class CombinedYearlyOverview extends Command
 
         $table->setHeaderTitle('Combined Results for ' . $year);
         $table->setHorizontal();
-        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Vat to pay', 'Vat to get back']);
+        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Net left', 'Vat to pay', 'Vat to get back']);
 
         $table->setRows([
             [
@@ -42,6 +42,7 @@ class CombinedYearlyOverview extends Command
                 $result['real_overview']['socialContribution']['yearly_amount'] .' €',
                 $result['real_overview']['taxable_income'] .' €',
                 '<error>' . $result['real_overview']['tax'] . ' €</error>',
+                $result['real_overview']['taxable_income'] - $result['real_overview']['tax'] . '€ (' . ($result['real_overview']['taxable_income'] - $result['real_overview']['tax']) /12 .')',
                 $result['real_overview']['bill']['totalVatCollected'] .' €',
                 $result['real_overview']['expense']['vatToRecover'] .' €',
             ],
@@ -54,6 +55,7 @@ class CombinedYearlyOverview extends Command
                 $result['real_overview']['socialContribution']['yearly_amount'] + $result['socialContribution']['yearly_amount'] .' €',
                 $result['real_overview']['taxable_income'] + $result['taxable_income'] .' €',
                 '<error>' . $result['real_overview']['tax'] + $result['tax'] . ' €</error>',
+                $result['real_overview']['taxable_income'] + $result['taxable_income'] - $result['real_overview']['tax'] - $result['tax'] . '€ (' . ($result['real_overview']['taxable_income'] + $result['taxable_income'] - $result['real_overview']['tax'] - $result['tax']) / 12 .')',
                 $result['real_overview']['bill']['totalVatCollected'] + $result['bill']['totalVatCollected'] .' €',
                 $result['real_overview']['expense']['vatToRecover'] + $result['expense']['vatToRecover'] .' €',
             ],
