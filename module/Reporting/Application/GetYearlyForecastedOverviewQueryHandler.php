@@ -13,6 +13,6 @@ class GetYearlyForecastedOverviewQueryHandler
 
     public function handle(GetYearlyForecastedOverviewQuery $query): array
     {
-        return $this->repository->retrieveYearlyForecastedOverview($query->year);
+        return $this->repository->retrieveYearlyForecastedOverview($query->year, $query->onlyFuture);
     }
 }

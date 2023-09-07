@@ -16,9 +16,9 @@ use Module\Reporting\Domain\TaxCalculator;
 class ReportingRepositoryDatabase implements ReportingRepository
 {
     public function __construct(
-        private BillingFacade $billingFacade,
-        private ExpenseFacade $expenseFacade,
-        private ForecastFacade $forecastFacade,
+        private readonly BillingFacade $billingFacade,
+        private readonly ExpenseFacade $expenseFacade,
+        private readonly ForecastFacade $forecastFacade,
     )
     {
     }
@@ -63,19 +63,37 @@ class ReportingRepositoryDatabase implements ReportingRepository
         ];
     }
 
-    public function retrieveYearlyForecastedOverview(int $year): array
+    public function retrieveYearlyForecastedOverview(int $year, bool $onlyFuture): array
     {
         $realOverview = $this->retrieveYearlyOverview($year);
 
-        $forecastExpenses = $this->forecastFacade->getExpensesForecasted($year);
-        $forecastIncome = $this->forecastFacade->getIncomeForecasted($year);
+        $forecastExpenses = $this->forecastFacade->getExpensesForecasted($year, $onlyFuture);
+        $forecastIncome = $this->forecastFacade->getIncomeForecasted($year, $onlyFuture);
+
+        $taxCalculator = new TaxCalculator(TaxConfig::loadConfiguration($year, config('calculator.tax')));
+        $socialContributionCalculator = new SocialContributionCalculator(
+            SocialContributionConfig::loadConfiguration($year, config('calculator.social_cotisation'))
+        );
+
+        $totalIncome = $forecastIncome['total'];
+        $totalDeductibleExpense = $forecastExpenses['totalDeductibleExpense'];
+        $netTaxableIncome = $totalIncome - $totalDeductibleExpense;
+
+        $socialContribution = $socialContributionCalculator->compute($netTaxableIncome);
+
+        $taxableIncome = $netTaxableIncome - $socialContribution['yearly_amount'];
+
+        $tax = $taxCalculator->compute(
+            $taxableIncome, config('calculator.company_zip_code')
+        );
 
         return [
-            'real' => $realOverview,
-            'forecast' => [
-                'expense' => $forecastExpenses,
-                'income' => $forecastIncome,
-            ],
+            'bill' => $forecastIncome,
+            'expense' => $forecastExpenses,
+            'socialContribution' => $socialContribution,
+            'taxable_income' => $taxableIncome,
+            'tax' => $tax,
+            'real_overview' => $realOverview,
         ];
     }
 }

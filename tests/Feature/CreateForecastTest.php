@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Application\CreateExpenseForecastCommand;
 use Module\Forecast\Application\CreateIncomeForecastCommand;
 use Module\Forecast\Domain\ForecastRepository;
@@ -31,7 +32,7 @@ class CreateForecastTest extends TestCase
 
     public function testItRecordForecastedExpense()
     {
-        $cmd = new CreateExpenseForecastCommand(500, VatRate::rate21()->taxRatePercentage, $this->clock->now(), Category::CAR->value);
+        $cmd = new CreateExpenseForecastCommand(500, VatRate::rate21()->taxRatePercentage, $this->clock->now(), Category::CAR->value, CountryCode::BE->value);
         $this->bus->dispatch($cmd);
 
         $expenses = $this->forecastRepository->expenseForecastedForYear($this->clock->now()->startOfYear());

@@ -24,13 +24,10 @@ class YearlyForecastedOverview extends Command
         $query = new GetYearlyForecastedOverviewQuery($year);
         $result = $bus->dispatch($query);
 
-        dd($result);
-
-
         $table = new Table($this->output);
         $separator = new TableSeparator;
 
-        $table->setHeaderTitle('Results for year ' . $year);
+        $table->setHeaderTitle('Forecasted Results for ' . $year);
         $table->setHorizontal();
         $table->setHeaders(['Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Vat to pay', 'Vat to get back']);
 

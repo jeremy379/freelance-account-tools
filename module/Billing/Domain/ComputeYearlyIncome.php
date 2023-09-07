@@ -7,11 +7,11 @@ use Module\Billing\Domain\Objects\YearlyBill;
 
 class ComputeYearlyIncome
 {
-    public function __construct(private BillRepository $billRepository)
+    public function __construct(private readonly BillRepository $billRepository)
     {
     }
 
-    public function compute(int $year)
+    public function compute(int $year): YearlyBill
     {
         $from = CarbonImmutable::now()->setYear($year)->startOfYear();
         $to = CarbonImmutable::now()->setYear($year)->endOfYear();

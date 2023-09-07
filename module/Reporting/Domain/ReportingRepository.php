@@ -10,5 +10,5 @@ interface ReportingRepository
 
     public function retrieveYearlyOverview(int $year): array;
 
-    public function retrieveYearlyForecastedOverview(int $year): array;
+    public function retrieveYearlyForecastedOverview(int $year, bool $onlyFuture): array;
 }

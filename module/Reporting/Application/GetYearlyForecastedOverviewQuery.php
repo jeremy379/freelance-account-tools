@@ -6,7 +6,7 @@ use Module\SharedKernel\Domain\Query;
 
 class GetYearlyForecastedOverviewQuery implements Query
 {
-    public function __construct(public readonly int $year)
+    public function __construct(public readonly int $year, public readonly bool $onlyFuture = false)
     {
     }
 }

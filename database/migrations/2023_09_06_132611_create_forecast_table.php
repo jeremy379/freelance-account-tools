@@ -15,6 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('amount');
             $table->integer('vat_rate');
             $table->dateTime('forecasted_on');
+            $table->string('country_code')->nullable();
             $table->timestamps();
         });
     }

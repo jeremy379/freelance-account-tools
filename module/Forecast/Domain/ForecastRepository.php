@@ -11,10 +11,10 @@ interface ForecastRepository
     /**
      * @return array<Forecast>
      */
-    public function expenseForecastedForYear(CarbonImmutable $dateTime): array;
+    public function expenseForecastedForYear(CarbonImmutable $dateTime, bool $onlyFutureMonth = false): array;
 
     /**
      * @return array<Forecast>
      */
-    public function incomeForecastedForYear(CarbonImmutable $dateTime): array;
+    public function incomeForecastedForYear(CarbonImmutable $dateTime, bool $onlyFutureMonth = false): array;
 }

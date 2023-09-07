@@ -3,6 +3,7 @@
 namespace Module\Forecast\Infrastructure\Repository;
 
 use Carbon\CarbonImmutable;
+use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\Objects\ForecastAmount;
 use Module\Forecast\Domain\Objects\ForecastType;
@@ -20,6 +21,7 @@ class ForecastFactory
             $forecast->category ? Category::from($forecast->category) : null,
             VatRate::fromStoredValue($forecast->vat_rate),
             CarbonImmutable::parse($forecast->forecasted_on),
+            $forecast->country_code ? CountryCode::from($forecast->country_code) : null,
         );
     }
 }

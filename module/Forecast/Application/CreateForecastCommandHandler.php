@@ -3,6 +3,7 @@
 namespace Module\Forecast\Application;
 
 use Carbon\CarbonImmutable;
+use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\ForecastRepository;
 use Module\Forecast\Domain\Objects\ForecastAmount;
@@ -22,14 +23,15 @@ class CreateForecastCommandHandler
             $forecast = Forecast::income(
                 ForecastAmount::fromFloat($command->amount),
                 VatRate::fromStoredValue($command->vatRate),
-                $command->forecastedOn,
+                $command->forecastedOn
             );
         } else {
             $forecast = Forecast::expense(
                 ForecastAmount::fromFloat($command->amount),
                 Category::from($command->category),
                 VatRate::fromStoredValue($command->vatRate),
-                $command->forecastedOn
+                $command->forecastedOn,
+                CountryCode::from($command->countryCode)
             );
         }
 

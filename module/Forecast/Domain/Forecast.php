@@ -3,6 +3,7 @@
 namespace Module\Forecast\Domain;
 
 use Carbon\CarbonImmutable;
+use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Domain\Objects\ForecastAmount;
 use Module\Forecast\Domain\Objects\ForecastType;
 use Module\SharedKernel\Domain\Category;
@@ -15,7 +16,8 @@ class Forecast
         public readonly ForecastAmount $amount,
         public readonly ?Category $category,
         public readonly VatRate $vatRate,
-        public readonly CarbonImmutable $forecastedOn
+        public readonly CarbonImmutable $forecastedOn,
+        public readonly ?CountryCode $countryCodeWhereExpenseIsMade
     )
     {
     }
@@ -25,7 +27,8 @@ class Forecast
         ForecastAmount $amount,
         ?Category $category,
         VatRate $vatRate,
-        CarbonImmutable $forecastedOn
+        CarbonImmutable $forecastedOn,
+        ?CountryCode $countryCode,
     ): Forecast
     {
         return new self(
@@ -33,7 +36,8 @@ class Forecast
             $amount,
             $category,
             $vatRate,
-            $forecastedOn
+            $forecastedOn,
+            $countryCode
         );
     }
 
@@ -48,7 +52,8 @@ class Forecast
             $amount,
             null,
             $vatRate,
-            $forecastedOn
+            $forecastedOn,
+            null
         );
     }
 
@@ -56,7 +61,8 @@ class Forecast
         ForecastAmount $amount,
         Category $category,
         VatRate $vatRate,
-        CarbonImmutable $forecastedOn
+        CarbonImmutable $forecastedOn,
+        CountryCode $countryCode
     ): Forecast
     {
         return new self(
@@ -64,7 +70,8 @@ class Forecast
             $amount,
             $category,
             $vatRate,
-            $forecastedOn
+            $forecastedOn,
+            $countryCode
         );
     }
 
@@ -76,6 +83,7 @@ class Forecast
             'category' => $this->category?->value,
             'vat_rate' => $this->vatRate->taxRatePercentage,
             'forecasted_on' => $this->forecastedOn->toIso8601String(),
+            'country_code' => $this->countryCodeWhereExpenseIsMade?->value,
         ];
     }
 }
