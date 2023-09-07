@@ -7,6 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Module\Billing\Http\Console\BillPaymentReceived;
 use Module\Billing\Http\Console\CreateBill;
 use Module\Expense\Http\Console\CreateExpense;
+use Module\Forecast\Http\Console\InsertForecast;
 use Module\Reporting\Http\Console\CombinedYearlyOverview;
 use Module\Reporting\Http\Console\GetBalanceOverTime;
 use Module\Reporting\Http\Console\YearlyForecastedOverview;
@@ -23,6 +24,7 @@ class Kernel extends ConsoleKernel
         YearlyForecastedOverview::class,
         CombinedYearlyOverview::class,
         Main::class,
+        InsertForecast::class,
     ];
 
     /**

@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Module\Billing\Http\Console\BillPaymentReceived;
 use Module\Billing\Http\Console\CreateBill;
 use Module\Expense\Http\Console\CreateExpense;
+use Module\Forecast\Http\Console\InsertForecast;
 use Module\Reporting\Http\Console\CombinedYearlyOverview;
 use Module\Reporting\Http\Console\GetBalanceOverTime;
 use Module\Reporting\Http\Console\YearlyForecastedOverview;
@@ -21,8 +22,9 @@ class Main extends Command
 
     protected array $lists = [
         CreateBill::class,
-        BillPaymentReceived::class,
         CreateExpense::class,
+        InsertForecast::class,
+        BillPaymentReceived::class,
         GetBalanceOverTime::class,
         YearlyOverview::class,
         YearlyForecastedOverview::class,
