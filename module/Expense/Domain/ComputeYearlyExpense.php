@@ -30,8 +30,9 @@ class ComputeYearlyExpense
             $category = $expense->expense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
+            $expenseAmount *= 1 + ($expense->expense->taxRate->taxRatePercentage / 100);
+
             if(!$this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
-                $expenseAmount *= 1 + ($expense->expense->taxRate->taxRatePercentage / 100);
                 $vatAmount = 0;
             } else {
                 $vatAmount = $expenseAmount * ($expense->expense->taxRate->taxRatePercentage / 100);

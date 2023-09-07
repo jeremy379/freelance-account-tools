@@ -32,8 +32,8 @@ class ComputeYearlyForecastedExpense
             $category = $forecastedExpense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
+            $expenseAmount *= 1 + ($forecastedExpense->vatRate->taxRatePercentage / 100);
             if(!$this->configuration->isVATCanBeRefundIn($forecastedExpense->countryCodeWhereExpenseIsMade)) {
-                $expenseAmount *= 1 + ($forecastedExpense->vatRate->taxRatePercentage / 100);
                 $vatAmount = 0;
             } else {
                 $vatAmount = $expenseAmount * ($forecastedExpense->vatRate->taxRatePercentage / 100);
