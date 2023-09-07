@@ -53,18 +53,22 @@ class ComputeYearlyExpenseTest extends TestCase
         $travelExpense = $this->givenExpense(Category::TRAVEL, 250.50, VatRate::rate20(), CountryCode::FR);
         $houseExpense = $this->givenExpense(Category::HOUSE_EXPENSE, 4000, VatRate::rate6(), CountryCode::BE);
         $accountantExpense = $this->givenExpense(Category::ACCOUNTANT, 115, VatRate::rate21(), CountryCode::BE);
+        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::BE);
 
-        $totalExpenses = 4;
+        $totalExpenses = 5;
         $totalAmount = 880.50 + 250.50 + 4000 + 115;
         $deductible = (100 * 880.50 * 0.3)
             + (100 * 250.50 * 1.20 * 1) // Expense where tva cannot be deducted should be counted with TVA included
             + (100 * 4000 * 0.0764)
-            + (100 * 115 * 1);
+            + (100 * 115 * 1)
+            + (100 * 250 * 1);
         $deductible /= 100;
 
         $vatToRecover = (100 * 880.50 * 0.3 * 0.21)
             + (100 * 4000 * 0.0764 * 0.06)
-            + (100 * 115 * 0.21);
+            + (100 * 115 * 0.21)
+            - (100 * 250 * 0.21) //Reverse charge vat need to be paid in company country
+        ;
         $vatToRecover /= 100;
 
 
@@ -92,7 +96,7 @@ class ComputeYearlyExpenseTest extends TestCase
             [
                 'category' => $categoryValue->value,
                 'amount' => $amount,
-                'tax_rate' => $taxRate->taxRatePercentage,
+                'tax_rate' => $taxRate->value(),
                 'country_code' => $countryCode->value,
             ]
         )->create();

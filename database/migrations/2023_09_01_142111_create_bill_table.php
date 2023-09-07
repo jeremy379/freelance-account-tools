@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('reference')->unique();
             $table->string('client')->index();
             $table->unsignedBigInteger('amount');
-            $table->unsignedInteger('tax_rate');
+            $table->string('tax_rate');
             $table->dateTime('billing_datetime');
             $table->timestamps();
         });

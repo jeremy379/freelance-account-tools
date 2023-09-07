@@ -22,13 +22,7 @@ class ExpenseDomainFactory
             Category::from($expense->category),
             Provider::fromString($expense->provider),
             Amount::fromStoredInt($expense->amount),
-            match($expense->tax_rate) {
-                0 => VatRate::exempt(),
-                6 => VatRate::rate6(),
-                20 => VatRate::rate20(),
-                21 => VatRate::rate21(),
-                default => VatRate::includedAndNotRefundable()
-            },
+            VatRate::fromStoredValue($expense->tax_rate),
             CountryCode::from($expense->country_code),
         );
     }

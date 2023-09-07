@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('type');
             $table->string('category')->nullable();
             $table->unsignedBigInteger('amount');
-            $table->integer('vat_rate');
+            $table->string('vat_rate');
             $table->dateTime('forecasted_on');
             $table->string('country_code')->nullable();
             $table->timestamps();

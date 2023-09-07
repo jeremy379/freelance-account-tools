@@ -44,7 +44,7 @@ class ComputeYearlyIncomeTest extends TestCase
     private function givenBill(float $amount, VatRate $taxRate) {
         EloquentBill::factory()->create([
             'amount' => $amount * 100,
-            'tax_rate' => $taxRate->taxRatePercentage,
+            'tax_rate' => $taxRate->rate(),
             'billing_datetime' => $this->clock->now()->startOfYear()->addDays(random_int(1, 360)),
         ]);
     }

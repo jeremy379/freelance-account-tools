@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('category')->index();
             $table->string('provider')->index();
             $table->unsignedBigInteger('amount');
-            $table->unsignedInteger('tax_rate');
+            $table->string('tax_rate');
             $table->string('country_code');
             $table->timestamps();
         });
