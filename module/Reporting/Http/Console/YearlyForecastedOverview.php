@@ -25,7 +25,6 @@ class YearlyForecastedOverview extends Command
         $result = $bus->dispatch($query);
 
         $table = new Table($this->output);
-        $separator = new TableSeparator;
 
         $table->setHeaderTitle('Forecasted Results for ' . $year);
         $table->setHorizontal();

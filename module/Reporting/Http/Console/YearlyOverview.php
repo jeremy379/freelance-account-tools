@@ -23,9 +23,7 @@ class YearlyOverview extends Command
         $query = new GetYearlyOverviewQuery($year);
         $result = $bus->dispatch($query);
 
-
         $table = new Table($this->output);
-        $separator = new TableSeparator;
 
         $table->setHeaderTitle('Results for year ' . $year);
         $table->setHorizontal();
