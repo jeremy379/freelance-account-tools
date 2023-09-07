@@ -29,7 +29,7 @@ class CreateExpense extends Command
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
         $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->taxRatePercentage, 5);
-        $paymentDate = text('Enter the payment date', $clock->now()->toIso8601String(), $clock->now()->toIso8601String());
+        $paymentDate = text('Enter the payment date', $clock->now()->toIso8601String(), $clock->now()->toDateString());
         $countryCode = select('Choose the country', $this->mapCase(CountryCode::cases()));
 
         $command = new CreateExpenseCommand(

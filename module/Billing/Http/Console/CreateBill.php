@@ -26,7 +26,7 @@ class CreateBill extends Command
         $client = suggest('Enter the client', $this->existingClient());
         $amount = (float) text('Enter the amount (without tax)');
         $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->taxRatePercentage);
-        $billingDate = text('Enter the billing date', $clock->now()->toIso8601String(), $clock->now()->toIso8601String());
+        $billingDate = text('Enter the billing date', $clock->now()->toDateString(), $clock->now()->toDateString());
 
         $command = new CreateBillCommand(
             $reference,
