@@ -52,7 +52,7 @@ class Main extends Command
 
             $this->call($commandClass[$command]->getName());
 
-            $this->commandSelector($options);
+            $command = $this->commandSelector($options);
 
         } while(true);
     }
