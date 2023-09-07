@@ -25,7 +25,7 @@ class BillRepositoryDatabase implements BillRepository
                 'reference' => $bill->reference->value,
                 'client' => $bill->client->value,
                 'amount' => $bill->amountWithoutTax->toInt(),
-                'tax_rate' => $bill->taxRate->taxRatePercentage,
+                'tax_rate' => $bill->taxRate->value(),
                 'billing_datetime' => $bill->billingDate,
             ]);
         }

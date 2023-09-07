@@ -9,7 +9,7 @@ class CreateIncomeForecastCommand implements Command
 {
     public function __construct(
         public readonly float $amount,
-        public readonly int $vatRate,
+        public readonly string $vatRate,
         public readonly CarbonImmutable $forecastedOn,
     )
     {

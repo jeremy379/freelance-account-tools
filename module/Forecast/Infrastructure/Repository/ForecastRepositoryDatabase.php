@@ -22,7 +22,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
             'type' => $forecast->forecastType->value,
             'category' => $forecast->category?->value,
             'amount' => $forecast->amount->toInt(),
-            'vat_rate' => $forecast->vatRate->taxRatePercentage,
+            'vat_rate' => $forecast->vatRate->value(),
             'forecasted_on' => $forecast->forecastedOn,
             'country_code' => $forecast->countryCodeWhereExpenseIsMade?->value,
         ]);

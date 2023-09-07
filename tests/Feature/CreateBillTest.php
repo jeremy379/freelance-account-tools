@@ -66,7 +66,7 @@ class CreateBillTest extends TestCase
     public function testBillPaymentEmitEvent()
     {
         $taxRate = VatRate::rate21();
-        EloquentBill::factory(['reference' => 'bill_2023-002', 'tax_rate' => $taxRate->taxRatePercentage])->create();
+        EloquentBill::factory(['reference' => 'bill_2023-002', 'tax_rate' => $taxRate->value()])->create();
 
         $command = new ReceiveBillPaymentCommand(
             $reference = 'bill_2023-002',

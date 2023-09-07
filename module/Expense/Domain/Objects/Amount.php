@@ -38,7 +38,7 @@ class Amount
 
     public function withTax(VatRate $taxRate): Amount
     {
-        $amountInt = (int) round($this->amount + ($this->amount * $taxRate->taxRatePercentage / 100));
+        $amountInt = (int) round($this->amount + ($this->amount * $taxRate->rate() / 100));
 
         return new self($amountInt);
     }

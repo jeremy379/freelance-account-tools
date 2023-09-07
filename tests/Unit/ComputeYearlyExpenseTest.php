@@ -56,7 +56,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
 
         $totalExpenses = 5;
-        $totalAmount = 880.50 + 250.50 + 4000 + 115;
+        $totalAmount = 880.50 + 250.50 + 4000 + 115 + 250;
         $deductible = (100 * 880.50 * 0.3)
             + (100 * 250.50 * 1.20 * 1) // Expense where tva cannot be deducted should be counted with TVA included
             + (100 * 4000 * 0.0764)
@@ -69,6 +69,35 @@ class ComputeYearlyExpenseTest extends TestCase
             + (100 * 115 * 0.21)
             - (100 * 250 * 0.21) //Reverse charge vat need to be paid in company country
         ;
+        $vatToRecover /= 100;
+
+
+        $calculator = new ComputeYearlyExpense(
+            new ExpenseRepositoryDatabase(
+                new ExpenseDomainFactory()
+            ),
+            $this->configuration
+        );
+
+        $result = $calculator->compute($year = $this->clock->now()->year);
+
+        $this->assertEquals($totalExpenses, $result->expenseCount);
+        $this->assertEquals($totalAmount, $result->totalExpense);
+        $this->assertEquals($deductible, $result->totalDeductibleExpense);
+        $this->assertEquals($vatToRecover, $result->vatToRecover);
+        $this->assertEquals($year, $result->year);
+    }
+
+    public function testItComputeReverseChargedExpenses()
+    {
+        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
+
+        $totalExpenses = 1;
+        $totalAmount = 250;
+        $deductible = (100 * 250 * 1);
+        $deductible /= 100;
+
+        $vatToRecover = - (100 * 250 * 0.21); //Reverse charge vat need to be paid in company country
         $vatToRecover /= 100;
 
 

@@ -35,7 +35,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
                 'category' => $expense->category->value,
                 'provider' => $expense->provider->value,
                 'amount' => $expense->amount->toInt(),
-                'tax_rate' => $expense->taxRate->taxRatePercentage,
+                'tax_rate' => $expense->taxRate->value(),
                 'country_code' => $expense->countryCode->value,
             ]);
         }

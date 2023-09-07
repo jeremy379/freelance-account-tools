@@ -32,7 +32,7 @@ class CreateForecastTest extends TestCase
 
     public function testItRecordForecastedExpense()
     {
-        $cmd = new CreateExpenseForecastCommand(500, VatRate::rate21()->taxRatePercentage, $this->clock->now(), Category::CAR->value, CountryCode::BE->value);
+        $cmd = new CreateExpenseForecastCommand(500, VatRate::rate21()->value(), $this->clock->now(), Category::CAR->value, CountryCode::BE->value);
         $this->bus->dispatch($cmd);
 
         $expenses = $this->forecastRepository->expenseForecastedForYear($this->clock->now()->startOfYear());
@@ -42,7 +42,7 @@ class CreateForecastTest extends TestCase
 
     public function testItRecordForecastedIncome()
     {
-        $cmd = new CreateIncomeForecastCommand(500, VatRate::intracom()->taxRatePercentage, $this->clock->now());
+        $cmd = new CreateIncomeForecastCommand(500, VatRate::intracom()->value(), $this->clock->now());
         $this->bus->dispatch($cmd);
 
         $incomes = $this->forecastRepository->incomeForecastedForYear($this->clock->now()->startOfYear());
