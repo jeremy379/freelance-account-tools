@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         YearlyOverview::class,
         YearlyForecastedOverview::class,
         CombinedYearlyOverview::class,
+        Main::class,
     ];
 
     /**
