@@ -22,7 +22,7 @@ class BillPaymentReceived extends Command
     public function handle(Bus $bus, ClockInterface $clock): int
     {
         $reference = suggest('Enter the bill reference', $this->billReferenceWithLeftToPay());
-        $amountReceived = text('Enter the amount received');
+        $amountReceived = text(label: 'Enter the amount received', default: $this->amountOfBill($reference));
         $receptionDatetime = text('Enter the date of reception of the amount', $clock->now()->toIso8601String());
 
         $command = new ReceiveBillPaymentCommand($reference, $amountReceived, CarbonImmutable::parse($receptionDatetime));
@@ -40,5 +40,10 @@ class BillPaymentReceived extends Command
             ->whereDoesntHave('payments')
             ->pluck('reference')
             ->toArray();
+    }
+
+    private function amountOfBill(string $reference): float
+    {
+        return EloquentBill::query()->where('reference', $reference)->firstOrFail()->amount / 100;
     }
 }
