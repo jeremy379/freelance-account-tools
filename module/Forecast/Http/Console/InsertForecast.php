@@ -32,29 +32,48 @@ class InsertForecast extends Command
         });
 
         $vatRate = select('Which vat rate applies to this forecast', VatRate::values());
-        $forecastedOn = text(label: 'Forecasted On', default: $clock->now()->startOfDay()->toIso8601String());
-        $forecastedOn = CarbonImmutable::parse($forecastedOn);
+
+
+        $forecastedOnDates = [];
+        if($this->confirm('Is it a recurrent forecast (each month for one full year'))
+        {
+            $day = text('Day of month');
+            $year = text('Repeat each month of year');
+
+            for($i=1; $i<=12; $i++) {
+                $forecastedOnDates[] = CarbonImmutable::now()->setYear($year)->setMonth($i)->setDay($day);
+            }
+        } else {
+            $forecastedOn = text(label: 'Forecasted On', default: $clock->now()->toDateString());
+            $forecastedOnDates[] = CarbonImmutable::parse($forecastedOn);
+        }
 
         if($billOrExpense === 'Expense') {
             $category = select('Which category of expense does it belongs?', $this->mapCase(Category::cases()));
             $countryCode = select('In Which country this expense belongs? (for VAT)', $this->mapCase(CountryCode::cases()));
 
-            $command = new CreateExpenseForecastCommand(
-              $amount,
-              $vatRate,
-              $forecastedOn,
-              $category,
-              $countryCode,
-            );
-        } else {
-            $command = new CreateIncomeForecastCommand(
-                $amount,
-                $vatRate,
-                $forecastedOn
-            );
-        }
+            foreach($forecastedOnDates as $forecastedOn) {
+                $command = new CreateExpenseForecastCommand(
+                    $amount,
+                    $vatRate,
+                    $forecastedOn,
+                    $category,
+                    $countryCode,
+                );
 
-        $bus->dispatch($command);
+                $bus->dispatch($command);
+            }
+
+        } else {
+            foreach($forecastedOnDates as $forecastedOn) {
+                $command = new CreateIncomeForecastCommand(
+                    $amount,
+                    $vatRate,
+                    $forecastedOn
+                );
+                $bus->dispatch($command);
+            }
+        }
 
         info('Done !');
 

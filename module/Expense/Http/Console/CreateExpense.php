@@ -25,10 +25,10 @@ class CreateExpense extends Command
     public function handle(Bus $bus, ClockInterface $clock): int
     {
         $reference = text('Enter the Reference', '051-Provider-title');
-        $category = select('Choose the category', $this->mapCase(Category::cases()));
+        $category = select(label: 'Choose the category', options: $this->mapCase(Category::cases()), scroll: 8);
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
-        $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->taxRatePercentage, 5);
+        $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->value(), 5);
         $paymentDate = text('Enter the payment date', $clock->now()->toIso8601String(), $clock->now()->toDateString());
         $countryCode = select('Choose the country', $this->mapCase(CountryCode::cases()));
 

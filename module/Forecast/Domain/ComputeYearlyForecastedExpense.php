@@ -33,14 +33,14 @@ class ComputeYearlyForecastedExpense
             $category = $forecastedExpense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
-            if($forecastedExpense->taxRate->isReverseCharge()) {
+            if($forecastedExpense->vatRate->isReverseCharge()) {
                 $vatAmount = $expenseAmount * -1 *  (VatRate::rate21()->rate() / 100);
             } else {
-                if (!$this->configuration->isVATCanBeRefundIn($forecastedExpense->countryCode)) {
+                if (!$this->configuration->isVATCanBeRefundIn($forecastedExpense->countryCodeWhereExpenseIsMade)) {
                     $vatAmount = 0;
-                    $expenseAmount *= 1 + ($forecastedExpense->taxRate->rate() / 100);
+                    $expenseAmount *= 1 + ($forecastedExpense->vatRate->rate() / 100);
                 } else {
-                    $vatAmount = $expenseAmount * ($forecastedExpense->taxRate->rate() / 100) * $deductibleRate;
+                    $vatAmount = $expenseAmount * ($forecastedExpense->vatRate->rate() / 100) * $deductibleRate;
                 }
             }
 

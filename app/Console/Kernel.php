@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
         CombinedYearlyOverview::class,
         Main::class,
         InsertForecast::class,
+        Backup::class,
     ];
 
     /**

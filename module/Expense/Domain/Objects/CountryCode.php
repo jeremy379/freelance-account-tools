@@ -8,4 +8,5 @@ enum CountryCode: string
     case FR = 'FR';
     case NL = 'NL';
     case OUTSIDE_EU = 'OUTSIDE_EU';
+    case OTHER_EU = 'OTHER_EU';
 }

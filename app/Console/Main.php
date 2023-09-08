@@ -29,6 +29,7 @@ class Main extends Command
         YearlyOverview::class,
         YearlyForecastedOverview::class,
         CombinedYearlyOverview::class,
+        Backup::class,
     ];
 
     public function __invoke()

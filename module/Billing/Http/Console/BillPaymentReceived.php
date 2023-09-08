@@ -23,7 +23,7 @@ class BillPaymentReceived extends Command
     {
         $reference = suggest('Enter the bill reference', $this->billReferenceWithLeftToPay());
         $amountReceived = text(label: 'Enter the amount received', default: $this->amountOfBill($reference));
-        $receptionDatetime = text('Enter the date of reception of the amount', $clock->now()->toIso8601String());
+        $receptionDatetime = text('Enter the date of reception of the amount', default: $clock->now()->toDateString());
 
         $command = new ReceiveBillPaymentCommand($reference, $amountReceived, CarbonImmutable::parse($receptionDatetime));
 

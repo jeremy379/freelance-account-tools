@@ -31,7 +31,7 @@ class VatRate
     public static function values(): array
     {
         return [
-            '21' => 21, '20' => 20, '10' => 10, '6' => 6, '0' => 0, self::EXEMPT => self::EXEMPT, self::INCLUDED_NOT_REFUNDABLE => self::INCLUDED_NOT_REFUNDABLE, self::INTRACOM => self::INTRACOM
+            '21' => 21, '20' => 20, '10' => 10, '6' => 6, '0' => 0, self::EXEMPT => self::EXEMPT, self::INCLUDED_NOT_REFUNDABLE => self::INCLUDED_NOT_REFUNDABLE, self::INTRACOM => self::INTRACOM, self::REVERSE_CHARGE => self::REVERSE_CHARGE,
         ];
     }
 
