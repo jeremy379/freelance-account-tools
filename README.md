@@ -1,5 +1,7 @@
 ## Account manager
 
+[![Laravel](https://github.com/jeremy379/freelance-account-tools/actions/workflows/laravel.yml/badge.svg?branch=main)](https://github.com/jeremy379/freelance-account-tools/actions/workflows/laravel.yml)
+
 - This project is made to work in a standalone way on your machine.
 
 This projects allow you to simulate your situation as a self-employed in Belgium (as main activity).
