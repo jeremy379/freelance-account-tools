@@ -28,6 +28,7 @@ For the house, it's the ratio between your office area and your house (you can u
 ## Starting the project (on your machine)
 
 - sail up -d
+- php artisan migrate
 - sail artisan menu
 
 Run `sail` to see all available command.
