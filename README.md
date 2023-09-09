@@ -39,3 +39,9 @@ As this is a beta version, it doesn't include a proper UI yet.
 In the future, I'd like to serve this project as a native app with a proper UI. Do you feel interested? Reach me to provide me feedback.
 
 php artisan native:serve
+
+
+## Dev
+
+This project is covered by test.
+You can run test with `sail test`
