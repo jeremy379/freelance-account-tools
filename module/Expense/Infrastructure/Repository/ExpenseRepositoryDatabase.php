@@ -8,7 +8,6 @@ use Module\Expense\Domain\Exception\ExpenseNotFound;
 use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
-use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\SavingMode;
 
 class ExpenseRepositoryDatabase implements ExpenseRepository
@@ -21,7 +20,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
     {
         $expense = EloquentExpense::where('reference', $reference)->first();
 
-        if(!$expense) {
+        if (! $expense) {
             throw ExpenseNotFound::byReference($reference);
         }
 
@@ -30,7 +29,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
 
     public function save(Expense $expense): void
     {
-        if($expense->savingMode() === SavingMode::CREATE) {
+        if ($expense->savingMode() === SavingMode::CREATE) {
             EloquentExpense::create([
                 'reference' => $expense->reference->value,
                 'category' => $expense->category->value,
@@ -48,13 +47,12 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
             ->whereHas('payment', function (Builder $query) use ($from, $to) {
                 $query->where('occurred_on', '>=', $from);
 
-                if($to) {
+                if ($to) {
                     $query->where('occurred_on', '<=', $to);
                 }
             })
             ->get()
             ->transform(fn (EloquentExpense $expense) => $this->expenseDomainFactory->toExpenseWithPayment($expense))
-            ->toArray()
-        ;
+            ->toArray();
     }
 }

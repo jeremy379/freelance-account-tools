@@ -4,8 +4,6 @@ namespace Module\Billing\Http\Console;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
-use Module\Billing\Application\GetBillWithPaymentByReferenceQuery;
 use Module\Billing\Application\ReceiveBillPaymentCommand;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillDomainFactory;
@@ -48,6 +46,7 @@ class BillPaymentReceived extends Command
     {
         $factory = new BillDomainFactory();
         $bill = $factory->toBill(EloquentBill::query()->where('reference', $reference)->firstOrFail());
+
         return $bill->amountWithoutTax->withTax($bill->taxRate)->toInt() / 100;
     }
 }

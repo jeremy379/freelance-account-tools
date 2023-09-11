@@ -3,7 +3,6 @@
 namespace Module\Forecast\Domain;
 
 use Carbon\CarbonImmutable;
-use Module\Billing\Domain\BillRepository;
 use Module\Billing\Domain\Objects\YearlyBill;
 
 class ComputeYearlyForecastedIncome
@@ -21,7 +20,7 @@ class ComputeYearlyForecastedIncome
         $totalTurnover = 0;
         $totalVatCollected = 0;
 
-        foreach($bills as $bill) {
+        foreach ($bills as $bill) {
             $totalTurnover += $bill->amount->toInt();
             $totalVatCollected += $bill->amount->toInt() * ($bill->vatRate->rate() / 100);
         }

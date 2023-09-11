@@ -27,7 +27,7 @@ class CreateBillCommandHandler
                 Reference::fromString($command->reference),
                 Client::fromString($command->client),
                 Amount::fromFloat($command->amountWithoutTax),
-                match($command->taxRate) {
+                match ($command->taxRate) {
                     0, 'exempt' => VatRate::exempt(),
                     'intracom' => VatRate::intraCom(),
                     6 => VatRate::rate6(),

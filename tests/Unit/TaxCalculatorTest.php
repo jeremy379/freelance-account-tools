@@ -38,9 +38,9 @@ class TaxCalculatorTest extends TestCase
                 'rate_after_last_slice' => 50,
                 'exoneratedAmount' => 10160,
                 'rate_city_tax' => [
-                    '5030' => 7.8
-                ]
-            ]
+                    '5030' => 7.8,
+                ],
+            ],
         ]);
     }
 
@@ -67,7 +67,7 @@ class TaxCalculatorTest extends TestCase
                 [
                     [
                         'amount' => 15200,
-                        'rate' => 25
+                        'rate' => 25,
                     ],
                     [
                         'amount' => 11630,
@@ -75,9 +75,9 @@ class TaxCalculatorTest extends TestCase
                     ],
                     [
                         'amount' => 11368.88,
-                        'rate' => 45
+                        'rate' => 45,
                     ],
-                ]
+                ],
             ],
             [
                 83216.66,
@@ -85,7 +85,7 @@ class TaxCalculatorTest extends TestCase
                 [
                     [
                         'amount' => 15200,
-                        'rate' => 25
+                        'rate' => 25,
                     ],
                     [
                         'amount' => 11630,
@@ -93,14 +93,14 @@ class TaxCalculatorTest extends TestCase
                     ],
                     [
                         'amount' => 19610,
-                        'rate' => 45
+                        'rate' => 45,
                     ],
                     [
                         'amount' => 36776.66,
-                        'rate' => 50
+                        'rate' => 50,
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 }

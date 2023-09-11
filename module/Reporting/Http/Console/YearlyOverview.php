@@ -25,21 +25,21 @@ class YearlyOverview extends Command
 
         $table = new Table($this->output);
 
-        $table->setHeaderTitle('Results for year ' . $year);
+        $table->setHeaderTitle('Results for year '.$year);
         $table->setHorizontal();
         $table->setHeaders(['Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Vat to pay', 'Vat to get back']);
 
         $table->setRows([
             [
-                $result['bill']['total'] .' €',
-                $result['expense']['totalExpense'] .' €',
-                $result['expense']['totalDeductibleExpense'] .' €',
-                $result['bill']['total'] - $result['expense']['totalDeductibleExpense'] .' €',
-                $result['socialContribution']['yearly_amount'] .' €',
-                $result['taxable_income'] .' €',
-                '<error>' . $result['tax'] . ' €</error>',
-                $result['bill']['totalVatCollected'] .' €',
-                $result['expense']['vatToRecover'] .' €',
+                $result['bill']['total'].' €',
+                $result['expense']['totalExpense'].' €',
+                $result['expense']['totalDeductibleExpense'].' €',
+                $result['bill']['total'] - $result['expense']['totalDeductibleExpense'].' €',
+                $result['socialContribution']['yearly_amount'].' €',
+                $result['taxable_income'].' €',
+                '<error>'.$result['tax'].' €</error>',
+                $result['bill']['totalVatCollected'].' €',
+                $result['expense']['vatToRecover'].' €',
             ],
         ]);
 

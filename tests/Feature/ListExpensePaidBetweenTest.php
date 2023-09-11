@@ -18,6 +18,7 @@ use Tests\TestCase;
 class ListExpensePaidBetweenTest extends TestCase
 {
     private ClockInterface $clock;
+
     private ExpenseRepository $expenseRepository;
 
     protected function setUp(): void

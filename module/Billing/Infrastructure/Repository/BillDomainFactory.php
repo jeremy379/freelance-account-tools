@@ -9,8 +9,8 @@ use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\BillPayment;
 use Module\Billing\Domain\Objects\Client;
 use Module\Billing\Domain\Objects\Reference;
-use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
+use Module\SharedKernel\Domain\VatRate;
 
 class BillDomainFactory
 {
@@ -31,7 +31,7 @@ class BillDomainFactory
 
         $billWithPayment = BillWithPayments::bill($billObject);
 
-        foreach($bill->payments as $payment) {
+        foreach ($bill->payments as $payment) {
             $billWithPayment = $billWithPayment->withPayment(BillPayment::with($payment->occurred_on, Amount::fromStoredInt($payment->amount)));
         }
 

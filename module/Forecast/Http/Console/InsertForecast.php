@@ -4,7 +4,6 @@ namespace Module\Forecast\Http\Console;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
-use Module\Billing\Application\CreateBillCommand;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Application\CreateExpenseForecastCommand;
 use Module\Forecast\Application\CreateIncomeForecastCommand;
@@ -26,21 +25,20 @@ class InsertForecast extends Command
     {
         $billOrExpense = select('What forecast do you want to add?', ['Income', 'Expense']);
 
-        $amount = (float) text(label: 'Enter the amount', validate: fn (string $value) => match(true) {
-            !is_numeric($value) => 'The amount must be a number',
+        $amount = (float) text(label: 'Enter the amount', validate: fn (string $value) => match (true) {
+            ! is_numeric($value) => 'The amount must be a number',
             empty($value) && $value !== 0 => 'The amount is required',
             default => null,
         });
 
         $vatRate = select('Which vat rate applies to this forecast', VatRate::values());
 
-
         $forecastedOnDates = [];
-        if($this->confirm('Is it a recurrent forecast (each month for one full year')) {
+        if ($this->confirm('Is it a recurrent forecast (each month for one full year')) {
             $day = text('Day of month');
             $year = text('Repeat each month of year');
 
-            for($i = 1; $i <= 12; $i++) {
+            for ($i = 1; $i <= 12; $i++) {
                 $forecastedOnDates[] = CarbonImmutable::now()->setYear($year)->setMonth($i)->setDay($day);
             }
         } else {
@@ -48,11 +46,11 @@ class InsertForecast extends Command
             $forecastedOnDates[] = CarbonImmutable::parse($forecastedOn);
         }
 
-        if($billOrExpense === 'Expense') {
+        if ($billOrExpense === 'Expense') {
             $category = select('Which category of expense does it belongs?', $this->mapCase(Category::cases()));
             $countryCode = select('In Which country this expense belongs? (for VAT)', $this->mapCase(CountryCode::cases()));
 
-            foreach($forecastedOnDates as $forecastedOn) {
+            foreach ($forecastedOnDates as $forecastedOn) {
                 $command = new CreateExpenseForecastCommand(
                     $amount,
                     $vatRate,
@@ -65,7 +63,7 @@ class InsertForecast extends Command
             }
 
         } else {
-            foreach($forecastedOnDates as $forecastedOn) {
+            foreach ($forecastedOnDates as $forecastedOn) {
                 $command = new CreateIncomeForecastCommand(
                     $amount,
                     $vatRate,
@@ -81,12 +79,12 @@ class InsertForecast extends Command
     }
 
     /**
-     * @param array<\BackedEnum> $cases
+     * @param  array<\BackedEnum>  $cases
      */
     private function mapCase(array $cases): array
     {
         $response = [];
-        foreach($cases as $case) {
+        foreach ($cases as $case) {
             $response[$case->name] = $case->value;
         }
 

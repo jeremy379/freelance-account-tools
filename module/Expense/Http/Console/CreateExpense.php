@@ -12,6 +12,7 @@ use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\VatRate;
 use Module\SharedKernel\Infrastructure\CommandValidator;
+
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\suggest;
@@ -27,7 +28,7 @@ class CreateExpense extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', '051-Provider-title', validate: fn(string $value) => $this->validate('expense.reference', $value));
+        $reference = text('Enter the Reference', '051-Provider-title', validate: fn (string $value) => $this->validate('expense.reference', $value));
         $category = select(label: 'Choose the category', options: $this->mapCase(Category::cases()), scroll: 8);
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
@@ -63,12 +64,12 @@ class CreateExpense extends Command
     }
 
     /**
-     * @param array<\BackedEnum> $cases
+     * @param  array<\BackedEnum>  $cases
      */
     private function mapCase(array $cases): array
     {
         $response = [];
-        foreach($cases as $case) {
+        foreach ($cases as $case) {
             $response[$case->name] = $case->value;
         }
 

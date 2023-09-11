@@ -20,7 +20,7 @@ class BillRepositoryDatabase implements BillRepository
 
     public function save(Bill $bill): void
     {
-        if($bill->savingMode() === SavingMode::CREATE) {
+        if ($bill->savingMode() === SavingMode::CREATE) {
             EloquentBill::create([
                 'reference' => $bill->reference->value,
                 'client' => $bill->client->value,
@@ -35,11 +35,11 @@ class BillRepositoryDatabase implements BillRepository
     {
         $dbBill = EloquentBill::where('reference', $reference->value)->first();
 
-        if($dbBill === null) {
+        if ($dbBill === null) {
             throw BillNotFound::byReference($reference->value);
         }
 
-        if($withPayment) {
+        if ($withPayment) {
             return $this->factory->toBillWithPayment($dbBill);
         } else {
             return $this->factory->toBill($dbBill);
@@ -53,13 +53,12 @@ class BillRepositoryDatabase implements BillRepository
             ->where(function (Builder $query) use ($from, $to) {
                 $query->where('billing_datetime', '>=', $from);
 
-                if($to) {
+                if ($to) {
                     $query->where('billing_datetime', '<=', $to);
                 }
             })
             ->get()
             ->transform(fn (EloquentBill $bill) => $this->factory->toBill($bill))
-            ->toArray()
-        ;
+            ->toArray();
     }
 }

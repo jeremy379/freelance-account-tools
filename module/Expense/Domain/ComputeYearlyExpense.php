@@ -22,19 +22,21 @@ class ComputeYearlyExpense
         $expenses = $this->expenseRepository->fetchBetween($from, $to);
 
         $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = 0;
-        foreach($expenses as $expense) {
-            if($expense->expense->category === Category::TAX) {
+        foreach ($expenses as $expense) {
+            if ($expense->expense->category === Category::TAX) {
                 continue; //We do not process this type of expense. This is mostly a row saying "Hey, I paid that amount of tax!"
             }
 
             $expenseAmount = $expense->expense->amount->toInt();
 
-            if($expense->expense->category === Category::TAX_PREVISION) {
+            if ($expense->expense->category === Category::TAX_PREVISION) {
                 $taxProvisioned += $expenseAmount; //This is for reporting purpose. These amount are just cash moved to specific bank account.
+
                 continue;
             }
-            if($expense->expense->category === Category::SOCIAL_CHARGE) {
+            if ($expense->expense->category === Category::SOCIAL_CHARGE) {
                 $socialContributionPaid += $expenseAmount;
+
                 continue;
             }
 
@@ -43,10 +45,10 @@ class ComputeYearlyExpense
             $category = $expense->expense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
-            if($expense->expense->taxRate->isReverseCharge()) {
-                $vatAmount = $expenseAmount * -1 *  (VatRate::rate21()->rate() / 100);
+            if ($expense->expense->taxRate->isReverseCharge()) {
+                $vatAmount = $expenseAmount * -1 * (VatRate::rate21()->rate() / 100);
             } else {
-                if (!$this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
+                if (! $this->configuration->isVATCanBeRefundIn($expense->expense->countryCode)) {
                     $vatAmount = 0;
                     $expenseAmount *= 1 + ($expense->expense->taxRate->rate() / 100);
                 } else {

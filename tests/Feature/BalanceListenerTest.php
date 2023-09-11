@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
-use Module\Balance\Infrastructure\Listener\BalanceEventSubscriber;
-use Module\Balance\Infrastructure\Repository\BalanceRepositoryDatabase;
 use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Expense\Domain\Events\ExpensePaid;
@@ -19,6 +17,7 @@ use Tests\TestCase;
 class BalanceListenerTest extends TestCase
 {
     private ClockInterface $clock;
+
     private EventDispatcher $eventDispatcher;
 
     protected function setUp(): void

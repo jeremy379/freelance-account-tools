@@ -19,7 +19,9 @@ use Tests\TestCase;
 class CreateForecastTest extends TestCase
 {
     private Bus $bus;
+
     private ForecastRepository $forecastRepository;
+
     private ClockInterface $clock;
 
     protected function setUp(): void

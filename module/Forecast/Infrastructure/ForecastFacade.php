@@ -2,11 +2,9 @@
 
 namespace Module\Forecast\Infrastructure;
 
-use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
 use Module\Forecast\Domain\ComputeYearlyForecastedExpense;
 use Module\Forecast\Domain\ComputeYearlyForecastedIncome;
-use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\ForecastRepository;
 
 class ForecastFacade

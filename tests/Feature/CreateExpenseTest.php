@@ -19,7 +19,9 @@ use Tests\TestCase;
 class CreateExpenseTest extends TestCase
 {
     private EventDispatcher $eventDispatcher;
+
     private ExpenseRepository $expenseRepository;
+
     private ClockInterface $clock;
 
     protected function setUp(): void
@@ -57,7 +59,7 @@ class CreateExpenseTest extends TestCase
             'provider' => 'company-1',
             'amount' => '50054',
             'tax_rate' => 21,
-            'country_code' => 'BE'
+            'country_code' => 'BE',
         ]);
     }
 
@@ -84,7 +86,7 @@ class CreateExpenseTest extends TestCase
 
         $this->assertNotNull($expenseInDb);
 
-        $this->eventDispatcher->assertEmitted(new ExpensePaid($reference, ($amount + ($amount * $taxRate/100)) * 100, $this->clock->now()));
+        $this->eventDispatcher->assertEmitted(new ExpensePaid($reference, ($amount + ($amount * $taxRate / 100)) * 100, $this->clock->now()));
     }
 
     public function testItFailsWhenExpenseReferenceAlreadyExists()
@@ -103,7 +105,6 @@ class CreateExpenseTest extends TestCase
             $this->expenseRepository,
             $this->eventDispatcher
         );
-
 
         $commandHandler->handle($command);
 

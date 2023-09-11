@@ -5,8 +5,11 @@ namespace Module\SharedKernel\Domain;
 class VatRate
 {
     public const EXEMPT = 'exempt';
+
     public const INTRACOM = 'intracom';
+
     public const REVERSE_CHARGE = 'reverse-charge';
+
     public const INCLUDED_NOT_REFUNDABLE = 'included-not-refundable';
 
     private function __construct(private readonly string $taxValue)
@@ -15,7 +18,7 @@ class VatRate
 
     public static function fromStoredValue(string $taxRatePercentage): VatRate
     {
-        return match($taxRatePercentage) {
+        return match ($taxRatePercentage) {
             '0' => VatRate::rate0(),
             self::EXEMPT => VatRate::exempt(),
             self::INTRACOM => VatRate::intraCom(),
@@ -25,7 +28,7 @@ class VatRate
             '10' => VatRate::rate10(),
             '20' => VatRate::rate20(),
             '21' => VatRate::rate21(),
-            default => throw new \InvalidArgumentException('Tax value ' . $taxRatePercentage . ' is not an allowed value')
+            default => throw new \InvalidArgumentException('Tax value '.$taxRatePercentage.' is not an allowed value')
         };
     }
 
@@ -38,7 +41,7 @@ class VatRate
 
     public function rate(): int
     {
-        if(is_numeric($this->taxValue)) {
+        if (is_numeric($this->taxValue)) {
             return $this->taxValue;
         }
 

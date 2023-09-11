@@ -2,13 +2,11 @@
 
 namespace Module\Billing\Domain;
 
-use Carbon\CarbonImmutable;
-use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\BillPayment;
 
 class BillWithPayments
 {
-    /** @param array<BillPayment> $billPayments */
+    /** @param  array<BillPayment>  $billPayments */
     private function __construct(
         public readonly Bill $bill,
         public readonly array $billPayments
@@ -28,10 +26,10 @@ class BillWithPayments
     public function fullyPaid(): bool
     {
         $totalPaid = 0;
-        foreach($this->billPayments as $payment) {
+        foreach ($this->billPayments as $payment) {
             $totalPaid += $payment->amount->toInt();
         }
 
-        return ($totalPaid >= $this->bill->amountWithoutTax->withTax($this->bill->taxRate));
+        return $totalPaid >= $this->bill->amountWithoutTax->withTax($this->bill->taxRate);
     }
 }

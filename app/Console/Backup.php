@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 class Backup extends Command
 {
     protected $signature = 'backup';
+
     protected $description = 'Backup database';
 
     public function __invoke()

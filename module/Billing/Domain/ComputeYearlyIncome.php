@@ -21,7 +21,7 @@ class ComputeYearlyIncome
         $totalTurnover = 0;
         $totalVatCollected = 0;
 
-        foreach($bills as $bill) {
+        foreach ($bills as $bill) {
             $totalTurnover += $bill->amountWithoutTax->toInt();
             $totalVatCollected += $bill->amountWithoutTax->toInt() * ($bill->taxRate->rate() / 100);
         }

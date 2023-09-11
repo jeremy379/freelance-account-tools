@@ -18,7 +18,7 @@ class CreateExpenseCommandHandler
 {
     public function __construct(
         private readonly ExpenseRepository $repository,
-        private readonly EventDispatcher   $eventDispatcher,
+        private readonly EventDispatcher $eventDispatcher,
     ) {
     }
 
@@ -34,7 +34,7 @@ class CreateExpenseCommandHandler
                 Category::from(strtoupper($command->category)),
                 Provider::fromString($command->provider),
                 Amount::fromFloat($command->amount),
-                match($command->taxRate) {
+                match ($command->taxRate) {
                     0, 'exempt' => VatRate::exempt(),
                     6 => VatRate::rate6(),
                     20 => VatRate::rate20(),
@@ -44,7 +44,7 @@ class CreateExpenseCommandHandler
                 CountryCode::from(strtoupper($command->countryCode)),
             );
 
-            if($command->paymentDate) {
+            if ($command->paymentDate) {
                 $expense = $expense->pay($command->paymentDate);
             }
 

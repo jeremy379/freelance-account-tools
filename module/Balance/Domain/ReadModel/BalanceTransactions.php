@@ -8,7 +8,7 @@ use Webmozart\Assert\Assert;
 class BalanceTransactions implements \Countable
 {
     /**
-     * @param array<Balance> $transactions
+     * @param  array<Balance>  $transactions
      */
     public function __construct(private array $transactions = [])
     {

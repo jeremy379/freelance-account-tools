@@ -7,13 +7,14 @@ use Countable;
 use Illuminate\Contracts\Support\Arrayable;
 use Module\Balance\Domain\Objects\Amount;
 
-class BalanceOverTime implements Countable, Arrayable
+class BalanceOverTime implements Arrayable, Countable
 {
     private ?int $minValue = null;
+
     private ?int $maxValue = null;
 
     /**
-     * @param array<BalanceOnDatetime> $balances
+     * @param  array<BalanceOnDatetime>  $balances
      */
     private function __construct(private array $balances = [])
     {
@@ -36,11 +37,11 @@ class BalanceOverTime implements Countable, Arrayable
         $newBalances->maxValue = $this->maxValue;
         $newBalances->minValue = $this->minValue;
 
-        if($this->minValue === null || $balanceOnDatetime->amount->toInt() < $this->minValue) {
+        if ($this->minValue === null || $balanceOnDatetime->amount->toInt() < $this->minValue) {
             $newBalances->minValue = $balanceOnDatetime->amount->toInt();
         }
 
-        if($this->maxValue === null || $balanceOnDatetime->amount->toInt() > $this->maxValue) {
+        if ($this->maxValue === null || $balanceOnDatetime->amount->toInt() > $this->maxValue) {
             $newBalances->maxValue = $balanceOnDatetime->amount->toInt();
         }
 
@@ -87,20 +88,20 @@ class BalanceOverTime implements Countable, Arrayable
      */
     public function groupByDate(string $granularity): BalanceOverTime
     {
-        if(!in_array($granularity, ['week', 'month'])) {
+        if (! in_array($granularity, ['week', 'month'])) {
             throw new \InvalidArgumentException('Granularity must be either month or week');
         }
 
         $balancesByDays = [];
 
-        foreach($this->balances as $balance) {
-            $granuledBalanceDate = match($granularity) {
+        foreach ($this->balances as $balance) {
+            $granuledBalanceDate = match ($granularity) {
                 'month' => $balance->datetime->startOfMonth()->toDateString(),
                 'week' => $balance->datetime->startOfWeek()->toDateString(),
             };
 
             $amount = $balance->amount;
-            if(isset($balancesByDays[$granuledBalanceDate])) {
+            if (isset($balancesByDays[$granuledBalanceDate])) {
                 $amount = Amount::fromStoredInt($amount->toInt() + $balancesByDays[$granuledBalanceDate]->toInt());
             }
 
@@ -109,7 +110,7 @@ class BalanceOverTime implements Countable, Arrayable
 
         $balanceOverTime = self::new();
 
-        foreach($balancesByDays as $dateString => $amountObject) {
+        foreach ($balancesByDays as $dateString => $amountObject) {
             $balanceOverTime = $balanceOverTime->with(
                 new BalanceOnDatetime($amountObject, CarbonImmutable::parse($dateString))
             );

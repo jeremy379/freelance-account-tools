@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use Module\Balance\Domain\Balance;
 use Module\Billing\Application\CreateBillCommand;
 use Module\Billing\Application\CreateBillCommandHandler;
 use Module\Billing\Application\ReceiveBillPaymentCommand;
@@ -10,13 +9,12 @@ use Module\Billing\Application\ReceiveBillPaymentCommandHandler;
 use Module\Billing\Domain\BillRepository;
 use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Domain\Exception\CannotCreateBill;
-use Module\Billing\Domain\Objects\Amount;
-use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\EventDispatcher;
+use Module\SharedKernel\Domain\VatRate;
 use Tests\FakeClock;
 use Tests\FakeEventDispatcher;
 use Tests\TestCase;
@@ -24,7 +22,9 @@ use Tests\TestCase;
 class CreateBillTest extends TestCase
 {
     private EventDispatcher $eventDispatcher;
+
     private BillRepository $billRepository;
+
     private ClockInterface $clock;
 
     protected function setUp(): void
@@ -88,10 +88,10 @@ class CreateBillTest extends TestCase
 
     public function testItFailsWhenExpenseReferenceAlreadyExists()
     {
-        EloquentBill::factory(['reference' => 'bill_2023-002',])->create();
+        EloquentBill::factory(['reference' => 'bill_2023-002'])->create();
 
         $command = new CreateBillCommand(
-             'bill_2023-002',
+            'bill_2023-002',
             'client_1',
             500.25,
             21,

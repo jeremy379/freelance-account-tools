@@ -30,10 +30,10 @@ class SocialContributionCalculatorTest extends TestCase
                 ],
                 'final_slice' => [
                     'from' => 104422.25,
-                    'fixed_amount' => 4819.65 * 4
+                    'fixed_amount' => 4819.65 * 4,
                 ],
                 'managing_fees_rate' => 4.25,
-            ]
+            ],
         ]);
     }
 
@@ -48,7 +48,7 @@ class SocialContributionCalculatorTest extends TestCase
 
         $this->assertEquals([
             'yearly_amount' => $expectedValue,
-            'periodic_amount' => $this->commercialRound(( ($expectedValue*100) / 4) /100, 2),
+            'periodic_amount' => $this->commercialRound((($expectedValue * 100) / 4) / 100, 2),
             'period' => 'P3M',
         ], $calculator);
     }
@@ -58,22 +58,24 @@ class SocialContributionCalculatorTest extends TestCase
         return [
             [
                 60000,
-                12822.75
+                12822.75,
             ],
             [
                 80000,
-                16492.76
+                16492.76,
             ],
             [
                 115000,
-                20097.94
+                20097.94,
             ],
         ];
     }
 
-    private function commercialRound(float $number, int $precision = 0): float {
+    private function commercialRound(float $number, int $precision = 0): float
+    {
         $factor = 10 ** $precision;
         $rounded = round($number * $factor);
+
         return $rounded / $factor;
     }
 }

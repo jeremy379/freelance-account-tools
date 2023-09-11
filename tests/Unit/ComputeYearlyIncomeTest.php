@@ -3,11 +3,11 @@
 namespace Tests\Unit;
 
 use Module\Billing\Domain\ComputeYearlyIncome;
-use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\Billing\Infrastructure\Repository\BillRepositoryDatabase;
 use Module\SharedKernel\Domain\ClockInterface;
+use Module\SharedKernel\Domain\VatRate;
 use Tests\FakeClock;
 use Tests\TestCase;
 
@@ -33,15 +33,16 @@ class ComputeYearlyIncomeTest extends TestCase
             new BillRepositoryDatabase(new BillDomainFactory())
         );
 
-        $result = $computer->compute($year =$this->clock->now()->year);
+        $result = $computer->compute($year = $this->clock->now()->year);
 
         $this->assertEquals(5, $result->billCount);
         $this->assertEquals($year, $result->year);
-        $this->assertEquals(7850 + 5000 +10800 +2500 +125, $result->total);
-        $this->assertEquals((2500 + 125) * 0.21 , $result->totalVatCollected);
+        $this->assertEquals(7850 + 5000 + 10800 + 2500 + 125, $result->total);
+        $this->assertEquals((2500 + 125) * 0.21, $result->totalVatCollected);
     }
 
-    private function givenBill(float $amount, VatRate $taxRate) {
+    private function givenBill(float $amount, VatRate $taxRate)
+    {
         EloquentBill::factory()->create([
             'amount' => $amount * 100,
             'tax_rate' => $taxRate->rate(),

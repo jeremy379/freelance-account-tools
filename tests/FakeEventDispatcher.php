@@ -4,12 +4,11 @@ namespace Tests;
 
 use Module\SharedKernel\Domain\DomainEvent;
 use Module\SharedKernel\Domain\EventDispatcher;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 class FakeEventDispatcher implements EventDispatcher
 {
-    /** @var array<DomainEvent>  */
+    /** @var array<DomainEvent> */
     public array $emitted = [];
 
     public function dispatch(DomainEvent ...$events): void
@@ -19,14 +18,14 @@ class FakeEventDispatcher implements EventDispatcher
 
     public function assertEmitted(DomainEvent $event): void
     {
-        foreach($this->emitted as $emittedEvents) {
-            if($emittedEvents->name() === $event->name() && $emittedEvents->payload() === $event->payload()) {
+        foreach ($this->emitted as $emittedEvents) {
+            if ($emittedEvents->name() === $event->name() && $emittedEvents->payload() === $event->payload()) {
                 return;
             }
         }
 
         throw new ExpectationFailedException(
-            'Failing asserting that event ' . $event->name() . ' was emitted with payload ' . json_encode($event->payload())
+            'Failing asserting that event '.$event->name().' was emitted with payload '.json_encode($event->payload())
         );
     }
 }

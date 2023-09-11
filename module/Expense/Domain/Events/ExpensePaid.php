@@ -16,7 +16,6 @@ class ExpensePaid implements DomainEvent
     ) {
     }
 
-
     public function name(): string
     {
         return self::NAME;

@@ -7,30 +7,31 @@ use Module\Billing\Domain\Events\BillPaid;
 use Module\Billing\Domain\Objects\Amount;
 use Module\Billing\Domain\Objects\Client;
 use Module\Billing\Domain\Objects\Reference;
-use Module\SharedKernel\Domain\VatRate;
 use Module\SharedKernel\Domain\DomainEntityWithEvents;
 use Module\SharedKernel\Domain\DomainEvent;
 use Module\SharedKernel\Domain\SavingMode;
+use Module\SharedKernel\Domain\VatRate;
 
 class Bill implements DomainEntityWithEvents
 {
     private array $events = [];
+
     private SavingMode $savingMode;
 
     private function __construct(
-        public readonly Reference       $reference,
-        public readonly Client          $client,
-        public readonly Amount          $amountWithoutTax,
-        public readonly VatRate         $taxRate,
+        public readonly Reference $reference,
+        public readonly Client $client,
+        public readonly Amount $amountWithoutTax,
+        public readonly VatRate $taxRate,
         public readonly CarbonImmutable $billingDate,
     ) {
     }
 
     public static function record(
-        Reference       $reference,
-        Client          $client,
-        Amount          $amountWithoutTax,
-        VatRate         $taxRate,
+        Reference $reference,
+        Client $client,
+        Amount $amountWithoutTax,
+        VatRate $taxRate,
         CarbonImmutable $billingDate,
     ): Bill {
         $bill = new self(
@@ -46,10 +47,10 @@ class Bill implements DomainEntityWithEvents
     }
 
     public static function restore(
-        Reference       $reference,
-        Client          $client,
-        Amount          $amountWithoutTax,
-        VatRate         $taxRate,
+        Reference $reference,
+        Client $client,
+        Amount $amountWithoutTax,
+        VatRate $taxRate,
         CarbonImmutable $billingDate,
     ): Bill {
         return new self(
@@ -79,6 +80,7 @@ class Bill implements DomainEntityWithEvents
     {
         $events = $this->events;
         $this->events = [];
+
         return $events;
     }
 

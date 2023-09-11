@@ -21,7 +21,7 @@ class TaxCalculator
 
         $this->details = $sliced;
 
-        foreach($sliced as $slice) {
+        foreach ($sliced as $slice) {
             $amountAsInt = (int) ($slice['amount'] * 100);
             $tax += $amountAsInt * $slice['rate'] / 100;
         }
@@ -33,9 +33,10 @@ class TaxCalculator
 
     public function computationDetails(): array
     {
-        if(empty($this->details)) {
+        if (empty($this->details)) {
             throw new \Exception('To get details, run the computations first', 400);
         }
+
         return $this->details;
     }
 
@@ -43,20 +44,20 @@ class TaxCalculator
     {
         $sliced = [];
 
-        foreach($slices as $slice) {
+        foreach ($slices as $slice) {
 
             $outOfSlice = $amount < $slice['from'];
 
-            if($outOfSlice) {
+            if ($outOfSlice) {
                 continue;
             }
 
             $fullyInSlice = $amount >= $slice['from'] && $amount >= $slice['to'];
             $partlyInSlice = $amount >= $slice['from'] && $amount < $slice['to'];
 
-            if($fullyInSlice) {
+            if ($fullyInSlice) {
                 $computedAmount = $slice['to'] - $slice['from'];
-            } elseif($partlyInSlice) {
+            } elseif ($partlyInSlice) {
                 $computedAmount = ((int) ($amount * 10000 - $slice['from'] * 10000)) / 10000;
             } else {
                 $computedAmount = 0;
@@ -68,7 +69,7 @@ class TaxCalculator
             ];
         }
 
-        if($amount > $this->taxConfig->thresholdAfterLastSlice()) {
+        if ($amount > $this->taxConfig->thresholdAfterLastSlice()) {
             $sliced[] = [
                 'rate' => $this->taxConfig->finalRate(),
                 'amount' => ((int) ($amount * 10000 - $this->taxConfig->thresholdAfterLastSlice() * 10000) / 10000),
@@ -82,6 +83,7 @@ class TaxCalculator
     {
         $factor = 10 ** $precision;
         $rounded = round($number * $factor);
+
         return $rounded / $factor;
     }
 }

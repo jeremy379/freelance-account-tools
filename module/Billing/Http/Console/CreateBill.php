@@ -5,16 +5,16 @@ namespace Module\Billing\Http\Console;
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
 use Module\Billing\Application\CreateBillCommand;
-use Module\SharedKernel\Domain\VatRate;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
-
+use Module\SharedKernel\Domain\VatRate;
 use Module\SharedKernel\Infrastructure\CommandValidator;
-use function Laravel\Prompts\select;
-use function Laravel\Prompts\text;
-use function Laravel\Prompts\suggest;
+
 use function Laravel\Prompts\info;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\suggest;
+use function Laravel\Prompts\text;
 
 class CreateBill extends Command
 {
@@ -26,7 +26,7 @@ class CreateBill extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', $clock->now()->year . '-001', validate: fn(string $value) => $this->validate('bill.reference', $value));
+        $reference = text('Enter the Reference', $clock->now()->year.'-001', validate: fn (string $value) => $this->validate('bill.reference', $value));
         $client = suggest('Enter the client', $this->existingClient());
         $amount = (float) text('Enter the amount (without tax)');
         $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->rate());

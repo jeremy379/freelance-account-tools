@@ -2,13 +2,11 @@
 
 namespace Module\Forecast\Application;
 
-use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\ForecastRepository;
 use Module\Forecast\Domain\Objects\ForecastAmount;
 use Module\SharedKernel\Domain\Category;
-use Module\SharedKernel\Domain\Command;
 use Module\SharedKernel\Domain\VatRate;
 
 class CreateForecastCommandHandler
@@ -19,7 +17,7 @@ class CreateForecastCommandHandler
 
     public function handle(CreateIncomeForecastCommand|CreateExpenseForecastCommand $command): void
     {
-        if($command instanceof CreateIncomeForecastCommand) {
+        if ($command instanceof CreateIncomeForecastCommand) {
             $forecast = Forecast::income(
                 ForecastAmount::fromFloat($command->amount),
                 VatRate::fromStoredValue($command->vatRate),

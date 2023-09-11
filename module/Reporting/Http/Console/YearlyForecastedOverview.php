@@ -4,11 +4,9 @@ namespace Module\Reporting\Http\Console;
 
 use Illuminate\Console\Command;
 use Module\Reporting\Application\GetYearlyForecastedOverviewQuery;
-use Module\Reporting\Application\GetYearlyOverviewQuery;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 
 use function Laravel\Prompts\text;
 
@@ -27,21 +25,21 @@ class YearlyForecastedOverview extends Command
 
         $table = new Table($this->output);
 
-        $table->setHeaderTitle('Forecasted Results for ' . $year);
+        $table->setHeaderTitle('Forecasted Results for '.$year);
         $table->setHorizontal();
         $table->setHeaders(['Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Vat to pay', 'Vat to get back']);
 
         $table->setRows([
             [
-                $result['bill']['total'] .' €',
-                $result['expense']['totalExpense'] .' €',
-                $result['expense']['totalDeductibleExpense'] .' €',
-                $result['bill']['total'] - $result['expense']['totalDeductibleExpense'] .' €',
-                $result['socialContribution']['yearly_amount'] .' €',
-                $result['taxable_income'] .' €',
-                '<error>' . $result['tax'] . ' €</error>',
-                $result['bill']['totalVatCollected'] .' €',
-                $result['expense']['vatToRecover'] .' €',
+                $result['bill']['total'].' €',
+                $result['expense']['totalExpense'].' €',
+                $result['expense']['totalDeductibleExpense'].' €',
+                $result['bill']['total'] - $result['expense']['totalDeductibleExpense'].' €',
+                $result['socialContribution']['yearly_amount'].' €',
+                $result['taxable_income'].' €',
+                '<error>'.$result['tax'].' €</error>',
+                $result['bill']['totalVatCollected'].' €',
+                $result['expense']['vatToRecover'].' €',
             ],
         ]);
 

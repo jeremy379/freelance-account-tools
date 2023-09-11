@@ -23,6 +23,7 @@ class Amount
     public static function fromStoredInt(int $amount): Amount
     {
         Assert::positiveInteger($amount);
+
         return new self($amount);
     }
 

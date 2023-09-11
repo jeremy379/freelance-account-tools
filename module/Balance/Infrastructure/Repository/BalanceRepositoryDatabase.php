@@ -16,7 +16,7 @@ class BalanceRepositoryDatabase implements BalanceRepository
             ->where('type', $type->value)
             ->where('occurred_on', '>=', $from);
 
-        if($to) {
+        if ($to) {
             $balanceTransactions = $balanceTransactions->where('occurred_on', '<=', $to);
         }
 

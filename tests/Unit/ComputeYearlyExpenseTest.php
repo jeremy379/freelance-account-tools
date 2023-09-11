@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Module\Balance\Domain\Objects\BalanceType;
 use Module\Balance\Infrastructure\Eloquent\EloquentBalanceTransaction;
-use Module\SharedKernel\Domain\VatRate;
 use Module\Expense\Domain\ComputeYearlyExpense;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
 use Module\Expense\Domain\Objects\CountryCode;
@@ -13,12 +12,14 @@ use Module\Expense\Infrastructure\Repository\ExpenseDomainFactory;
 use Module\Expense\Infrastructure\Repository\ExpenseRepositoryDatabase;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
+use Module\SharedKernel\Domain\VatRate;
 use Tests\FakeClock;
 use Tests\TestCase;
 
 class ComputeYearlyExpenseTest extends TestCase
 {
     private DeductibilityConfiguration $configuration;
+
     private ClockInterface $clock;
 
     protected function setUp(): void
@@ -53,7 +54,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $travelExpense = $this->givenExpense(Category::TRAVEL, 250.50, VatRate::rate20(), CountryCode::FR);
         $houseExpense = $this->givenExpense(Category::HOUSE_EXPENSE, 4000, VatRate::rate6(), CountryCode::BE);
         $accountantExpense = $this->givenExpense(Category::ACCOUNTANT, 115, VatRate::rate21(), CountryCode::BE);
-        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
+        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE, 250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
 
         $totalExpenses = 5;
         $totalAmount = 880.50 + 250.50 + 4000 + 115 + 250;
@@ -67,10 +68,8 @@ class ComputeYearlyExpenseTest extends TestCase
         $vatToRecover = (100 * 880.50 * 0.3 * 0.21)
             + (100 * 4000 * 0.0764 * 0.06)
             + (100 * 115 * 0.21)
-            - (100 * 250 * 0.21) //Reverse charge vat need to be paid in company country
-        ;
+            - (100 * 250 * 0.21); //Reverse charge vat need to be paid in company country
         $vatToRecover /= 100;
-
 
         $calculator = new ComputeYearlyExpense(
             new ExpenseRepositoryDatabase(
@@ -90,16 +89,15 @@ class ComputeYearlyExpenseTest extends TestCase
 
     public function testItComputeReverseChargedExpenses()
     {
-        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE,  250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
+        $expenseInReverseCharge = $this->givenExpense(Category::SOFTWARE, 250, VatRate::reverseCharge(), CountryCode::OUTSIDE_EU);
 
         $totalExpenses = 1;
         $totalAmount = 250;
         $deductible = (100 * 250 * 1);
         $deductible /= 100;
 
-        $vatToRecover = - (100 * 250 * 0.21); //Reverse charge vat need to be paid in company country
+        $vatToRecover = -(100 * 250 * 0.21); //Reverse charge vat need to be paid in company country
         $vatToRecover /= 100;
-
 
         $calculator = new ComputeYearlyExpense(
             new ExpenseRepositoryDatabase(
@@ -197,7 +195,7 @@ class ComputeYearlyExpenseTest extends TestCase
 
     private function givenExpense(Category $categoryValue, float $amount, VatRate $taxRate, CountryCode $countryCode): EloquentExpense
     {
-        $amount *= 100;//We store int.
+        $amount *= 100; //We store int.
 
         $expense = EloquentExpense::factory(
             [

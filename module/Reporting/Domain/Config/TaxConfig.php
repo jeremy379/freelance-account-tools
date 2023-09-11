@@ -10,7 +10,7 @@ class TaxConfig
 
     public static function loadConfiguration(int $yearToLoad, array $config): TaxConfig
     {
-        $config = $config[$yearToLoad] ?? throw new \InvalidArgumentException('The configuration doesn\'t contains the year ' . $yearToLoad);
+        $config = $config[$yearToLoad] ?? throw new \InvalidArgumentException('The configuration doesn\'t contains the year '.$yearToLoad);
 
         return new self(
             $config['slices'],

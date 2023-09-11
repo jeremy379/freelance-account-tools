@@ -11,9 +11,10 @@ trait CommandValidator
         'bill.reference' => 'required|string|unique:bill,reference',
     ];
 
-    private function validate(string $field, $value): ?string {
+    private function validate(string $field, $value): ?string
+    {
 
-           $ruleToApply = [$field => $this->rules[$field]];
+        $ruleToApply = [$field => $this->rules[$field]];
 
         $validator = Validator::make([$field => $value], $ruleToApply);
 

@@ -8,7 +8,6 @@ use Module\Forecast\Domain\Forecast;
 use Module\Forecast\Domain\ForecastRepository;
 use Module\Forecast\Domain\Objects\ForecastType;
 use Module\Forecast\Infrastructure\Eloquent\EloquentForecast;
-use Module\SharedKernel\Domain\ClockInterface;
 
 class ForecastRepositoryDatabase implements ForecastRepository
 {
@@ -35,7 +34,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
             ->where(function (Builder $query) use ($dateTime, $onlyFutureMonth) {
                 $query->whereYear('forecasted_on', $dateTime->year);
 
-                if($onlyFutureMonth) {
+                if ($onlyFutureMonth) {
                     $query->whereMonth('forecasted_on', '>', $dateTime->month);
                 }
             })
@@ -51,7 +50,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
             ->where(function (Builder $query) use ($dateTime, $onlyFutureMonth) {
                 $query->whereYear('forecasted_on', $dateTime->year);
 
-                if($onlyFutureMonth) {
+                if ($onlyFutureMonth) {
                     $query->whereMonth('forecasted_on', '>', $dateTime->month);
                 }
             })

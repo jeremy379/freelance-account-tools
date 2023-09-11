@@ -41,10 +41,10 @@ class Main extends Command
         /** @var array<Command> $commandClass */
         $commandClass = [];
 
-        foreach($this->lists as $command) {
+        foreach ($this->lists as $command) {
             $commandClass[$command] = new $command();
 
-            $options[$command] = $commandClass[$command]->getName() . ' (' . $commandClass[$command]->getDescription() . ')';
+            $options[$command] = $commandClass[$command]->getName().' ('.$commandClass[$command]->getDescription().')';
         }
 
         $options['close'] = 'Quit';
@@ -60,7 +60,7 @@ class Main extends Command
 
             $command = $this->commandSelector($options);
 
-        } while(true);
+        } while (true);
     }
 
     private function commandSelector(array $options): string

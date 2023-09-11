@@ -7,7 +7,9 @@ use Module\Reporting\Domain\Config\SocialContributionConfig;
 class SocialContributionCalculator
 {
     public const PERIODICITY = 'P3M';
+
     public const PERIOD_PER_YEAR = 4;
+
     private float $annualContribution = 0;
 
     public function __construct(private SocialContributionConfig $config)
@@ -22,8 +24,8 @@ class SocialContributionCalculator
 
             $amountStillToBeTaxed = $netTaxableIncome;
 
-            foreach($this->config->slices() as $slice) {
-                if($amountStillToBeTaxed > 0) {
+            foreach ($this->config->slices() as $slice) {
+                if ($amountStillToBeTaxed > 0) {
                     [$amountInSlice, $amountStillToBeTaxed] = $this->splitAmountInSlice($slice, $amountStillToBeTaxed);
 
                     $ratePercent = $slice['rate'] / 100;
@@ -51,7 +53,7 @@ class SocialContributionCalculator
     private function splitAmountInSlice(array $slice, float $amount): array
     {
         $rest = 0;
-        if($amount >= $slice['to']) {
+        if ($amount >= $slice['to']) {
             $rest = $amount - $slice['to'];
             $amount = $slice['to'];
         }
@@ -64,6 +66,7 @@ class SocialContributionCalculator
     {
         $factor = 10 ** $precision;
         $rounded = round($number * $factor);
+
         return $rounded / $factor;
     }
 }

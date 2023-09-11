@@ -10,7 +10,7 @@ class ConfigurationStorage implements Configuration
     {
         $config = config($key);
 
-        if(!is_array($config)) {
+        if (! is_array($config)) {
             throw new \InvalidArgumentException('Configuration key is invalid. An array is expected');
         }
 

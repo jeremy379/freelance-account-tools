@@ -31,8 +31,9 @@ class GetBalanceOverTime extends Command
         /** @var BalanceOverTime $balances */
         $balances = $bus->dispatch($query);
 
-        if($balances->isEmpty()) {
+        if ($balances->isEmpty()) {
             error('There is no entries in your balance');
+
             return self::INVALID;
         }
 
@@ -49,12 +50,12 @@ class GetBalanceOverTime extends Command
         //Generate empty array matrix
 
         $rows = [];
-        foreach($xScale as $xIndex => $date) {
-            foreach($yScale as $yIndex => $amount) {
-                if($xIndex === 0) {
+        foreach ($xScale as $xIndex => $date) {
+            foreach ($yScale as $yIndex => $amount) {
+                if ($xIndex === 0) {
                     $roundedAmount = round($amount / 100);
-                    $roundedAmount = str_repeat(' ', 10 -strlen($roundedAmount)) . $roundedAmount;
-                    $rows[$yIndex][0] = '<info>' . $roundedAmount . '</info>';
+                    $roundedAmount = str_repeat(' ', 10 - strlen($roundedAmount)).$roundedAmount;
+                    $rows[$yIndex][0] = '<info>'.$roundedAmount.'</info>';
                 } else {
                     $rows[$yIndex][$xIndex] = '';
                 }
@@ -63,17 +64,17 @@ class GetBalanceOverTime extends Command
 
         $sumRowYIndex = $yIndex + 1;
 
-        $rows[$sumRowYIndex][0] = str_repeat(' ', 10 -strlen('Total')) . '<info>Total</info>';
+        $rows[$sumRowYIndex][0] = str_repeat(' ', 10 - strlen('Total')).'<info>Total</info>';
 
         /** @var BalanceOnDatetime $balance */
-        foreach($balances->toArray() as $timestamp => $balance) {
+        foreach ($balances->toArray() as $timestamp => $balance) {
             //Check the right box in the matrix
             $xIndexToCheck = $this->getPositionOnXAxis($balance->datetime, $xScale);
             $yIndexToCheck = $this->getPositionOnYAxis($balance->amount->toInt(), $yScale);
 
             $rows[$yIndexToCheck][$xIndexToCheck] = '<error>x</error>';
 
-            $rows[$sumRowYIndex][$xIndexToCheck] = str_repeat(' ', 10 -strlen($balance->amount->toHumanFloat())) . '<info>' . $balance->amount->toHumanFloat() . '</info>';
+            $rows[$sumRowYIndex][$xIndexToCheck] = str_repeat(' ', 10 - strlen($balance->amount->toHumanFloat())).'<info>'.$balance->amount->toHumanFloat().'</info>';
         }
 
         $this->customTable($xScale, $rows);
@@ -108,7 +109,7 @@ class GetBalanceOverTime extends Command
     private function xAxisGranularity(CarbonImmutable $from, CarbonImmutable $to): string
     {
         $diffInDays = $from->diffInDays($to);
-        if($diffInDays <= 30) {
+        if ($diffInDays <= 30) {
             return 'week';
         } else {
             return 'month';
@@ -123,7 +124,7 @@ class GetBalanceOverTime extends Command
 
         $fromCopy = $from->copy();
 
-        $fromCopy = match($granularityType) {
+        $fromCopy = match ($granularityType) {
             'month' => $fromCopy->startOfMonth(),
             'week' => $fromCopy->startOfWeek()
         };
@@ -131,7 +132,7 @@ class GetBalanceOverTime extends Command
         while ($fromCopy->lt($to)) {
             $xScale[] = $fromCopy->toDateString();
 
-            $fromCopy = match($granularityType) {
+            $fromCopy = match ($granularityType) {
                 'month' => $fromCopy->addMonth(),
                 'week' => $fromCopy->addWeek()
             };
@@ -142,12 +143,12 @@ class GetBalanceOverTime extends Command
 
     private function getPositionOnXAxis(CarbonImmutable $datetime, array $xScale): int
     {
-        foreach($xScale as $index => $date) {
-            if($date !== 'Amount (€)') {
+        foreach ($xScale as $index => $date) {
+            if ($date !== 'Amount (€)') {
                 $dateCarboned = CarbonImmutable::parse($date);
 
                 if ($datetime->lt($dateCarboned)) {
-                    return max($index -1, 1);
+                    return max($index - 1, 1);
                 }
             }
         }
@@ -157,8 +158,8 @@ class GetBalanceOverTime extends Command
 
     private function getPositionOnYAxis(int $amount, array $yScale): int
     {
-        foreach($yScale as $index => $yAmount) {
-            if($amount >= $yAmount) {
+        foreach ($yScale as $index => $yAmount) {
+            if ($amount >= $yAmount) {
                 return $index;
             }
         }

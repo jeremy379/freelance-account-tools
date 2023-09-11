@@ -67,8 +67,8 @@ return [
             'rate_after_last_slice' => 50,
             'exoneratedAmount' => 10160,
             'rate_city_tax' => [ // https://finances.belgium.be/sites/default/files/downloads/111-taux-taxe-communale-2023.pdf
-                '5030' => 7.8
-            ]
+                '5030' => 7.8,
+            ],
         ],
         2024 => [ //@todo set new value 01/01/2024
             'slices' => [
@@ -93,9 +93,9 @@ return [
             'rate_after_last_slice' => 50,
             'exoneratedAmount' => 10160,
             'rate_city_tax' => [ // https://finances.belgium.be/sites/default/files/downloads/111-taux-taxe-communale-2023.pdf
-                '5030' => 7.8
-            ]
-        ]
+                '5030' => 7.8,
+            ],
+        ],
     ],
     'deductibility' => [
         'category' => [
@@ -115,7 +115,7 @@ return [
             Category::PLCI->value => 100,
             Category::INSURANCE->value => 100,
         ],
-      'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, some stuff need to be requested by your accountant : https://finances.belgium.be/fr/entreprises/tva/international/remboursement-de-la-tva-etrangere/assujettis-etablis-en-belgique#q1
+        'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, some stuff need to be requested by your accountant : https://finances.belgium.be/fr/entreprises/tva/international/remboursement-de-la-tva-etrangere/assujettis-etablis-en-belgique#q1
     ],
     'company_zip_code' => env('COMPANY_ZIP_CODE', 5030),
 ];

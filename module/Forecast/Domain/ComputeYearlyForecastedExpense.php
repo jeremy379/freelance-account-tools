@@ -4,7 +4,6 @@ namespace Module\Forecast\Domain;
 
 use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
-use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Domain\Objects\YearlyExpense;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\VatRate;
@@ -26,19 +25,21 @@ class ComputeYearlyForecastedExpense
 
         $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = 0;
 
-        foreach($expenses as $forecastedExpense) {
-            if($forecastedExpense->category === Category::TAX) {
+        foreach ($expenses as $forecastedExpense) {
+            if ($forecastedExpense->category === Category::TAX) {
                 continue; //We do not process this type of expense. This is mostly a row saying "Hey, I paid that amount of tax!"
             }
 
             $expenseAmount = $forecastedExpense->amount->toInt();
 
-            if($forecastedExpense->category === Category::TAX_PREVISION) {
+            if ($forecastedExpense->category === Category::TAX_PREVISION) {
                 $taxProvisioned += $expenseAmount; //This is for reporting purpose. These amount are just cash moved to specific bank account.
+
                 continue;
             }
-            if($forecastedExpense->category === Category::SOCIAL_CHARGE) {
+            if ($forecastedExpense->category === Category::SOCIAL_CHARGE) {
                 $socialContributionPaid += $expenseAmount;
+
                 continue;
             }
 
@@ -47,10 +48,10 @@ class ComputeYearlyForecastedExpense
             $category = $forecastedExpense->category;
             $deductibleRate = $this->configuration->deductibilityRateFor($category);
 
-            if($forecastedExpense->vatRate->isReverseCharge()) {
-                $vatAmount = $expenseAmount * -1 *  (VatRate::rate21()->rate() / 100);
+            if ($forecastedExpense->vatRate->isReverseCharge()) {
+                $vatAmount = $expenseAmount * -1 * (VatRate::rate21()->rate() / 100);
             } else {
-                if (!$this->configuration->isVATCanBeRefundIn($forecastedExpense->countryCodeWhereExpenseIsMade)) {
+                if (! $this->configuration->isVATCanBeRefundIn($forecastedExpense->countryCodeWhereExpenseIsMade)) {
                     $vatAmount = 0;
                     $expenseAmount *= 1 + ($forecastedExpense->vatRate->rate() / 100);
                 } else {

@@ -15,7 +15,7 @@ class SocialContributionConfig
 
     public static function loadConfiguration(int $yearToLoad, array $config)
     {
-        $config = $config[$yearToLoad] ?? throw new \InvalidArgumentException('The configuration doesn\'t contains the year ' . $yearToLoad);
+        $config = $config[$yearToLoad] ?? throw new \InvalidArgumentException('The configuration doesn\'t contains the year '.$yearToLoad);
 
         return new self(
             self::checkSlice($config['slices']),
@@ -46,7 +46,7 @@ class SocialContributionConfig
 
     private static function checkSlice(array $slices): array
     {
-        foreach($slices as $slice) {
+        foreach ($slices as $slice) {
             Assert::keyExists($slice, 'from');
             Assert::keyExists($slice, 'to');
             Assert::keyExists($slice, 'rate');
@@ -59,6 +59,7 @@ class SocialContributionConfig
     {
         Assert::keyExists($slice, 'from');
         Assert::keyExists($slice, 'fixed_amount');
+
         return $slice;
     }
 }

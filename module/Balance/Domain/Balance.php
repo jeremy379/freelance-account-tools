@@ -28,7 +28,7 @@ class Balance implements DomainEntityWithEvents
         Reference $reference,
         CarbonImmutable $datetime,
     ): Balance {
-        if($type === BalanceType::EXPENSE) {
+        if ($type === BalanceType::EXPENSE) {
             $amount = Amount::fromStoredInt($amount->toInt() * -1);
         }
         $entry = new self($amount, $type, $reference, $datetime);
@@ -61,6 +61,7 @@ class Balance implements DomainEntityWithEvents
     {
         $events = $this->events;
         $this->events = [];
+
         return $events;
     }
 }

@@ -17,27 +17,28 @@ use Module\SharedKernel\Domain\VatRate;
 class Expense implements DomainEntityWithEvents
 {
     private array $events = [];
+
     private SavingMode $savingMode;
 
     private function __construct(
-        public readonly Reference   $reference,
-        public readonly Category    $category,
-        public readonly Provider    $provider,
-        public readonly Amount      $amount,
-        public readonly VatRate     $taxRate,
+        public readonly Reference $reference,
+        public readonly Category $category,
+        public readonly Provider $provider,
+        public readonly Amount $amount,
+        public readonly VatRate $taxRate,
         public readonly CountryCode $countryCode,
     ) {
     }
 
     public static function record(
-        Reference   $reference,
-        Category    $category,
-        Provider    $provider,
-        Amount      $amount,
-        VatRate     $taxRate,
+        Reference $reference,
+        Category $category,
+        Provider $provider,
+        Amount $amount,
+        VatRate $taxRate,
         CountryCode $countryCode
     ): Expense {
-        $expense =  new self(
+        $expense = new self(
             $reference,
             $category,
             $provider,
@@ -64,11 +65,11 @@ class Expense implements DomainEntityWithEvents
     }
 
     public static function restore(
-        Reference   $reference,
-        Category    $category,
-        Provider    $provider,
-        Amount      $amount,
-        VatRate     $taxRate,
+        Reference $reference,
+        Category $category,
+        Provider $provider,
+        Amount $amount,
+        VatRate $taxRate,
         CountryCode $countryCode
     ): Expense {
         return new self(
@@ -90,6 +91,7 @@ class Expense implements DomainEntityWithEvents
     {
         $events = $this->events;
         $this->events = [];
+
         return $events;
     }
 
@@ -110,6 +112,7 @@ class Expense implements DomainEntityWithEvents
         );
 
         $expense->savingMode = $this->savingMode();
+
         return $expense;
     }
 }

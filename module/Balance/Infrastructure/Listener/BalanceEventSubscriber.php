@@ -16,6 +16,7 @@ use Module\SharedKernel\Domain\EventDispatcher;
 class BalanceEventSubscriber
 {
     private BalanceRepository $balanceRepository;
+
     private EventDispatcher $eventDispatcher;
 
     public function __construct()
