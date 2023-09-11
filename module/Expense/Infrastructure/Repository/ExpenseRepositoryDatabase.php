@@ -8,6 +8,7 @@ use Module\Expense\Domain\Exception\ExpenseNotFound;
 use Module\Expense\Domain\Expense;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
+use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\SavingMode;
 
 class ExpenseRepositoryDatabase implements ExpenseRepository

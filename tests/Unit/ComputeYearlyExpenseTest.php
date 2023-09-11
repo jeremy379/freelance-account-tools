@@ -117,6 +117,84 @@ class ComputeYearlyExpenseTest extends TestCase
         $this->assertEquals($year, $result->year);
     }
 
+    public function testItDoeNotComputePaidTaxes()
+    {
+        $this->givenExpense(
+            Category::TAX,
+            5000,
+            VatRate::rate0(),
+            CountryCode::BE,
+        );
+
+        $calculator = new ComputeYearlyExpense(
+            new ExpenseRepositoryDatabase(
+                new ExpenseDomainFactory()
+            ),
+            $this->configuration
+        );
+
+        $result = $calculator->compute($year = $this->clock->now()->year);
+
+        $this->assertEquals(0, $result->taxProvisioned);
+        $this->assertEquals(0, $result->totalExpense);
+        $this->assertEquals(0, $result->vatToRecover);
+        $this->assertEquals(0, $result->socialContributionAlreadyPaid);
+        $this->assertEquals(0, $result->totalDeductibleExpense);
+        $this->assertEquals(1, $result->expenseCount);
+    }
+
+    public function testItRecordSocialContributionPaidButDoNotSumItWithOtherDeduction()
+    {
+        $this->givenExpense(
+            Category::SOCIAL_CHARGE,
+            5000,
+            VatRate::rate0(),
+            CountryCode::BE,
+        );
+
+        $calculator = new ComputeYearlyExpense(
+            new ExpenseRepositoryDatabase(
+                new ExpenseDomainFactory()
+            ),
+            $this->configuration
+        );
+
+        $result = $calculator->compute($year = $this->clock->now()->year);
+
+        $this->assertEquals(0, $result->taxProvisioned);
+        $this->assertEquals(0, $result->totalExpense);
+        $this->assertEquals(0, $result->vatToRecover);
+        $this->assertEquals(500000, $result->socialContributionAlreadyPaid);
+        $this->assertEquals(0, $result->totalDeductibleExpense);
+        $this->assertEquals(1, $result->expenseCount);
+    }
+
+    public function testItRecordTaxProvisionedPaidButDoNotSumItWithOtherDeduction()
+    {
+        $this->givenExpense(
+            Category::TAX_PREVISION,
+            5000,
+            VatRate::rate0(),
+            CountryCode::BE,
+        );
+
+        $calculator = new ComputeYearlyExpense(
+            new ExpenseRepositoryDatabase(
+                new ExpenseDomainFactory()
+            ),
+            $this->configuration
+        );
+
+        $result = $calculator->compute($year = $this->clock->now()->year);
+
+        $this->assertEquals(500000, $result->taxProvisioned);
+        $this->assertEquals(0, $result->totalExpense);
+        $this->assertEquals(0, $result->vatToRecover);
+        $this->assertEquals(0, $result->socialContributionAlreadyPaid);
+        $this->assertEquals(0, $result->totalDeductibleExpense);
+        $this->assertEquals(1, $result->expenseCount);
+    }
+
     private function givenExpense(Category $categoryValue, float $amount, VatRate $taxRate, CountryCode $countryCode): EloquentExpense
     {
         $amount *= 100;//We store int.

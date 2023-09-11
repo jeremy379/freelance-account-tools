@@ -9,6 +9,8 @@ class YearlyExpense
         public readonly float $totalDeductibleExpense,
         public readonly int $expenseCount,
         public readonly float $vatToRecover,
+        public readonly float $taxProvisioned,
+        public readonly float $socialContributionAlreadyPaid,
         public readonly int $year,
     ) {
     }
@@ -20,6 +22,8 @@ class YearlyExpense
             'totalDeductibleExpense' => $this->totalDeductibleExpense,
             'expenseCount' => $this->expenseCount,
             'vatToRecover' => $this->vatToRecover,
+            'taxProvisioned' => $this->taxProvisioned,
+            'socialContributionAlreadyPaid' => $this->socialContributionAlreadyPaid,
             'year' => $this->year,
         ];
     }
