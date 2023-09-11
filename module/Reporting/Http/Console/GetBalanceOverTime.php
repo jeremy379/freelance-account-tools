@@ -44,7 +44,7 @@ class GetBalanceOverTime extends Command
         $yScale = $this->yScale($balances->min(), $balances->max());
         $xScale = $this->xScale($from, $to);
 
-        $xScale = array_merge(['Amount'], $xScale);
+        $xScale = array_merge(['Amount (€)'], $xScale);
 
         //Generate empty array matrix
 
@@ -52,7 +52,9 @@ class GetBalanceOverTime extends Command
         foreach($xScale as $xIndex => $date) {
             foreach($yScale as $yIndex => $amount) {
                 if($xIndex === 0) {
-                    $rows[$yIndex][0] = '<info>' . round($amount / 100) . '</info>';
+                    $roundedAmount = round($amount / 100);
+                    $roundedAmount = str_repeat(' ', 10 -strlen($roundedAmount)) . $roundedAmount;
+                    $rows[$yIndex][0] = '<info>' . $roundedAmount . '</info>';
                 } else {
                     $rows[$yIndex][$xIndex] = '';
                 }
@@ -61,7 +63,7 @@ class GetBalanceOverTime extends Command
 
         $sumRowYIndex = $yIndex + 1;
 
-        $rows[$sumRowYIndex][0] = '<info>Total</info>';
+        $rows[$sumRowYIndex][0] = str_repeat(' ', 10 -strlen('Total')) . '<info>Total</info>';
 
         /** @var BalanceOnDatetime $balance */
         foreach($balances->toArray() as $timestamp => $balance) {
@@ -71,7 +73,7 @@ class GetBalanceOverTime extends Command
 
             $rows[$yIndexToCheck][$xIndexToCheck] = '<error>x</error>';
 
-            $rows[$sumRowYIndex][$xIndexToCheck] = '<info>' . $balance->amount->toHumanFloat() . '</info>';
+            $rows[$sumRowYIndex][$xIndexToCheck] = str_repeat(' ', 10 -strlen($balance->amount->toHumanFloat())) . '<info>' . $balance->amount->toHumanFloat() . '</info>';
         }
 
         $this->customTable($xScale, $rows);
@@ -141,7 +143,7 @@ class GetBalanceOverTime extends Command
     private function getPositionOnXAxis(CarbonImmutable $datetime, array $xScale): int
     {
         foreach($xScale as $index => $date) {
-            if($date !== 'Amount') {
+            if($date !== 'Amount (€)') {
                 $dateCarboned = CarbonImmutable::parse($date);
 
                 if ($datetime->lt($dateCarboned)) {
