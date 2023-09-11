@@ -101,27 +101,37 @@ class GetBalanceOverTime extends Command
 
     private function xScale(CarbonImmutable $from, CarbonImmutable $to): array
     {
+        //Month from first to last except if duration is below one month, then by weeks.
+
+
+
         $xScale = [];
         $diffInDays = $from->diffInDays($to);
-        if($diffInDays < 100)
+        if($diffInDays <= 30)
         {
-            $granularity = $diffInDays/10;
-            $granularityType = 'day';
+            $granularity = 1;
+            $granularityType = 'week';
         } else {
-            $granularity = $from->diffInMonths($to);
+            $granularity = 1;
             $granularityType = 'month';
         }
 
         $granularity = max($granularity, 1);
 
+
         $fromCopy = $from->copy();
+
+        $fromCopy = match($granularityType) {
+            'month' => $fromCopy->startOfMonth(),
+            'week' => $fromCopy->startOfWeek()
+        };
 
         while ($fromCopy->lt($to)) {
             $xScale[] = $fromCopy->toDateString();
 
             $fromCopy = match($granularityType) {
-                'day' => $fromCopy->addDays($granularity),
-                'month' => $fromCopy->addMonths($granularity)
+                'month' => $fromCopy->addMonths($granularity),
+                'week' => $fromCopy->addWeeks($granularity)
             };
         }
 
