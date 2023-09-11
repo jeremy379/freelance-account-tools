@@ -29,7 +29,7 @@ class CreateBill extends Command
         $reference = text('Enter the Reference', $clock->now()->year . '-001', validate: fn(string $value) => $this->validate('bill.reference', $value));
         $client = suggest('Enter the client', $this->existingClient());
         $amount = (float) text('Enter the amount (without tax)');
-        $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->taxRatePercentage);
+        $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->rate());
         $billingDate = text('Enter the billing date', $clock->now()->toDateString(), $clock->now()->toDateString());
 
         $command = new CreateBillCommand(
