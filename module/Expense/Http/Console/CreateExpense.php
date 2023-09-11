@@ -4,7 +4,6 @@ namespace Module\Expense\Http\Console;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Validator;
 use Module\Expense\Application\CreateExpenseCommand;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
@@ -12,7 +11,7 @@ use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\VatRate;
-
+use Module\SharedKernel\Infrastructure\CommandValidator;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\suggest;
@@ -20,13 +19,15 @@ use function Laravel\Prompts\text;
 
 class CreateExpense extends Command
 {
+    use CommandValidator;
+
     protected $signature = 'expense:create';
 
     protected $description = 'Register a paid expense';
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', '051-Provider-title', validate: fn(string $value) => $this->validate('reference', $value));
+        $reference = text('Enter the Reference', '051-Provider-title', validate: fn(string $value) => $this->validate('expense.reference', $value));
         $category = select(label: 'Choose the category', options: $this->mapCase(Category::cases()), scroll: 8);
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
@@ -72,18 +73,5 @@ class CreateExpense extends Command
         }
 
         return $response;
-    }
-
-    private function validate(string $field, $value): ?string {
-
-        $rules = [
-            'reference' => 'required|string|unique:expense,reference'
-        ];
-
-        $ruleToApply = [$field => $rules[$field]];
-
-        $validator = Validator::make([$field => $value], $ruleToApply);
-
-        return $validator->fails() ? implode(',', $validator->errors()->all()) : null;
     }
 }
