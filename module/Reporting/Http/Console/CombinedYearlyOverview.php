@@ -42,7 +42,7 @@ class CombinedYearlyOverview extends Command
                 $realNetTaxable .' €',
                 $realOverview['socialContribution']['yearly_amount'] .' € (Incl. ' . $realOverview['socialContributionAlreadyPaid'] . '€ already paid)',
                 $realOverview['taxable_income'] .' €',
-                '<error>' . $realOverview['tax'] . ' €</error> (Incl. ' . $realOverview['taxProvisioned'] . '€ already paid)',
+                '<error>' . $realOverview['tax'] . ' €</error> (Incl. ' . $realOverview['taxProvisioned'] . '€ already provisioned)',
                 round($totalNetLeft, 2) . '€ (' .  round($totalNetLeft/ 12, 2) .')',
                 $realOverview['bill']['totalVatCollected'] .' €',
                 $realOverview['expense']['vatToRecover'] .' €',
