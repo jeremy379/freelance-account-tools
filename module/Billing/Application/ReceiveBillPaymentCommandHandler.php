@@ -17,7 +17,7 @@ class ReceiveBillPaymentCommandHandler
     {
         $bill = $this->billRepository->byReference(Reference::fromString($command->reference));
 
-        $bill = $bill->paymentReceived($command->paymentReceivedOn, Amount::fromFloat($command->amountReceived));
+        $bill = $bill->paymentReceived($command->paymentReceivedOn, Amount::fromFloat($command->amountReceivedIncludingTaxes));
 
         $this->eventDispatcher->dispatch(...$bill->popEvents());
     }

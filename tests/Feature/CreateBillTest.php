@@ -83,7 +83,7 @@ class CreateBillTest extends TestCase
 
         $this->assertTrue(true);
 
-        $this->eventDispatcher->assertEmitted(new BillPaid($reference, (int) round(($amount + ($amount * 21/100)) * 100), $this->clock->now()));
+        $this->eventDispatcher->assertEmitted(new BillPaid($reference, (int) round($amount * 100), $this->clock->now()));
     }
 
     public function testItFailsWhenExpenseReferenceAlreadyExists()

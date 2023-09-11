@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Module\Billing\Application\GetBillWithPaymentByReferenceQuery;
 use Module\Billing\Application\ReceiveBillPaymentCommand;
 use Module\Billing\Infrastructure\Eloquent\EloquentBill;
+use Module\Billing\Infrastructure\Repository\BillDomainFactory;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 
@@ -45,6 +46,8 @@ class BillPaymentReceived extends Command
 
     private function amountOfBill(string $reference): float
     {
-        return EloquentBill::query()->where('reference', $reference)->firstOrFail()->amount / 100;
+        $factory = new BillDomainFactory();
+        $bill = $factory->toBill(EloquentBill::query()->where('reference', $reference)->firstOrFail());
+        return $bill->amountWithoutTax->withTax($bill->taxRate)->toInt() / 100;
     }
 }

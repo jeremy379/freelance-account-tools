@@ -10,8 +10,8 @@ class BillPaid implements DomainEvent
     public const NAME = 'BillPaid';
 
     public function __construct(
-        public readonly string           $billReference,
-        public readonly int              $amountPaid,
+        public readonly string $billReference,
+        public readonly int $amountPaid,
         private readonly CarbonImmutable $paymentDatetime,
     ) {
     }

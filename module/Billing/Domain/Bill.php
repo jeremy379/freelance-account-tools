@@ -65,7 +65,7 @@ class Bill implements DomainEntityWithEvents
     {
         $bill = $this->copy();
 
-        $bill->chainEvent(new BillPaid($bill->reference->value, $amountReceived->withTax($bill->taxRate)->toInt(), $receivedOn));
+        $bill->chainEvent(new BillPaid($bill->reference->value, $amountReceived->toInt(), $receivedOn));
 
         return $bill;
     }

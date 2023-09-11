@@ -9,7 +9,7 @@ class ReceiveBillPaymentCommand implements Command
 {
     public function __construct(
         public readonly string $reference,
-        public readonly float $amountReceived,
+        public readonly float $amountReceivedIncludingTaxes,
         public readonly CarbonImmutable $paymentReceivedOn
     ) {
     }
