@@ -9,7 +9,8 @@ class VatRate
     public const REVERSE_CHARGE = 'reverse-charge';
     public const INCLUDED_NOT_REFUNDABLE = 'included-not-refundable';
 
-    private function __construct(private readonly string $taxValue) {
+    private function __construct(private readonly string $taxValue)
+    {
     }
 
     public static function fromStoredValue(string $taxRatePercentage): VatRate

@@ -13,8 +13,7 @@ class BillPaid implements DomainEvent
         public readonly string           $billReference,
         public readonly int              $amountPaid,
         private readonly CarbonImmutable $paymentDatetime,
-    )
-    {
+    ) {
     }
 
     public function name(): string

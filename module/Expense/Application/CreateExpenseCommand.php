@@ -15,7 +15,6 @@ class CreateExpenseCommand implements Command
         public readonly int|string $taxRate,
         public readonly string $countryCode,
         public readonly ?CarbonImmutable $paymentDate = null
-    )
-    {
+    ) {
     }
 }

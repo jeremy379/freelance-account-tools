@@ -10,7 +10,6 @@ class BalanceOnDatetime
     public function __construct(
         public readonly Amount $amount,
         public readonly CarbonImmutable $datetime
-    )
-    {
+    ) {
     }
 }

@@ -12,8 +12,7 @@ class BillWithPayments
     private function __construct(
         public readonly Bill $bill,
         public readonly array $billPayments
-    )
-    {
+    ) {
     }
 
     public static function bill(Bill $bill): BillWithPayments

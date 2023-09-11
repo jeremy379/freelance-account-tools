@@ -19,8 +19,7 @@ class ReportingRepositoryDatabase implements ReportingRepository
         private readonly BillingFacade $billingFacade,
         private readonly ExpenseFacade $expenseFacade,
         private readonly ForecastFacade $forecastFacade,
-    )
-    {
+    ) {
     }
 
     public function balanceBetween(CarbonImmutable $from, CarbonImmutable $to): array
@@ -51,7 +50,8 @@ class ReportingRepositoryDatabase implements ReportingRepository
         $taxableIncome = $netTaxableIncome - $socialContribution['yearly_amount'];
 
         $tax = $taxCalculator->compute(
-            $taxableIncome, config('calculator.company_zip_code')
+            $taxableIncome,
+            config('calculator.company_zip_code')
         );
 
         return [
@@ -84,7 +84,8 @@ class ReportingRepositoryDatabase implements ReportingRepository
         $taxableIncome = $netTaxableIncome - $socialContribution['yearly_amount'];
 
         $tax = $taxCalculator->compute(
-            $taxableIncome, config('calculator.company_zip_code')
+            $taxableIncome,
+            config('calculator.company_zip_code')
         );
 
         return [

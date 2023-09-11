@@ -11,6 +11,7 @@ use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
+
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\text;
 
@@ -30,8 +31,7 @@ class GetBalanceOverTime extends Command
         /** @var BalanceOverTime $balances */
         $balances = $bus->dispatch($query);
 
-        if($balances->isEmpty())
-        {
+        if($balances->isEmpty()) {
             error('There is no entries in your balance');
             return self::INVALID;
         }
@@ -52,7 +52,7 @@ class GetBalanceOverTime extends Command
         foreach($xScale as $xIndex => $date) {
             foreach($yScale as $yIndex => $amount) {
                 if($xIndex === 0) {
-                    $rows[$yIndex][0] = '<info>' . round($amount/100) . '</info>';
+                    $rows[$yIndex][0] = '<info>' . round($amount / 100) . '</info>';
                 } else {
                     $rows[$yIndex][$xIndex] = '';
                 }
@@ -82,10 +82,10 @@ class GetBalanceOverTime extends Command
     private function yScale(int $min, int $max): array
     {
         $minPower = pow(10, strlen(abs($min)) - 1);
-        $min = round($min/$minPower, 2) * $minPower;
+        $min = round($min / $minPower, 2) * $minPower;
 
         $maxPower = pow(10, strlen(abs($max)) - 1);
-        $max = round($max/$maxPower, 2) * $maxPower;
+        $max = round($max / $maxPower, 2) * $maxPower;
 
         $step = 10 ** floor(log10(abs($min)));
         $result = [];
@@ -106,13 +106,9 @@ class GetBalanceOverTime extends Command
     private function xScale(CarbonImmutable $from, CarbonImmutable $to): array
     {
         //Month from first to last except if duration is below one month, then by weeks.
-
-
-
         $xScale = [];
         $diffInDays = $from->diffInDays($to);
-        if($diffInDays <= 30)
-        {
+        if($diffInDays <= 30) {
             $granularity = 1;
             $granularityType = 'week';
         } else {
@@ -174,7 +170,7 @@ class GetBalanceOverTime extends Command
 
         $table->setHeaders($xScale);
 
-        $separator = new TableSeparator;
+        $separator = new TableSeparator();
 
         $lastIndex = count($rows) - 1;
         array_splice($rows, $lastIndex, 0, [$separator]);

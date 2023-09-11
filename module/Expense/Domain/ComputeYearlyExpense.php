@@ -45,6 +45,6 @@ class ComputeYearlyExpense
             $vatToRequest += $vatAmount;
         }
 
-        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $vatToRequest/100, $year);
+        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100, count($expenses), $vatToRequest / 100, $year);
     }
 }

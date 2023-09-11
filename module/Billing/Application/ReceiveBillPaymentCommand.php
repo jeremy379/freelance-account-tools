@@ -11,7 +11,6 @@ class ReceiveBillPaymentCommand implements Command
         public readonly string $reference,
         public readonly float $amountReceived,
         public readonly CarbonImmutable $paymentReceivedOn
-    )
-    {
+    ) {
     }
 }

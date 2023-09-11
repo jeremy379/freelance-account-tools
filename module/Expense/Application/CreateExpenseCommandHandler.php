@@ -19,8 +19,7 @@ class CreateExpenseCommandHandler
     public function __construct(
         private readonly ExpenseRepository $repository,
         private readonly EventDispatcher   $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function handle(CreateExpenseCommand $command): void

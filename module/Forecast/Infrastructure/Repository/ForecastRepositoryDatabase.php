@@ -32,7 +32,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
     {
         return EloquentForecast::query()
             ->where('type', ForecastType::EXPENSE->value)
-            ->where(function(Builder $query) use ($dateTime, $onlyFutureMonth) {
+            ->where(function (Builder $query) use ($dateTime, $onlyFutureMonth) {
                 $query->whereYear('forecasted_on', $dateTime->year);
 
                 if($onlyFutureMonth) {
@@ -40,7 +40,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
                 }
             })
             ->get()
-            ->transform(fn(EloquentForecast $forecast) => $this->factory->toForecast($forecast))
+            ->transform(fn (EloquentForecast $forecast) => $this->factory->toForecast($forecast))
             ->toArray();
     }
 
@@ -48,7 +48,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
     {
         return EloquentForecast::query()
             ->where('type', ForecastType::INCOME->value)
-            ->where(function(Builder $query) use ($dateTime, $onlyFutureMonth) {
+            ->where(function (Builder $query) use ($dateTime, $onlyFutureMonth) {
                 $query->whereYear('forecasted_on', $dateTime->year);
 
                 if($onlyFutureMonth) {
@@ -56,7 +56,7 @@ class ForecastRepositoryDatabase implements ForecastRepository
                 }
             })
             ->get()
-            ->transform(fn(EloquentForecast $forecast) => $this->factory->toForecast($forecast))
+            ->transform(fn (EloquentForecast $forecast) => $this->factory->toForecast($forecast))
             ->toArray();
     }
 }

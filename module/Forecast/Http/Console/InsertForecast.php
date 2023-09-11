@@ -12,6 +12,7 @@ use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\VatRate;
+
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -25,7 +26,7 @@ class InsertForecast extends Command
     {
         $billOrExpense = select('What forecast do you want to add?', ['Income', 'Expense']);
 
-        $amount = (float) text(label: 'Enter the amount', validate: fn(string $value) => match(true) {
+        $amount = (float) text(label: 'Enter the amount', validate: fn (string $value) => match(true) {
             !is_numeric($value) => 'The amount must be a number',
             empty($value) && $value !== 0 => 'The amount is required',
             default => null,
@@ -35,12 +36,11 @@ class InsertForecast extends Command
 
 
         $forecastedOnDates = [];
-        if($this->confirm('Is it a recurrent forecast (each month for one full year'))
-        {
+        if($this->confirm('Is it a recurrent forecast (each month for one full year')) {
             $day = text('Day of month');
             $year = text('Repeat each month of year');
 
-            for($i=1; $i<=12; $i++) {
+            for($i = 1; $i <= 12; $i++) {
                 $forecastedOnDates[] = CarbonImmutable::now()->setYear($year)->setMonth($i)->setDay($day);
             }
         } else {

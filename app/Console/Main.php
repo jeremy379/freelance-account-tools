@@ -11,6 +11,7 @@ use Module\Reporting\Http\Console\CombinedYearlyOverview;
 use Module\Reporting\Http\Console\GetBalanceOverTime;
 use Module\Reporting\Http\Console\YearlyForecastedOverview;
 use Module\Reporting\Http\Console\YearlyOverview;
+
 use function Laravel\Prompts\intro;
 use function Laravel\Prompts\select;
 
@@ -40,9 +41,8 @@ class Main extends Command
         /** @var array<Command> $commandClass */
         $commandClass = [];
 
-        foreach($this->lists as $command)
-        {
-            $commandClass[$command] = new $command;
+        foreach($this->lists as $command) {
+            $commandClass[$command] = new $command();
 
             $options[$command] = $commandClass[$command]->getName() . ' (' . $commandClass[$command]->getDescription() . ')';
         }

@@ -10,8 +10,7 @@ class SocialContributionConfig
         private array $slices,
         private array $finalSlice,
         private float $managingFee,
-    )
-    {
+    ) {
     }
 
     public static function loadConfiguration(int $yearToLoad, array $config)
@@ -45,7 +44,8 @@ class SocialContributionConfig
         return $this->managingFee;
     }
 
-    private static function checkSlice(array $slices): array {
+    private static function checkSlice(array $slices): array
+    {
         foreach($slices as $slice) {
             Assert::keyExists($slice, 'from');
             Assert::keyExists($slice, 'to');
@@ -55,7 +55,8 @@ class SocialContributionConfig
         return $slices;
     }
 
-    private static function checkFinalSlice(array $slice): array {
+    private static function checkFinalSlice(array $slice): array
+    {
         Assert::keyExists($slice, 'from');
         Assert::keyExists($slice, 'fixed_amount');
         return $slice;

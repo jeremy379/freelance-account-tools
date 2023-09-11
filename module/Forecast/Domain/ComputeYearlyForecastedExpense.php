@@ -13,7 +13,7 @@ class ComputeYearlyForecastedExpense
     public function __construct(
         private readonly ForecastRepository $repository,
         private readonly DeductibilityConfiguration $configuration
-    ){
+    ) {
 
     }
 
@@ -48,6 +48,6 @@ class ComputeYearlyForecastedExpense
             $vatToRequest += $vatAmount;
         }
 
-        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100 ,count($expenses), $vatToRequest/100, $year);
+        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100, count($expenses), $vatToRequest / 100, $year);
     }
 }

@@ -13,8 +13,7 @@ class ForecastFacade
 {
     public function __construct(
         private readonly ForecastRepository $forecastRepository,
-    )
-    {
+    ) {
     }
 
     public function getExpensesForecasted(int $year, bool $onlyFutureMonth = false): array

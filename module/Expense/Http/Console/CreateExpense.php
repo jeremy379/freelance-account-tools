@@ -11,6 +11,7 @@ use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\ClockInterface;
 use Module\SharedKernel\Domain\VatRate;
+
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\suggest;

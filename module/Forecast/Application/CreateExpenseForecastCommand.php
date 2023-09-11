@@ -13,7 +13,6 @@ class CreateExpenseForecastCommand implements Command
         public readonly CarbonImmutable $forecastedOn,
         public readonly string $category,
         public readonly string $countryCode,
-    )
-    {
+    ) {
     }
 }

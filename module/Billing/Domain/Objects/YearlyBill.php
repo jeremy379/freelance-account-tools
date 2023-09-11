@@ -9,8 +9,7 @@ class YearlyBill
         public readonly float $total,
         public readonly float $totalVatCollected,
         public readonly int $billCount,
-    )
-    {
+    ) {
     }
 
     public function toArray(): array

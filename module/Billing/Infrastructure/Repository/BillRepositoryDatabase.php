@@ -50,7 +50,7 @@ class BillRepositoryDatabase implements BillRepository
     public function fetchBetween(CarbonImmutable $from, CarbonImmutable $to): array
     {
         return EloquentBill::query()
-            ->where(function(Builder $query) use ($from, $to) {
+            ->where(function (Builder $query) use ($from, $to) {
                 $query->where('billing_datetime', '>=', $from);
 
                 if($to) {
@@ -58,8 +58,8 @@ class BillRepositoryDatabase implements BillRepository
                 }
             })
             ->get()
-            ->transform(fn(EloquentBill $bill) => $this->factory->toBill($bill))
+            ->transform(fn (EloquentBill $bill) => $this->factory->toBill($bill))
             ->toArray()
-            ;
+        ;
     }
 }

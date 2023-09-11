@@ -11,7 +11,6 @@ class CreateIncomeForecastCommand implements Command
         public readonly float $amount,
         public readonly string $vatRate,
         public readonly CarbonImmutable $forecastedOn,
-    )
-    {
+    ) {
     }
 }

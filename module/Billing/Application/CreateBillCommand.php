@@ -13,7 +13,6 @@ class CreateBillCommand implements Command
         public readonly float $amountWithoutTax,
         public readonly int $taxRate,
         public readonly CarbonImmutable $billingDate,
-    )
-    {
+    ) {
     }
 }

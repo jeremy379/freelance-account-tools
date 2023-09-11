@@ -44,7 +44,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
     public function fetchBetween(CarbonImmutable $from, CarbonImmutable $to): array
     {
         return EloquentExpense::query()
-            ->whereHas('payment', function(Builder $query) use ($from, $to) {
+            ->whereHas('payment', function (Builder $query) use ($from, $to) {
                 $query->where('occurred_on', '>=', $from);
 
                 if($to) {
@@ -52,7 +52,7 @@ class ExpenseRepositoryDatabase implements ExpenseRepository
                 }
             })
             ->get()
-            ->transform(fn(EloquentExpense $expense) => $this->expenseDomainFactory->toExpenseWithPayment($expense))
+            ->transform(fn (EloquentExpense $expense) => $this->expenseDomainFactory->toExpenseWithPayment($expense))
             ->toArray()
         ;
     }

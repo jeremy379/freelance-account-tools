@@ -18,8 +18,7 @@ class Forecast
         public readonly VatRate $vatRate,
         public readonly CarbonImmutable $forecastedOn,
         public readonly ?CountryCode $countryCodeWhereExpenseIsMade
-    )
-    {
+    ) {
     }
 
     public static function restore(
@@ -29,8 +28,7 @@ class Forecast
         VatRate $vatRate,
         CarbonImmutable $forecastedOn,
         ?CountryCode $countryCode,
-    ): Forecast
-    {
+    ): Forecast {
         return new self(
             $forecastType,
             $amount,
@@ -45,8 +43,7 @@ class Forecast
         ForecastAmount $amount,
         VatRate $vatRate,
         CarbonImmutable $forecastedOn
-    ): Forecast
-    {
+    ): Forecast {
         return new self(
             ForecastType::INCOME,
             $amount,
@@ -63,8 +60,7 @@ class Forecast
         VatRate $vatRate,
         CarbonImmutable $forecastedOn,
         CountryCode $countryCode
-    ): Forecast
-    {
+    ): Forecast {
         return new self(
             ForecastType::EXPENSE,
             $amount,

@@ -32,8 +32,7 @@ class Bill implements DomainEntityWithEvents
         Amount          $amountWithoutTax,
         VatRate         $taxRate,
         CarbonImmutable $billingDate,
-    ): Bill
-    {
+    ): Bill {
         $bill = new self(
             $reference,
             $client,
@@ -52,8 +51,7 @@ class Bill implements DomainEntityWithEvents
         Amount          $amountWithoutTax,
         VatRate         $taxRate,
         CarbonImmutable $billingDate,
-    ): Bill
-    {
+    ): Bill {
         return new self(
             $reference,
             $client,

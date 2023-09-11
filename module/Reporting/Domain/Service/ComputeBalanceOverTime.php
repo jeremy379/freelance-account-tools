@@ -39,7 +39,8 @@ class ComputeBalanceOverTime
 
         foreach($cumulatedEntries as $timestamp => $amount) {
             $balanceOverTime = $balanceOverTime->with(
-                    new BalanceOnDatetime(Amount::fromStoredInt($amount),
+                new BalanceOnDatetime(
+                    Amount::fromStoredInt($amount),
                     CarbonImmutable::createFromTimestamp($timestamp)
                 )
             );

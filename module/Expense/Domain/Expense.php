@@ -26,8 +26,7 @@ class Expense implements DomainEntityWithEvents
         public readonly Amount      $amount,
         public readonly VatRate     $taxRate,
         public readonly CountryCode $countryCode,
-    )
-    {
+    ) {
     }
 
     public static function record(
@@ -37,8 +36,7 @@ class Expense implements DomainEntityWithEvents
         Amount      $amount,
         VatRate     $taxRate,
         CountryCode $countryCode
-    ): Expense
-    {
+    ): Expense {
         $expense =  new self(
             $reference,
             $category,
@@ -72,8 +70,7 @@ class Expense implements DomainEntityWithEvents
         Amount      $amount,
         VatRate     $taxRate,
         CountryCode $countryCode
-    ): Expense
-    {
+    ): Expense {
         return new self(
             $reference,
             $category,

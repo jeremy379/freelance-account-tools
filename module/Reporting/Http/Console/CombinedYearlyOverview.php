@@ -7,6 +7,7 @@ use Module\Reporting\Application\GetYearlyForecastedOverviewQuery;
 use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 use Symfony\Component\Console\Helper\Table;
+
 use function Laravel\Prompts\text;
 
 class CombinedYearlyOverview extends Command
@@ -38,7 +39,7 @@ class CombinedYearlyOverview extends Command
                 $result['real_overview']['socialContribution']['yearly_amount'] .' €',
                 $result['real_overview']['taxable_income'] .' €',
                 '<error>' . $result['real_overview']['tax'] . ' €</error>',
-                $result['real_overview']['taxable_income'] - $result['real_overview']['tax'] . '€ (' . ($result['real_overview']['taxable_income'] - $result['real_overview']['tax']) /12 .')',
+                $result['real_overview']['taxable_income'] - $result['real_overview']['tax'] . '€ (' . ($result['real_overview']['taxable_income'] - $result['real_overview']['tax']) / 12 .')',
                 $result['real_overview']['bill']['totalVatCollected'] .' €',
                 $result['real_overview']['expense']['vatToRecover'] .' €',
             ],

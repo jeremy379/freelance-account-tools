@@ -10,8 +10,7 @@ class YearlyExpense
         public readonly int $expenseCount,
         public readonly float $vatToRecover,
         public readonly int $year,
-    )
-    {
+    ) {
     }
 
     public function toArray(): array

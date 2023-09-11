@@ -23,12 +23,12 @@ class TaxCalculator
 
         foreach($sliced as $slice) {
             $amountAsInt = (int) ($slice['amount'] * 100);
-            $tax += $amountAsInt * $slice['rate']/100;
+            $tax += $amountAsInt * $slice['rate'] / 100;
         }
 
-        $cityTaxRate = 1 + $this->taxConfig->cityTaxRate($companyQGZipCode)/100;
+        $cityTaxRate = 1 + $this->taxConfig->cityTaxRate($companyQGZipCode) / 100;
 
-        return $this->commercialRound(($tax * $cityTaxRate)/100, 2);
+        return $this->commercialRound(($tax * $cityTaxRate) / 100, 2);
     }
 
     public function computationDetails(): array
@@ -78,7 +78,8 @@ class TaxCalculator
         return $sliced;
     }
 
-    private function commercialRound(float $number, int $precision = 0): float {
+    private function commercialRound(float $number, int $precision = 0): float
+    {
         $factor = 10 ** $precision;
         $rounded = round($number * $factor);
         return $rounded / $factor;

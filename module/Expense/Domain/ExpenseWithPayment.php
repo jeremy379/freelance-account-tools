@@ -9,7 +9,6 @@ class ExpenseWithPayment
     public function __construct(
         public readonly Expense $expense,
         public readonly CarbonImmutable $paidOn,
-    )
-    {
+    ) {
     }
 }

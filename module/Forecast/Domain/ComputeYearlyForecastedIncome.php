@@ -23,7 +23,7 @@ class ComputeYearlyForecastedIncome
 
         foreach($bills as $bill) {
             $totalTurnover += $bill->amount->toInt();
-            $totalVatCollected += $bill->amount->toInt() * ($bill->vatRate->rate()/100);
+            $totalVatCollected += $bill->amount->toInt() * ($bill->vatRate->rate() / 100);
         }
 
         return new YearlyBill(

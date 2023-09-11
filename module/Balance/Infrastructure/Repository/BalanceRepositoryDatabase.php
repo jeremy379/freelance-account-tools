@@ -22,7 +22,7 @@ class BalanceRepositoryDatabase implements BalanceRepository
 
         $factory = new BalanceTransactionFactory();
 
-        return $balanceTransactions->get()->transform(fn(EloquentBalanceTransaction $transaction) => $factory($transaction))->toArray();
+        return $balanceTransactions->get()->transform(fn (EloquentBalanceTransaction $transaction) => $factory($transaction))->toArray();
     }
 
     public function save(Balance $balance): void

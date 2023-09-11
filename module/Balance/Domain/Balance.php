@@ -19,8 +19,7 @@ class Balance implements DomainEntityWithEvents
         public readonly BalanceType $type,
         public readonly Reference $reference,
         public readonly CarbonImmutable $datetime,
-    )
-    {
+    ) {
     }
 
     public static function newEntry(
@@ -28,8 +27,7 @@ class Balance implements DomainEntityWithEvents
         BalanceType $type,
         Reference $reference,
         CarbonImmutable $datetime,
-    ): Balance
-    {
+    ): Balance {
         if($type === BalanceType::EXPENSE) {
             $amount = Amount::fromStoredInt($amount->toInt() * -1);
         }
@@ -45,8 +43,7 @@ class Balance implements DomainEntityWithEvents
         BalanceType $type,
         Reference $reference,
         CarbonImmutable $datetime,
-    ): Balance
-    {
+    ): Balance {
         return new self(
             $amount,
             $type,

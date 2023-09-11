@@ -9,6 +9,7 @@ use Module\SharedKernel\Domain\Bus;
 use Module\SharedKernel\Domain\ClockInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
+
 use function Laravel\Prompts\text;
 
 class YearlyForecastedOverview extends Command

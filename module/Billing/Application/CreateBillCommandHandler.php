@@ -19,26 +19,26 @@ class CreateBillCommandHandler
 
     public function handle(CreateBillCommand $command): void
     {
-         try {
-             $this->billRepository->byReference(Reference::fromString($command->reference));
-             throw CannotCreateBill::referenceAlreadyExists($command->reference);
-         }  catch (BillNotFound) {
-             $bill = Bill::record(
-                 Reference::fromString($command->reference),
-                 Client::fromString($command->client),
-                 Amount::fromFloat($command->amountWithoutTax),
-                 match($command->taxRate) {
-                     0, 'exempt' => VatRate::exempt(),
-                     'intracom' => VatRate::intraCom(),
-                     6 => VatRate::rate6(),
-                     20 => VatRate::rate20(),
-                     21 => VatRate::rate21(),
-                     default => VatRate::exempt()
-                 },
-                 $command->billingDate,
-             );
+        try {
+            $this->billRepository->byReference(Reference::fromString($command->reference));
+            throw CannotCreateBill::referenceAlreadyExists($command->reference);
+        } catch (BillNotFound) {
+            $bill = Bill::record(
+                Reference::fromString($command->reference),
+                Client::fromString($command->client),
+                Amount::fromFloat($command->amountWithoutTax),
+                match($command->taxRate) {
+                    0, 'exempt' => VatRate::exempt(),
+                    'intracom' => VatRate::intraCom(),
+                    6 => VatRate::rate6(),
+                    20 => VatRate::rate20(),
+                    21 => VatRate::rate21(),
+                    default => VatRate::exempt()
+                },
+                $command->billingDate,
+            );
 
-             $this->billRepository->save($bill);
-         }
+            $this->billRepository->save($bill);
+        }
     }
 }

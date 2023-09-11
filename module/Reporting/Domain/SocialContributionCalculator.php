@@ -42,7 +42,7 @@ class SocialContributionCalculator
         $this->annualContribution += $annualContributionInt * $managingFeePercent;
 
         return [
-            'yearly_amount' => $this->commercialRound($this->annualContribution / 100 , 2),
+            'yearly_amount' => $this->commercialRound($this->annualContribution / 100, 2),
             'periodic_amount' => $this->commercialRound(($this->annualContribution / self::PERIOD_PER_YEAR) / 100, 2),
             'period' => self::PERIODICITY,
         ];
@@ -60,7 +60,8 @@ class SocialContributionCalculator
 
     }
 
-    private function commercialRound(float $number, int $precision = 0): float {
+    private function commercialRound(float $number, int $precision = 0): float
+    {
         $factor = 10 ** $precision;
         $rounded = round($number * $factor);
         return $rounded / $factor;

@@ -13,8 +13,7 @@ class ExpensePaid implements DomainEvent
         private readonly string $expenseReference,
         private readonly int $amountPaid,
         private readonly CarbonImmutable $paymentDatetime,
-    )
-    {
+    ) {
     }
 
 
