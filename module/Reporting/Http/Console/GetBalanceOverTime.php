@@ -94,7 +94,11 @@ class GetBalanceOverTime extends Command
             $result[] = $i;
         }
 
+        $result[] = 0;
+
         $result[] = $i;
+
+        sort($result, SORT_NUMERIC);
 
         return $result;
     }
