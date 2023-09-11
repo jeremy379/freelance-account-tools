@@ -6,6 +6,7 @@ use Carbon\CarbonImmutable;
 use Module\Expense\Domain\Config\DeductibilityConfiguration;
 use Module\Expense\Domain\ExpenseRepository;
 use Module\Expense\Domain\Objects\YearlyExpense;
+use Module\SharedKernel\Domain\Category;
 use Module\SharedKernel\Domain\VatRate;
 
 class ComputeYearlyForecastedExpense
@@ -23,11 +24,24 @@ class ComputeYearlyForecastedExpense
 
         $expenses = $this->repository->expenseForecastedForYear($from, $onlyFutureMonth);
 
-        $sumAllExpenses = 0;
-        $sumDeductibleExpense = 0;
-        $vatToRequest = 0;
+        $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = 0;
+
         foreach($expenses as $forecastedExpense) {
+            if($forecastedExpense->category === Category::TAX) {
+                continue; //We do not process this type of expense. This is mostly a row saying "Hey, I paid that amount of tax!"
+            }
+
             $expenseAmount = $forecastedExpense->amount->toInt();
+
+            if($forecastedExpense->category === Category::TAX_PREVISION) {
+                $taxProvisioned += $expenseAmount; //This is for reporting purpose. These amount are just cash moved to specific bank account.
+                continue;
+            }
+            if($forecastedExpense->category === Category::SOCIAL_CHARGE) {
+                $socialContributionPaid += $expenseAmount;
+                continue;
+            }
+
             $sumAllExpenses += $expenseAmount;
 
             $category = $forecastedExpense->category;
@@ -48,6 +62,13 @@ class ComputeYearlyForecastedExpense
             $vatToRequest += $vatAmount;
         }
 
-        return new YearlyExpense($sumAllExpenses / 100, $sumDeductibleExpense / 100, count($expenses), $vatToRequest / 100, $year);
+        return new YearlyExpense(
+            $sumAllExpenses / 100,
+            $sumDeductibleExpense / 100, count($expenses),
+            $vatToRequest / 100,
+            $taxProvisioned / 100,
+            $socialContributionPaid / 100,
+            $year
+        );
     }
 }

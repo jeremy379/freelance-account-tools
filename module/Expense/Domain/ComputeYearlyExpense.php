@@ -21,7 +21,7 @@ class ComputeYearlyExpense
 
         $expenses = $this->expenseRepository->fetchBetween($from, $to);
 
-        $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid= 0;
+        $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = 0;
         foreach($expenses as $expense) {
             if($expense->expense->category === Category::TAX) {
                 continue; //We do not process this type of expense. This is mostly a row saying "Hey, I paid that amount of tax!"
@@ -63,8 +63,8 @@ class ComputeYearlyExpense
             $sumDeductibleExpense / 100,
             count($expenses),
             $vatToRequest / 100,
-            $taxProvisioned,
-            $socialContributionPaid,
+            $taxProvisioned / 100,
+            $socialContributionPaid / 100,
             $year
         );
     }

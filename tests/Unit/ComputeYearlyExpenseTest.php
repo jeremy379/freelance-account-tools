@@ -164,7 +164,7 @@ class ComputeYearlyExpenseTest extends TestCase
         $this->assertEquals(0, $result->taxProvisioned);
         $this->assertEquals(0, $result->totalExpense);
         $this->assertEquals(0, $result->vatToRecover);
-        $this->assertEquals(500000, $result->socialContributionAlreadyPaid);
+        $this->assertEquals(5000, $result->socialContributionAlreadyPaid);
         $this->assertEquals(0, $result->totalDeductibleExpense);
         $this->assertEquals(1, $result->expenseCount);
     }
@@ -187,7 +187,7 @@ class ComputeYearlyExpenseTest extends TestCase
 
         $result = $calculator->compute($year = $this->clock->now()->year);
 
-        $this->assertEquals(500000, $result->taxProvisioned);
+        $this->assertEquals(5000, $result->taxProvisioned);
         $this->assertEquals(0, $result->totalExpense);
         $this->assertEquals(0, $result->vatToRecover);
         $this->assertEquals(0, $result->socialContributionAlreadyPaid);
