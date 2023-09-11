@@ -4,6 +4,7 @@ namespace Module\Expense\Http\Console;
 
 use Carbon\CarbonImmutable;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Validator;
 use Module\Expense\Application\CreateExpenseCommand;
 use Module\Expense\Domain\Objects\CountryCode;
 use Module\Expense\Infrastructure\Eloquent\EloquentExpense;
@@ -25,7 +26,7 @@ class CreateExpense extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', '051-Provider-title');
+        $reference = text('Enter the Reference', '051-Provider-title', validate: fn(string $value) => $this->validate('reference', $value));
         $category = select(label: 'Choose the category', options: $this->mapCase(Category::cases()), scroll: 8);
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
@@ -71,5 +72,18 @@ class CreateExpense extends Command
         }
 
         return $response;
+    }
+
+    private function validate(string $field, $value): ?string {
+
+        $rules = [
+            'reference' => 'required|string|unique:expense,reference'
+        ];
+
+        $ruleToApply = [$field => $rules[$field]];
+
+        $validator = Validator::make([$field => $value], $ruleToApply);
+
+        return $validator->fails() ? implode(',', $validator->errors()->all()) : null;
     }
 }
