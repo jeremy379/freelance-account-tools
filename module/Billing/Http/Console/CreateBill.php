@@ -26,7 +26,7 @@ class CreateBill extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', $clock->now()->year.'-001', validate: fn (string $value) => $this->validate('bill.reference', $value));
+        $reference = text('Enter the Reference', $clock->now()->year.'-001', validate: fn (string $value) => $this->validate('bill_reference', $value));
         $client = suggest('Enter the client', $this->existingClient());
         $amount = (float) text('Enter the amount (without tax)');
         $taxRate = (int) select('Choose the tax rate', VatRate::values(), VatRate::rate21()->rate());

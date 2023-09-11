@@ -19,4 +19,5 @@ enum Category: string
     case HOUSE_EXPENSE = 'HOUSE_EXPENSE';
     case PLCI = 'PLCI';
     case INSURANCE = 'INSURANCE';
+    case SALARY = 'SALARY';
 }

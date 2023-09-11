@@ -62,6 +62,7 @@ class ReportingRepositoryDatabase implements ReportingRepository
             'tax' => $tax,
             'socialContributionAlreadyPaid' => $expenseOverview['socialContributionAlreadyPaid'],
             'taxProvisioned' => $expenseOverview['taxProvisioned'],
+            'salary' => $expenseOverview['salary'],
         ];
     }
 
@@ -99,6 +100,7 @@ class ReportingRepositoryDatabase implements ReportingRepository
             'real_overview' => $realOverview,
             'socialContributionAlreadyPaid' => $forecastExpenses['socialContributionAlreadyPaid'],
             'taxProvisioned' => $forecastExpenses['taxProvisioned'],
+            'salary' => $forecastExpenses['salary'],
         ];
     }
 }

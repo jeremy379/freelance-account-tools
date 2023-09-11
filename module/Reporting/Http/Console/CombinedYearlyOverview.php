@@ -27,7 +27,7 @@ class CombinedYearlyOverview extends Command
 
         $table->setHeaderTitle('Combined Results for '.$year);
         $table->setHorizontal();
-        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Net left', 'Vat to pay', 'Vat to get back']);
+        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Net left', 'Salary', 'Vat to pay', 'Vat to get back']);
 
         $realOverview = $result['real_overview'];
         $realNetTaxable = round($realOverview['bill']['total'] - $realOverview['expense']['totalDeductibleExpense'], 2);
@@ -43,7 +43,8 @@ class CombinedYearlyOverview extends Command
                 $realOverview['socialContribution']['yearly_amount'].' € (Incl. '.$realOverview['socialContributionAlreadyPaid'].'€ already paid)',
                 round($realOverview['taxable_income'], 2).' €',
                 '<error>'.$realOverview['tax'].' €</error> (Incl. '.$realOverview['taxProvisioned'].'€ already provisioned)',
-                round($totalNetLeft, 2).'€ ('.round($totalNetLeft / 12, 2).'€/month)',
+                round($totalNetLeft, 2).'€',
+                round($realOverview['salary']/12, 2) . ' € (Max: ' . round($totalNetLeft / 12, 2) . '€/month)',
                 $realOverview['bill']['totalVatCollected'].' €',
                 $realOverview['expense']['vatToRecover'].' €',
             ],
@@ -56,8 +57,8 @@ class CombinedYearlyOverview extends Command
                 $realOverview['socialContribution']['yearly_amount'] + $result['socialContribution']['yearly_amount'].' €',
                 round($realOverview['taxable_income'] + $result['taxable_income'], 2).' €',
                 '<error>'.$realOverview['tax'] + $result['tax'].' €</error>',
-                $realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax'].
-                    '€ ('.round(($realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']) / 12, 2).'€/month)',
+                $realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']. ' €',
+                round(($realOverview['salary'] + $result['salary']) /12, 2) . ' € (Max: ' . round(($realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']) / 12, 2) . '€/month)',
                 $realOverview['bill']['totalVatCollected'] + $result['bill']['totalVatCollected'].' €',
                 $realOverview['expense']['vatToRecover'] + $result['expense']['vatToRecover'].' €',
             ],

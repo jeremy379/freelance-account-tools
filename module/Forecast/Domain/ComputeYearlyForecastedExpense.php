@@ -23,7 +23,7 @@ class ComputeYearlyForecastedExpense
 
         $expenses = $this->repository->expenseForecastedForYear($from, $onlyFutureMonth);
 
-        $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = 0;
+        $sumAllExpenses = $sumDeductibleExpense = $vatToRequest = $taxProvisioned = $socialContributionPaid = $salary = 0;
 
         foreach ($expenses as $forecastedExpense) {
             if ($forecastedExpense->category === Category::TAX) {
@@ -39,6 +39,12 @@ class ComputeYearlyForecastedExpense
             }
             if ($forecastedExpense->category === Category::SOCIAL_CHARGE) {
                 $socialContributionPaid += $expenseAmount;
+
+                continue;
+            }
+
+            if ($forecastedExpense->category === Category::SALARY) {
+                $salary += $expenseAmount;
 
                 continue;
             }
@@ -69,6 +75,7 @@ class ComputeYearlyForecastedExpense
             $vatToRequest / 100,
             $taxProvisioned / 100,
             $socialContributionPaid / 100,
+            $salary / 100,
             $year
         );
     }

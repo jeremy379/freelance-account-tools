@@ -101,10 +101,7 @@ class BalanceOverTime implements Arrayable, Countable
             };
 
             $amount = $balance->amount;
-            if (isset($balancesByDays[$granuledBalanceDate])) {
-                $amount = Amount::fromStoredInt($amount->toInt() + $balancesByDays[$granuledBalanceDate]->toInt());
-            }
-
+            //If the value already exists, we take the most recent one. As the balance represent the current situation at a certain time. We want the latest position in the wanted period.
             $balancesByDays[$granuledBalanceDate] = $amount;
         }
 

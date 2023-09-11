@@ -114,6 +114,7 @@ return [
             Category::HOUSE_EXPENSE->value => 7.64, //Area of office
             Category::PLCI->value => 100,
             Category::INSURANCE->value => 100,
+            Category::SALARY->value => 0,
         ],
         'vat_handle_for_countries' => ['BE'], //To be able to get TVA refund, some stuff need to be requested by your accountant : https://finances.belgium.be/fr/entreprises/tva/international/remboursement-de-la-tva-etrangere/assujettis-etablis-en-belgique#q1
     ],

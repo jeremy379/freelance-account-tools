@@ -28,7 +28,7 @@ class CreateExpense extends Command
 
     public function handle(Bus $bus, ClockInterface $clock): int
     {
-        $reference = text('Enter the Reference', '051-Provider-title', validate: fn (string $value) => $this->validate('expense.reference', $value));
+        $reference = text('Enter the Reference', '051-Provider-title', validate: fn (string $value) => $this->validate('expense_reference', $value));
         $category = select(label: 'Choose the category', options: $this->mapCase(Category::cases()), scroll: 8);
         $provider = suggest('Enter the provider', $this->existingProvider());
         $amount = (float) text('Enter the amount (without tax)');
