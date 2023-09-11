@@ -47,9 +47,14 @@ class Main extends Command
             $options[$command] = $commandClass[$command]->getName() . ' (' . $commandClass[$command]->getDescription() . ')';
         }
 
+        $options['close'] = 'Quit';
+
         $command = $this->commandSelector($options);
 
         do {
+            if ($command === 'close') {
+                return self::SUCCESS;
+            }
 
             $this->call($commandClass[$command]->getName());
 
