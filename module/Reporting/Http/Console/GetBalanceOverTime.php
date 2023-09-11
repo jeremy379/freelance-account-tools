@@ -36,13 +36,13 @@ class GetBalanceOverTime extends Command
             return self::INVALID;
         }
 
-        $balances = $balances->groupByDate();
+        $from = $balances->first()->datetime->startOfDay();
+        $to = $balances->last()->datetime->endOfDay();
+
+        $balances = $balances->groupByDate($this->xAxisGranularity($from, $to));
 
         $yScale = $this->yScale($balances->min(), $balances->max());
-        $xScale = $this->xScale(
-            $balances->first()->datetime->startOfDay(),
-            $balances->last()->datetime->endOfDay()
-        );
+        $xScale = $this->xScale($from, $to);
 
         $xScale = array_merge(['Amount'], $xScale);
 
@@ -66,8 +66,8 @@ class GetBalanceOverTime extends Command
         /** @var BalanceOnDatetime $balance */
         foreach($balances->toArray() as $timestamp => $balance) {
             //Check the right box in the matrix
-            $xIndexToCheck = $this->getClosestPreviousDatetime($balance->datetime, $xScale);
-            $yIndexToCheck = $this->getClosestPreviousAmount($balance->amount->toInt(), $yScale);
+            $xIndexToCheck = $this->getPositionOnXAxis($balance->datetime, $xScale);
+            $yIndexToCheck = $this->getPositionOnYAxis($balance->amount->toInt(), $yScale);
 
             $rows[$yIndexToCheck][$xIndexToCheck] = '<error>x</error>';
 
@@ -98,26 +98,26 @@ class GetBalanceOverTime extends Command
 
         $result[] = $i;
 
-        sort($result, SORT_NUMERIC);
+        rsort($result, SORT_NUMERIC);
 
         return $result;
+    }
+
+    private function xAxisGranularity(CarbonImmutable $from, CarbonImmutable $to): string
+    {
+        $diffInDays = $from->diffInDays($to);
+        if($diffInDays <= 30) {
+            return 'week';
+        } else {
+            return 'month';
+        }
     }
 
     private function xScale(CarbonImmutable $from, CarbonImmutable $to): array
     {
         //Month from first to last except if duration is below one month, then by weeks.
         $xScale = [];
-        $diffInDays = $from->diffInDays($to);
-        if($diffInDays <= 30) {
-            $granularity = 1;
-            $granularityType = 'week';
-        } else {
-            $granularity = 1;
-            $granularityType = 'month';
-        }
-
-        $granularity = max($granularity, 1);
-
+        $granularityType = $this->xAxisGranularity($from, $to);
 
         $fromCopy = $from->copy();
 
@@ -130,22 +130,22 @@ class GetBalanceOverTime extends Command
             $xScale[] = $fromCopy->toDateString();
 
             $fromCopy = match($granularityType) {
-                'month' => $fromCopy->addMonths($granularity),
-                'week' => $fromCopy->addWeeks($granularity)
+                'month' => $fromCopy->addMonth(),
+                'week' => $fromCopy->addWeek()
             };
         }
 
         return $xScale;
     }
 
-    private function getClosestPreviousDatetime(CarbonImmutable $datetime, array $xScale): int
+    private function getPositionOnXAxis(CarbonImmutable $datetime, array $xScale): int
     {
         foreach($xScale as $index => $date) {
             if($date !== 'Amount') {
                 $dateCarboned = CarbonImmutable::parse($date);
 
-                if ($datetime->lte($dateCarboned)) {
-                    return max($index, 1);
+                if ($datetime->lt($dateCarboned)) {
+                    return max($index -1, 1);
                 }
             }
         }
@@ -153,11 +153,11 @@ class GetBalanceOverTime extends Command
         return 1;
     }
 
-    private function getClosestPreviousAmount(int $amount, array $yScale): int
+    private function getPositionOnYAxis(int $amount, array $yScale): int
     {
         foreach($yScale as $index => $yAmount) {
             if($amount >= $yAmount) {
-                return $index - 1;
+                return $index;
             }
         }
 

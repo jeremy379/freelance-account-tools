@@ -85,17 +85,26 @@ class BalanceOverTime implements Countable, Arrayable
     /**
      * Group Balance recorded on the same date (Y-m-d). This will sum the amount for this day.
      */
-    public function groupByDate(): BalanceOverTime
+    public function groupByDate(string $granularity): BalanceOverTime
     {
+        if(!in_array($granularity, ['week', 'month'])) {
+            throw new \InvalidArgumentException('Granularity must be either month or week');
+        }
+
         $balancesByDays = [];
 
         foreach($this->balances as $balance) {
+            $granuledBalanceDate = match($granularity) {
+                'month' => $balance->datetime->startOfMonth()->toDateString(),
+                'week' => $balance->datetime->startOfWeek()->toDateString(),
+            };
+
             $amount = $balance->amount;
-            if(isset($balancesByDays[$balance->datetime->toDateString()])) {
-                $amount = Amount::fromStoredInt($amount->toInt() + $balancesByDays[$balance->datetime->toDateString()]->toInt());
+            if(isset($balancesByDays[$granuledBalanceDate])) {
+                $amount = Amount::fromStoredInt($amount->toInt() + $balancesByDays[$granuledBalanceDate]->toInt());
             }
 
-            $balancesByDays[$balance->datetime->toDateString()] = $amount;
+            $balancesByDays[$granuledBalanceDate] = $amount;
         }
 
         $balanceOverTime = self::new();
