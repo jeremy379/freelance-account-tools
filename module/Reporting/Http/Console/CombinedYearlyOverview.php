@@ -44,7 +44,7 @@ class CombinedYearlyOverview extends Command
                 round($realOverview['taxable_income'], 2).' €',
                 '<error>'.$realOverview['tax'].' €</error> (Incl. '.$realOverview['taxProvisioned'].'€ already provisioned)',
                 round($totalNetLeft, 2).'€',
-                round($realOverview['salary']/12, 2) . ' € (Max: ' . round($totalNetLeft / 12, 2) . '€/month)',
+                round($realOverview['salary']/12, 2) . ' € (Max: ' . round($totalNetLeft / $clock->now()->month, 2) . '€/month)',
                 $realOverview['bill']['totalVatCollected'].' €',
                 $realOverview['expense']['vatToRecover'].' €',
             ],
