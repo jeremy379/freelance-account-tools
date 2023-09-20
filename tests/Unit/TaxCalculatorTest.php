@@ -36,7 +36,7 @@ class TaxCalculatorTest extends TestCase
                 ],
                 'threshold_after_last_slice' => 46440,
                 'rate_after_last_slice' => 50,
-                'exoneratedAmount' => 10160,
+                'exoneratedAmount' => 10740,
                 'rate_city_tax' => [
                     '5030' => 7.8,
                 ],
