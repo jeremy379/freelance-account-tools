@@ -26,6 +26,10 @@ class TaxCalculator
             $tax += $amountAsInt * $slice['rate'] / 100;
         }
 
+        $exoneratedAmount = $this->getExoneratedAmount();
+
+        $tax -= $exoneratedAmount;
+
         $cityTaxRate = 1 + $this->taxConfig->cityTaxRate($companyQGZipCode) / 100;
 
         return $this->commercialRound(($tax * $cityTaxRate) / 100, 2);
@@ -85,5 +89,14 @@ class TaxCalculator
         $rounded = round($number * $factor);
 
         return $rounded / $factor;
+    }
+
+    private function getExoneratedAmount(): float
+    {
+        $exoneratedAmount = $this->taxConfig->exoneratedAmount();
+
+        $firstSliceRate = $this->taxConfig->slices()[0]['rate'];
+
+        return ($exoneratedAmount * 100) * $firstSliceRate/100;
     }
 }

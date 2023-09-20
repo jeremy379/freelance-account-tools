@@ -63,7 +63,7 @@ class TaxCalculatorTest extends TestCase
         return [
             [
                 38198.88,
-                14626.30, //13568 * 7.8% (city tax),
+                11731.87, //(13568 - quotité exempté) * 7.8% (city tax),
                 [
                     [
                         'amount' => 15200,
@@ -81,7 +81,7 @@ class TaxCalculatorTest extends TestCase
             ],
             [
                 83216.66,
-                38446.69, //35664.83 * 7,8% city tax,
+                35552.26, //(35664.83 - quot.exempté) * 7,8% city tax,
                 [
                     [
                         'amount' => 15200,
