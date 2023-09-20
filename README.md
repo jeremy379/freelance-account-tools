@@ -48,3 +48,9 @@ php artisan native:serve
 
 This project is covered by test.
 You can run test with `sail test`
+
+## Caution
+
+The tax calculator use some assumption that the revenue are above 26800, meaning it can be taxed using the regular exonerated value.
+Think about changing this value in config/calculator.php depending on your situation (child, married, ...).
+

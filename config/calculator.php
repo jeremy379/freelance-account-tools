@@ -65,7 +65,7 @@ return [
             ],
             'threshold_after_last_slice' => 46440,
             'rate_after_last_slice' => 50,
-            'exoneratedAmount' => 10160,
+            'exoneratedAmount' => 10740,//1 child below 3, single (https://www.avdbconsult.be/2017/10/06/quotite-exemptee/).
             'rate_city_tax' => [ // https://finances.belgium.be/sites/default/files/downloads/111-taux-taxe-communale-2023.pdf
                 '5030' => 7.8,
             ],
@@ -91,7 +91,7 @@ return [
             ],
             'threshold_after_last_slice' => 46440,
             'rate_after_last_slice' => 50,
-            'exoneratedAmount' => 10160,
+            'exoneratedAmount' => 9220,//1 child below 3, married (https://www.avdbconsult.be/2017/10/06/quotite-exemptee/)
             'rate_city_tax' => [ // https://finances.belgium.be/sites/default/files/downloads/111-taux-taxe-communale-2023.pdf
                 '5030' => 7.8,
             ],
