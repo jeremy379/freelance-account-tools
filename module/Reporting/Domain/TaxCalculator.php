@@ -26,7 +26,7 @@ class TaxCalculator
             $tax += $amountAsInt * $slice['rate'] / 100;
         }
 
-        $exoneratedAmount = $this->getExoneratedAmount();
+        $exoneratedAmount = $this->getExoneratedAmount($taxableIncomeAfterAllDeduction);
 
         $tax -= $exoneratedAmount;
 
@@ -91,9 +91,13 @@ class TaxCalculator
         return $rounded / $factor;
     }
 
-    private function getExoneratedAmount(): float
+    private function getExoneratedAmount(float $taxableIncomeAfterAllDeduction): float
     {
         $exoneratedAmount = $this->taxConfig->exoneratedAmount();
+
+        if($exoneratedAmount > $taxableIncomeAfterAllDeduction) {
+            $exoneratedAmount = $taxableIncomeAfterAllDeduction;
+        }
 
         $firstSliceRate = $this->taxConfig->slices()[0]['rate'];
 
