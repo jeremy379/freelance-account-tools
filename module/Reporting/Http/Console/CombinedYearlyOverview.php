@@ -54,7 +54,7 @@ class CombinedYearlyOverview extends Command
                 $realOverview['expense']['totalExpense'] + $result['expense']['totalExpense'].' €',
                 round($realOverview['expense']['totalDeductibleExpense'] + $result['expense']['totalDeductibleExpense'], 2).' €',
                 $realNetTaxable + $result['bill']['total'] - $result['expense']['totalDeductibleExpense'].' €',
-                $realOverview['socialContribution']['yearly_amount'] + $result['socialContribution']['yearly_amount'].' €',
+                $result['socialContribution']['yearly_amount'].' €',
                 round($result['taxable_income'], 2).' €',
                 '<error>'.$result['tax'].' €</error>',
                 $realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']. ' €',
