@@ -27,7 +27,7 @@ class CombinedYearlyOverview extends Command
 
         $table->setHeaderTitle('Combined Results for '.$year);
         $table->setHorizontal();
-        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Net left', 'Salary', 'Vat to pay', 'Vat to get back']);
+        $table->setHeaders(['', 'Income', 'Expense', 'Inc. deductible', 'Net taxable', 'Social contribution', 'Taxable', 'Tax', 'Net left', 'Salary (paid)', 'Vat to pay', 'Vat to get back']);
 
         $realOverview = $result['real_overview'];
         $realNetTaxable = round($realOverview['bill']['total'] - $realOverview['expense']['totalDeductibleExpense'], 2);
@@ -55,8 +55,8 @@ class CombinedYearlyOverview extends Command
                 round($realOverview['expense']['totalDeductibleExpense'] + $result['expense']['totalDeductibleExpense'], 2).' €',
                 $realNetTaxable + $result['bill']['total'] - $result['expense']['totalDeductibleExpense'].' €',
                 $realOverview['socialContribution']['yearly_amount'] + $result['socialContribution']['yearly_amount'].' €',
-                round($realOverview['taxable_income'] + $result['taxable_income'], 2).' €',
-                '<error>'.$realOverview['tax'] + $result['tax'].' €</error>',
+                round($result['taxable_income'], 2).' €',
+                '<error>'.$result['tax'].' €</error>',
                 $realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']. ' €',
                 round(($realOverview['salary'] + $result['salary']) /12, 2) . ' € (Max: ' . round(($realOverview['taxable_income'] + $result['taxable_income'] - $realOverview['tax'] - $result['tax']) / 12, 2) . '€/month)',
                 $realOverview['bill']['totalVatCollected'] + $result['bill']['totalVatCollected'].' €',

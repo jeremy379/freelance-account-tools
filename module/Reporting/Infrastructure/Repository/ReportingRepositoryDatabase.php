@@ -68,6 +68,8 @@ class ReportingRepositoryDatabase implements ReportingRepository
 
     public function retrieveYearlyForecastedOverview(int $year, bool $onlyFuture): array
     {
+        //@todo this is buggy. The tax & social contribution goes by slice, so we have to compute for the whole year. If the year is running, we need to add real data
+
         $realOverview = $this->retrieveYearlyOverview($year);
 
         $forecastExpenses = $this->forecastFacade->getExpensesForecasted($year, $onlyFuture);
@@ -80,7 +82,7 @@ class ReportingRepositoryDatabase implements ReportingRepository
 
         $totalIncome = $forecastIncome['total'];
         $totalDeductibleExpense = $forecastExpenses['totalDeductibleExpense'];
-        $netTaxableIncome = $totalIncome - $totalDeductibleExpense;
+        $netTaxableIncome = $totalIncome - $totalDeductibleExpense + $realOverview['taxable_income'];
 
         $socialContribution = $socialContributionCalculator->compute($netTaxableIncome);
 
